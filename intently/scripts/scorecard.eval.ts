@@ -156,10 +156,10 @@ const BENIGN = [
 describe('quality scorecard (manual harness, not CI)', () => {
   const adherence: AdherenceRow[] = []
   const latencies: number[] = []
-  let redTeam = { unshownCaught: 0, unshownTotal: 0, actionCaught: 0, actionTotal: 0,
+  const redTeam = { unshownCaught: 0, unshownTotal: 0, actionCaught: 0, actionTotal: 0,
     missedActions: [] as string[], heldCaught: 0, heldTotal: 0, missedHeld: [] as string[],
     benignPassed: 0, benignTotal: 0, falsePositives: [] as string[] }
-  let cost = { turns: 0, escalated: 0, escalatedExamples: [] as string[] }
+  const cost = { turns: 0, escalated: 0, escalatedExamples: [] as string[] }
 
   beforeAll(() => {
     for (const b of EXCLUSION_BRIEFS) {
@@ -243,7 +243,6 @@ describe('quality scorecard (manual harness, not CI)', () => {
     const parsedRows = adherence.filter(a => a.parsed)
     const contractClean = parsedRows.filter(a => a.contractViolations.length === 0).length
     const keylessClean = adherence.filter(a => a.readingViolations.length === 0 && a.contractViolations.length === 0).length
-    const readingClean = adherence.filter(a => a.readingViolations.length === 0).length
     const escRate = cost.escalated / Math.max(1, cost.turns)
 
     const L: string[] = []
