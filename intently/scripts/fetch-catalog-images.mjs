@@ -1,18 +1,26 @@
 // ─────────────────────────────────────────────────────────────────
 // fetch-catalog-images.mjs
 //
-// Restores the demo catalogue's product thumbnails (public/catalog/<id>.webp)
-// from their public source, the Hugging Face dataset
-// Qdrant/hm_ecommerce_products. The images are not committed to the public
-// repository: they are H&M product photographs, and redistributing them is
-// not ours to decide. The catalogue data (vision-catalog.json) references
-// them by H&M article number, so this script fetches exactly those.
+// Restores the demo catalogue's product thumbnails (public/catalog/<id>.webp).
+// They are not committed to the public repository: they are H&M product
+// photographs, and redistributing them is not ours to decide.
+//
+// Source: the H&M Personalized Fashion Recommendations dataset on Kaggle
+// (https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/data).
+// Downloading it requires a Kaggle account and accepting the competition
+// rules — that licence decision stays with whoever runs this. Its images/
+// folder is laid out as images/<first 3 digits>/<10-digit article id>.jpg,
+// and vision-catalog.json references products by the same article number.
+//
+// (The catalogue was originally built from the Hugging Face mirror
+// Qdrant/hm_ecommerce_products; as of 2026-09 its image URLs return 404, so it
+// is no longer a usable source.)
 //
 // Run from intently/:
-//   node scripts/fetch-catalog-images.mjs              # → public/catalog
-//   node scripts/fetch-catalog-images.mjs --storefront # also ../storefront/public/catalog
+//   node scripts/fetch-catalog-images.mjs --from /path/to/hm/images
+//   node scripts/fetch-catalog-images.mjs --from /path/to/hm/images --storefront
 //
-// Idempotent: existing files are skipped. Without the images the app still
+// Idempotent: existing thumbnails are skipped. Without the images the app still
 // runs; product cards just show no photo.
 // ─────────────────────────────────────────────────────────────────
 
@@ -27,75 +35,54 @@ const OUT = resolve(INTENTLY, 'public', 'catalog')
 const STOREFRONT_OUT = resolve(INTENTLY, '..', 'storefront', 'public', 'catalog')
 const CATALOG = resolve(INTENTLY, 'src', 'lib', 'catalog', 'vision-catalog.json')
 
-const DS = 'Qdrant/hm_ecommerce_products'
-const ROWS_URL = 'https://datasets-server.huggingface.co/rows'
-const PAGE = 100
-const MAX_ROWS = 200_000
-
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
-
-async function fetchPage(offset, attempt = 0) {
-  const url = `${ROWS_URL}?dataset=${encodeURIComponent(DS)}&config=default&split=train&offset=${offset}&length=${PAGE}`
-  try {
-    const res = await fetch(url, { headers: { accept: 'application/json' } })
-    if (!res.ok) throw new Error(`HTTP ${res.status}`)
-    return await res.json()
-  } catch (e) {
-    if (attempt < 4) { await sleep(800 * (attempt + 1)); return fetchPage(offset, attempt + 1) }
-    throw e
-  }
+function argValue(flag) {
+  const i = process.argv.indexOf(flag)
+  return i >= 0 ? process.argv[i + 1] : undefined
 }
 
 async function main() {
-  const withStorefront = process.argv.includes('--storefront')
-  const catalog = JSON.parse(readFileSync(CATALOG, 'utf8'))
-  const wanted = new Set(
-    catalog
-      .map((p) => /\/catalog\/(\d+)\.webp$/.exec(p.imageUrl ?? '')?.[1])
-      .filter(Boolean),
-  )
-  mkdirSync(OUT, { recursive: true })
-  for (const id of [...wanted]) if (existsSync(resolve(OUT, `${id}.webp`))) wanted.delete(id)
-  console.log(`${wanted.size} image(s) to fetch into ${OUT}`)
-
-  let fetched = 0
-  for (let offset = 0; wanted.size > 0 && offset < MAX_ROWS; offset += PAGE) {
-    let body
-    try { body = await fetchPage(offset) } catch (e) { console.warn(`\npage at ${offset} failed: ${e.message}`); continue }
-    if (!body.rows?.length) break
-    for (const { row: r } of body.rows) {
-      const id = String(Number(r.article_id))
-      if (!wanted.has(id) || !r.image_url) continue
-      try {
-        const res = await fetch(r.image_url)
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        const buf = Buffer.from(await res.arrayBuffer())
-        await sharp(buf).resize({ width: 320 }).webp({ quality: 80 }).toFile(resolve(OUT, `${id}.webp`))
-        wanted.delete(id)
-        fetched++
-      } catch (e) {
-        console.warn(`\n${id}: ${e.message}`)
-      }
-    }
-    process.stdout.write(`\rscanned ${offset + PAGE} rows · fetched ${fetched} · remaining ${wanted.size}   `)
+  const from = argValue('--from')
+  if (!from || !existsSync(from)) {
+    console.error(
+      'Usage: node scripts/fetch-catalog-images.mjs --from /path/to/hm/images [--storefront]\n\n' +
+      'Download the images/ folder of the Kaggle dataset "H&M Personalized Fashion\n' +
+      'Recommendations" (account + rules acceptance required), then point --from at it.',
+    )
+    process.exitCode = 1
+    return
   }
-  console.log()
 
-  if (withStorefront) {
+  const catalog = JSON.parse(readFileSync(CATALOG, 'utf8'))
+  const ids = [...new Set(
+    catalog.map((p) => /\/catalog\/(\d+)\.webp$/.exec(p.imageUrl ?? '')?.[1]).filter(Boolean),
+  )]
+  mkdirSync(OUT, { recursive: true })
+
+  let made = 0, skipped = 0
+  const missing = []
+  for (const id of ids) {
+    const target = resolve(OUT, `${id}.webp`)
+    if (existsSync(target)) { skipped++; continue }
+    const article = id.padStart(10, '0')
+    const src = resolve(from, article.slice(0, 3), `${article}.jpg`)
+    if (!existsSync(src)) { missing.push(id); continue }
+    await sharp(src).resize({ width: 320 }).webp({ quality: 80 }).toFile(target)
+    made++
+  }
+  console.log(`thumbnails: ${made} created, ${skipped} already present, ${missing.length} missing → ${OUT}`)
+
+  if (process.argv.includes('--storefront')) {
     mkdirSync(STOREFRONT_OUT, { recursive: true })
-    for (const p of catalog) {
-      const id = /\/catalog\/(\d+)\.webp$/.exec(p.imageUrl ?? '')?.[1]
-      const src = id && resolve(OUT, `${id}.webp`)
-      if (src && existsSync(src)) copyFileSync(src, resolve(STOREFRONT_OUT, `${id}.webp`))
+    for (const id of ids) {
+      const src = resolve(OUT, `${id}.webp`)
+      if (existsSync(src)) copyFileSync(src, resolve(STOREFRONT_OUT, `${id}.webp`))
     }
     console.log(`copied into ${STOREFRONT_OUT}`)
   }
 
-  if (wanted.size) {
-    console.log(`${wanted.size} image(s) not found in ${DS}: ${[...wanted].slice(0, 10).join(', ')}`)
+  if (missing.length) {
+    console.log(`not found under ${from}: ${missing.slice(0, 10).join(', ')}${missing.length > 10 ? ' …' : ''}`)
     process.exitCode = 1
-  } else {
-    console.log('done. Images: H&M product photos via Hugging Face Qdrant/hm_ecommerce_products.')
   }
 }
 

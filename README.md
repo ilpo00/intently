@@ -91,7 +91,7 @@ A PIM knows *"black dress, €35"*. Answering *"cold seaside evening"* needs to 
 ```bash
 cd intently
 npm install
-npm run catalog:images                   # optional: fetch the 292 product photos (~1 min)
+npm run catalog:images -- --from <kaggle-hm>/images   # optional: product photos, see below
 NEXT_PUBLIC_CATALOG=vision npm run dev   # → http://localhost:3000
 ```
 
@@ -121,4 +121,4 @@ prodprep.md    Pre-production risk ledger
 
 ---
 
-Catalogue data and product photos derive from H&M product data via the Hugging Face dataset [`Qdrant/hm_ecommerce_products`](https://huggingface.co/datasets/Qdrant/hm_ecommerce_products). The photos are not redistributed in this repository; `npm run catalog:images` fetches them from the source. Used for non-commercial demonstration only.
+Catalogue data and product photos derive from H&M product data via the Hugging Face dataset [`Qdrant/hm_ecommerce_products`](https://huggingface.co/datasets/Qdrant/hm_ecommerce_products). The photos are not redistributed in this repository. To see them, download the `images/` folder of Kaggle's [H&M Personalized Fashion Recommendations](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/data) dataset (account and rules acceptance required) and run `npm run catalog:images -- --from <path>/images` in `intently/`. Used for non-commercial demonstration only.
