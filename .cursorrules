@@ -1,0 +1,16 @@
+You are working on MISE, an AI-native e-commerce store for Japanese kitchen tools.
+
+Tech stack: Next.js 16 App Router, TypeScript, Tailwind CSS, Zustand, Anthropic Claude API
+Design: eggshell white with warm gray gradients, single-page "river" metaphor
+Data: hardcoded JSON product catalog (32 items), Medusa planned for v2
+AI: deterministic discovery engine + opt-in Tier-1 LLM (DeepSeek / Claude Haiku / OpenAI), live-only
+
+Key principles:
+- Fluid e-commerce: inspiration-first, conversation-native
+- Products emerge from dialogue, not catalog browsing
+- High emotional stakes, non-obvious selection, technique pairing
+- Prototype-first: defer infrastructure complexity
+
+File conventions: kebab-case for files, PascalCase for components
+State: Zustand stores in /store, never prop-drill through more than 2 levels
+Types: strict TypeScript, no any

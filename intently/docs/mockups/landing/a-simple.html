@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Intently landing · A — The Quiet Open (simple)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  /* Intently tokens — lifted verbatim from src/app/next/theme.css */
+  :root{
+    --nx-surface:#fbfaf8; --nx-surface-raised:#fff; --nx-surface-sunk:#f1eee8;
+    --nx-ink:#1a1b19; --nx-ink-soft:#3a3c38; --nx-muted:#63625b;
+    --nx-line:#e6e2d9; --nx-line-strong:#d3cec3;
+    --nx-accent:#1c6b54; --nx-accent-deep:#134a3a; --nx-accent-tint:#e8f0ec; --nx-on-accent:#fff;
+    --nx-r-sm:8px; --nx-r-md:14px; --nx-r-lg:20px; --nx-r-pill:999px;
+    --nx-shadow-card:0 1px 2px rgba(20,20,18,.04),0 10px 28px rgba(20,20,18,.06);
+    --nx-shadow-pop:0 30px 70px rgba(20,20,18,.22);
+    --nx-ease:cubic-bezier(.22,.61,.36,1); --nx-ease-spring:cubic-bezier(.34,1.3,.64,1);
+    --font-display:'Cormorant Garamond',Georgia,serif; --font-sans:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#e9e5dd;font-family:var(--font-sans);color:var(--nx-ink);-webkit-font-smoothing:antialiased}
+
+  /* ── page toolbar (not part of the product — the mockup viewer chrome) ── */
+  .viewer{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+    padding:10px 18px;background:#22231f;color:#f3f0e9;font-size:13px}
+  .viewer a{color:#cfe3da;text-decoration:none;border:1px solid #3a3c36;padding:5px 11px;border-radius:999px}
+  .viewer a:hover{background:#2d2f29}
+  .viewer .tag{background:var(--nx-accent);color:#fff;padding:5px 11px;border-radius:999px;font-weight:600}
+  .viewer .nav{display:flex;gap:8px;margin-left:auto}
+  .viewer .nav a.cur{background:#3a3c36;color:#fff}
+
+  .stage{max-width:1180px;margin:34px auto 10px;padding:0 20px}
+  .stagecap{color:#5b5a52;font-size:13px;margin:0 0 14px;text-align:center}
+
+  /* ── Intently overlay (faithful to .nx-overlay) ── */
+  .frame{position:relative;background:var(--nx-surface);border:1px solid var(--nx-line);
+    border-radius:var(--nx-r-lg);box-shadow:var(--nx-shadow-pop);overflow:hidden}
+  .nx-header{display:flex;align-items:center;gap:16px;padding:16px 20px;border-bottom:1px solid var(--nx-line);
+    background:var(--nx-surface-raised)}
+  .nx-wordmark{font-weight:600;letter-spacing:.02em;font-size:16px;display:inline-flex;align-items:center;gap:8px}
+  .nx-wordmark i{width:8px;height:8px;border-radius:50%;background:var(--nx-accent);display:inline-block}
+  .spacer{flex:1}
+  .nx-cart{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--nx-line-strong);
+    border-radius:var(--nx-r-pill);background:var(--nx-surface);font-size:13px;font-weight:500}
+  .nx-icon{width:36px;height:36px;display:grid;place-items:center;border:1px solid var(--nx-line);
+    background:var(--nx-surface);border-radius:var(--nx-r-pill);color:var(--nx-ink-soft)}
+
+  /* ── A · The Quiet Open — single centred composition, NO right canvas ── */
+  .open{min-height:540px;display:grid;place-items:center;padding:56px 24px;text-align:center;position:relative}
+  .open__inner{width:100%;max-width:600px;position:relative}
+  .eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--nx-accent);font-weight:600;
+    margin-bottom:18px;opacity:0;animation:rise .6s var(--nx-ease) .05s forwards}
+  h1.title{font-family:var(--font-display);font-weight:500;font-size:clamp(34px,5vw,52px);line-height:1.05;
+    letter-spacing:-.01em;margin:0 0 14px;text-wrap:balance;opacity:0;animation:rise .6s var(--nx-ease) .12s forwards}
+  .sub{font-size:16px;line-height:1.55;color:var(--nx-muted);margin:0 auto 30px;max-width:460px;
+    opacity:0;animation:rise .6s var(--nx-ease) .2s forwards}
+
+  /* the hero input — present and focused IMMEDIATELY (no fade) */
+  .inputwrap{position:relative;display:flex;gap:10px;align-items:center;background:var(--nx-surface-raised);
+    border:1.5px solid var(--nx-accent);border-radius:var(--nx-r-pill);padding:8px 8px 8px 22px;
+    box-shadow:0 0 0 4px var(--nx-accent-tint),var(--nx-shadow-card)}
+  .inputwrap input{flex:1;border:0;outline:0;background:none;font-family:var(--font-sans);font-size:17px;
+    color:var(--nx-ink);padding:12px 0}
+  .inputwrap input::placeholder{color:var(--nx-muted)}
+  .send{width:50px;height:50px;flex-shrink:0;display:grid;place-items:center;border:0;border-radius:50%;
+    background:var(--nx-accent);color:#fff;cursor:pointer}
+  .caret{display:inline-block;width:2px;height:22px;background:var(--nx-accent);vertical-align:middle;
+    animation:blink 1.1s steps(1) infinite;margin-left:1px}
+  @keyframes blink{50%{opacity:0}}
+
+  /* seeds — a calm horizontal row that fades in AFTER the input (secondary) */
+  .seedrow{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:22px}
+  .seed{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--nx-line-strong);
+    background:var(--nx-surface-raised);border-radius:var(--nx-r-pill);padding:9px 15px;font-size:13.5px;
+    color:var(--nx-ink-soft);cursor:pointer;opacity:0;transform:translateY(6px);
+    animation:rise .55s var(--nx-ease) forwards}
+  .seed:nth-child(1){animation-delay:.55s} .seed:nth-child(2){animation-delay:.68s} .seed:nth-child(3){animation-delay:.81s}
+  .seed:hover{border-color:var(--nx-accent);background:var(--nx-accent-tint);color:var(--nx-accent-deep)}
+  .seed q{font-family:var(--font-display);color:var(--nx-accent);font-size:20px;line-height:0}
+  .seed q::before,.seed q::after{content:''}
+
+  .promise{margin-top:30px;font-size:13.5px;color:var(--nx-muted);opacity:0;animation:rise .6s var(--nx-ease) 1s forwards}
+  .promise b{color:var(--nx-ink-soft);font-weight:500}
+
+  @keyframes rise{to{opacity:1;transform:translateY(0)}}
+
+  /* ── annotation pins ── */
+  .pin{position:absolute;width:26px;height:26px;border-radius:50%;background:var(--nx-accent);color:#fff;
+    font:600 13px/26px var(--font-sans);text-align:center;box-shadow:0 2px 6px rgba(20,20,18,.3);z-index:5}
+  .anchor{position:relative}
+
+  /* ── rationale ── */
+  .why{max-width:1180px;margin:30px auto 70px;padding:0 20px}
+  .why h2{font-family:var(--font-display);font-weight:500;font-size:30px;margin:34px 0 6px}
+  .lede{font-size:16px;color:var(--nx-ink-soft);line-height:1.6;max-width:780px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+  @media(max-width:760px){.grid2{grid-template-columns:1fr}}
+  .card{background:#fff;border:1px solid var(--nx-line);border-radius:var(--nx-r-md);padding:18px 20px}
+  .card h3{margin:0 0 6px;font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:var(--nx-accent)}
+  .card p{margin:0;color:var(--nx-ink-soft);font-size:14.5px;line-height:1.6}
+  ol.legend{list-style:none;counter-reset:p;padding:0;margin:18px 0 0;max-width:880px}
+  ol.legend li{counter-increment:p;position:relative;padding:12px 0 12px 44px;border-top:1px solid var(--nx-line);
+    color:var(--nx-ink-soft);font-size:15px;line-height:1.6}
+  ol.legend li::before{content:counter(p);position:absolute;left:0;top:12px;width:26px;height:26px;border-radius:50%;
+    background:var(--nx-accent);color:#fff;font:600 13px/26px var(--font-sans);text-align:center}
+  ol.legend b{color:var(--nx-ink)}
+  .candor{background:#fbf3ec;border:1px solid #e9d4c2;border-radius:var(--nx-r-md);padding:16px 20px;margin-top:18px;
+    color:#7a4a2a;font-size:14.5px;line-height:1.6}
+  .candor b{color:#5e3417}
+  .footnav{display:flex;justify-content:space-between;gap:12px;max-width:1180px;margin:0 auto 60px;padding:0 20px}
+  .footnav a{flex:1;text-decoration:none;color:var(--nx-ink);background:#fff;border:1px solid var(--nx-line);
+    border-radius:var(--nx-r-md);padding:16px 20px}
+  .footnav a:hover{border-color:var(--nx-accent)}
+  .footnav small{color:var(--nx-muted);display:block}
+  .footnav b{font-family:var(--font-display);font-size:18px;font-weight:500}
+</style>
+</head>
+<body>
+  <div class="viewer">
+    <span class="tag">A · Simple</span>
+    <span>The Quiet Open — one centred input, no empty canvas</span>
+    <span class="nav">
+      <a class="cur" href="a-simple.html">A</a>
+      <a href="b-inviting.html">B</a>
+      <a href="c-assisting.html">C</a>
+      <a href="index.html">← all + research</a>
+    </span>
+  </div>
+
+  <div class="stage">
+    <p class="stagecap">First impression — before a single word is typed. Desktop frame.</p>
+    <div class="frame">
+      <!-- faithful Intently chrome -->
+      <header class="nx-header">
+        <span class="nx-wordmark"><i></i>Intently</span>
+        <span class="spacer"></span>
+        <span class="nx-cart">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 13H7L6 7zM9 7a3 3 0 0 1 6 0"/></svg>
+          Cart
+        </span>
+        <span class="nx-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span>
+      </header>
+
+      <!-- A · single centred composition -->
+      <section class="open anchor">
+        <span class="pin" style="top:18px;left:18px">6</span>
+        <div class="open__inner">
+          <div class="eyebrow">Shop by situation</div>
+          <h1 class="title">What are you dressing for?</h1>
+          <p class="sub">Describe the moment — not a category. One sentence is enough, and you can change your mind as we go.</p>
+
+          <div class="inputwrap anchor">
+            <span class="pin" style="top:-13px;left:-13px">1</span>
+            <span class="pin" style="top:-13px;right:60px">4</span>
+            <input id="q" placeholder="A linen shirt for a warm coastal wedding…" aria-label="Describe the situation" />
+            <button class="send" aria-label="Discover">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+            </button>
+          </div>
+
+          <div class="seedrow anchor">
+            <span class="pin" style="top:-13px;left:-13px">2</span>
+            <button class="seed"><q>“</q>Something warm for a cold evening</button>
+            <button class="seed"><q>“</q>A black dress for a party</button>
+            <button class="seed"><q>“</q>Relaxed minimalist everyday basics</button>
+          </div>
+
+          <p class="promise anchor"><span class="pin" style="top:-13px;left:-13px">5</span>
+            You'll get <b>a curated few — each with the reason it fits.</b> Not three hundred results to wade through.</p>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="why">
+    <h2>Why this direction</h2>
+    <p class="lede"><b>Philosophy:</b> the fastest way to fix "too empty" is to stop rendering an empty thing. Before the
+      first search there is no two-pane split and no faint compass in a void — just one calm, centred composition where the
+      input <em>is</em> the page. The results canvas is born the moment it has something to hold. This is the lowest-risk
+      direction: it reads as a confident, premium prompt rather than an unfinished dashboard.</p>
+
+    <div class="grid2">
+      <div class="card"><h3>Best for</h3><p>The decisive shopper and the confident first-timer — people who already have a
+        sentence in their head and just need an obvious, dignified place to put it. Also the safest default if you ship one.</p></div>
+      <div class="card"><h3>Layout</h3><p><b>Centred.</b> Single focal column, generous air. The post-submit state slides into
+        the familiar conversation-rail + results-canvas split — so this is purely a landing treatment, not an engine change.</p></div>
+      <div class="card"><h3>Keeps the chips</h3><p>The three situation seeds move from a vertical stack in a cramped 380px rail
+        to a calm horizontal row directly under the input, where they read as "ways to start," not a menu.</p></div>
+      <div class="card"><h3>On "calm reveal"</h3><p>Applied — but deliberately to the <em>secondary</em> layer only. The input
+        is present and focused at t=0; the seeds and the promise line fade in over the next second. See the candour note.</p></div>
+    </div>
+
+    <h2>What each marker does</h2>
+    <ol class="legend">
+      <li><b>The input is the hero, not a footer.</b> Today the only text field is the small refine bar pinned to the bottom of
+        the left rail — easy to miss on arrival. Here it's enlarged, centred, pre-focused, and ringed in the pine accent so the
+        eye lands on it first. The blinking caret says "type here" without a word.</li>
+      <li><b>Seeds as a horizontal row, fading in calmly.</b> They lower activation energy (the hardest moment is the blank box)
+        and double as a worked example of the kind of sentence that works — situation, not SKU.</li>
+      <li><span style="opacity:.5">(reserved)</span> — the empty results canvas that exists today is simply <b>not rendered</b> in this state.</li>
+      <li><b>A rotating, situational placeholder.</b> It cycles real situations ("a linen shirt for a warm coastal wedding…",
+        "sturdy track pants that don't look like gym clothes…") so even an empty field is teaching what to say.</li>
+      <li><b>A one-line promise that pre-empts the killer objection.</b> "A curated few — each with the reason it fits" tells a
+        filter-fatigued shopper, before they invest a word, that this is <em>not</em> another endless results page.</li>
+      <li><b>No void.</b> The ~800px empty canvas that prompted this whole exercise doesn't appear until there's a shortlist to put in it.</li>
+    </ol>
+
+    <div class="candor">
+      <b>Where I'd push back / the honest trade-off.</b> This is the least "wow" of the three — it leans on copy and calm to sell
+      the difference, so a hardened skeptic might still read it as "a nicer search box." It also does the least to <em>show</em>
+      the payoff up front (Concept B does that). I built the calm reveal CTA-first on purpose: a shopper who's two seconds from
+      bouncing to the old product grid must see the input and the promise <em>immediately</em> — only the suggestions earn the
+      gentle delay. Fading in the primary action would be the one place "calm" turns into "broken."
+    </div>
+  </div>
+
+  <div class="footnav">
+    <a href="index.html"><small>Overview</small><b>← Research & all three</b></a>
+    <a href="b-inviting.html"><small>Next direction</small><b>B · The Living Preview →</b></a>
+  </div>
+
+<script>
+  // Rotating, situational placeholder — demonstrates marker 4.
+  const examples = [
+    "A linen shirt for a warm coastal wedding…",
+    "Sturdy track pants that don't look like gym clothes…",
+    "Something for my dad who hikes in autumn…",
+    "A first proper winter coat for commuting…"
+  ];
+  const input = document.getElementById('q');
+  let i = 0;
+  setInterval(() => {
+    if (document.activeElement === input || input.value) return; // never fight the user
+    input.style.transition = 'opacity .4s'; input.style.opacity = '0';
+    setTimeout(() => { i = (i+1)%examples.length; input.placeholder = examples[i]; input.style.opacity = '1'; }, 400);
+  }, 3200);
+</script>
+</body>
+</html>

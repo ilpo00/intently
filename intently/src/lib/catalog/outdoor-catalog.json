@@ -1,0 +1,1407 @@
+[
+  {
+    "id": "k1528",
+    "name": "Puma Men Ferrari Black Fleece Jacket",
+    "brand": "Puma",
+    "price": 9000,
+    "currency": "EUR",
+    "imageUrl": "/catalog/1528.jpg",
+    "category": "jacket",
+    "catalog": "outdoor",
+    "color": [
+      "black"
+    ],
+    "sizesAvailable": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "occasionTags": [
+      "sport",
+      "outdoor activity",
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 1,
+    "season": [
+      "autumn"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "sporty"
+    ],
+    "embeddingText": "puma men ferrari black fleece jacket puma jacket sport outdoor activity day hiking outdoors travel black autumn sporty solid"
+  },
+  {
+    "id": "k1530",
+    "name": "Puma Men Ferrari Track Jacket",
+    "brand": "Puma",
+    "price": 9000,
+    "currency": "EUR",
+    "imageUrl": "/catalog/1530.jpg",
+    "category": "jacket",
+    "catalog": "outdoor",
+    "color": [
+      "red"
+    ],
+    "sizesAvailable": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "occasionTags": [
+      "sport",
+      "outdoor activity",
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 1,
+    "season": [
+      "autumn"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "sporty"
+    ],
+    "embeddingText": "puma men ferrari track jacket puma jacket sport outdoor activity day hiking outdoors travel red autumn sporty solid"
+  },
+  {
+    "id": "k1579",
+    "name": "Domyos Men Grey Second Skin Jacket",
+    "brand": "Domyos",
+    "price": 9000,
+    "currency": "EUR",
+    "imageUrl": "/catalog/1579.jpg",
+    "category": "jacket",
+    "catalog": "outdoor",
+    "color": [
+      "grey"
+    ],
+    "sizesAvailable": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "occasionTags": [
+      "sport",
+      "outdoor activity",
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 1,
+    "season": [
+      "autumn"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "sporty"
+    ],
+    "embeddingText": "domyos men grey second skin jacket domyos jacket sport outdoor activity day hiking outdoors travel grey autumn sporty solid"
+  },
+  {
+    "id": "k1584",
+    "name": "Domyos Unisex Feather-light Jacket",
+    "brand": "Domyos",
+    "price": 9000,
+    "currency": "EUR",
+    "imageUrl": "/catalog/1584.jpg",
+    "category": "jacket",
+    "catalog": "outdoor",
+    "color": [
+      "white"
+    ],
+    "sizesAvailable": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "occasionTags": [
+      "everyday",
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 2,
+    "season": [
+      "summer"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "relaxed"
+    ],
+    "embeddingText": "domyos unisex feather-light jacket domyos jacket everyday day hiking outdoors travel white summer relaxed solid"
+  },
+  {
+    "id": "k1610",
+    "name": "Reebok Navy Jacket",
+    "brand": "Reebok",
+    "price": 9500,
+    "currency": "EUR",
+    "imageUrl": "/catalog/1610.jpg",
+    "category": "jacket",
+    "catalog": "outdoor",
+    "color": [
+      "navy blue"
+    ],
+    "sizesAvailable": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "occasionTags": [
+      "everyday",
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 2,
+    "season": [
+      "summer"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "relaxed"
+    ],
+    "embeddingText": "reebok navy jacket reebok jacket everyday day hiking outdoors travel navy blue summer relaxed solid"
+  },
+  {
+    "id": "k1611",
+    "name": "Reebok Knit Rib Women Black Jacket",
+    "brand": "Reebok",
+    "price": 9500,
+    "currency": "EUR",
+    "imageUrl": "/catalog/1611.jpg",
+    "category": "jacket",
+    "catalog": "outdoor",
+    "color": [
+      "black"
+    ],
+    "sizesAvailable": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "occasionTags": [
+      "sport",
+      "outdoor activity",
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 1,
+    "season": [
+      "summer"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "sporty"
+    ],
+    "embeddingText": "reebok knit rib women black jacket reebok jacket sport outdoor activity day hiking outdoors travel black summer sporty solid"
+  },
+  {
+    "id": "k1622",
+    "name": "Reebok Navy Knit Rib Jacket",
+    "brand": "Reebok",
+    "price": 9500,
+    "currency": "EUR",
+    "imageUrl": "/catalog/1622.jpg",
+    "category": "jacket",
+    "catalog": "outdoor",
+    "color": [
+      "navy blue"
+    ],
+    "sizesAvailable": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "occasionTags": [
+      "everyday",
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 2,
+    "season": [
+      "summer"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "relaxed"
+    ],
+    "embeddingText": "reebok navy knit rib jacket reebok jacket everyday day hiking outdoors travel navy blue summer relaxed solid"
+  },
+  {
+    "id": "k1658",
+    "name": "Nike Men Windrunner Blue Jacket",
+    "brand": "Nike",
+    "price": 9500,
+    "currency": "EUR",
+    "imageUrl": "/catalog/1658.jpg",
+    "category": "jacket",
+    "catalog": "outdoor",
+    "color": [
+      "blue"
+    ],
+    "sizesAvailable": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "occasionTags": [
+      "sport",
+      "outdoor activity",
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 1,
+    "season": [
+      "autumn"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "sporty"
+    ],
+    "embeddingText": "nike men windrunner blue jacket nike jacket sport outdoor activity day hiking outdoors travel blue autumn sporty solid"
+  },
+  {
+    "id": "k1662",
+    "name": "Nike Men Blue Windrunner Jacket",
+    "brand": "Nike",
+    "price": 9500,
+    "currency": "EUR",
+    "imageUrl": "/catalog/1662.jpg",
+    "category": "jacket",
+    "catalog": "outdoor",
+    "color": [
+      "navy blue"
+    ],
+    "sizesAvailable": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "occasionTags": [
+      "sport",
+      "outdoor activity",
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 1,
+    "season": [
+      "autumn"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "sporty"
+    ],
+    "embeddingText": "nike men blue windrunner jacket nike jacket sport outdoor activity day hiking outdoors travel navy blue autumn sporty solid"
+  },
+  {
+    "id": "k1758",
+    "name": "Lotto Men White Collared Jacket",
+    "brand": "Lotto",
+    "price": 9500,
+    "currency": "EUR",
+    "imageUrl": "/catalog/1758.jpg",
+    "category": "jacket",
+    "catalog": "outdoor",
+    "color": [
+      "white"
+    ],
+    "sizesAvailable": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "occasionTags": [
+      "sport",
+      "outdoor activity",
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 1,
+    "season": [
+      "autumn"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "sporty"
+    ],
+    "embeddingText": "lotto men white collared jacket lotto jacket sport outdoor activity day hiking outdoors travel white autumn sporty solid"
+  },
+  {
+    "id": "k2031",
+    "name": "ADIDAS Men Collared Track Jacket",
+    "brand": "ADIDAS",
+    "price": 9500,
+    "currency": "EUR",
+    "imageUrl": "/catalog/2031.jpg",
+    "category": "jacket",
+    "catalog": "outdoor",
+    "color": [
+      "black"
+    ],
+    "sizesAvailable": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "occasionTags": [
+      "sport",
+      "outdoor activity",
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 1,
+    "season": [
+      "autumn"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "sporty"
+    ],
+    "embeddingText": "adidas men collared track jacket adidas jacket sport outdoor activity day hiking outdoors travel black autumn sporty solid"
+  },
+  {
+    "id": "k3323",
+    "name": "KKR Mens Fangear Tee",
+    "brand": "KKR",
+    "price": 11000,
+    "currency": "EUR",
+    "imageUrl": "/catalog/3323.jpg",
+    "category": "jacket",
+    "catalog": "outdoor",
+    "color": [
+      "blue"
+    ],
+    "sizesAvailable": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "occasionTags": [
+      "sport",
+      "outdoor activity",
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 1,
+    "season": [
+      "summer"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "sporty"
+    ],
+    "embeddingText": "kkr mens fangear tee kkr jacket sport outdoor activity day hiking outdoors travel blue summer sporty solid"
+  },
+  {
+    "id": "k1525",
+    "name": "Puma Deck Navy Blue Backpack",
+    "brand": "Puma",
+    "price": 5000,
+    "currency": "EUR",
+    "imageUrl": "/catalog/1525.jpg",
+    "category": "backpack",
+    "catalog": "outdoor",
+    "color": [
+      "navy blue"
+    ],
+    "sizesAvailable": [
+      "One Size"
+    ],
+    "occasionTags": [
+      "everyday",
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 2,
+    "season": [
+      "autumn"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "relaxed"
+    ],
+    "embeddingText": "puma deck navy blue backpack puma backpack everyday day hiking outdoors travel navy blue autumn relaxed solid"
+  },
+  {
+    "id": "k1526",
+    "name": "Puma Big Cat Backpack Black",
+    "brand": "Puma",
+    "price": 5000,
+    "currency": "EUR",
+    "imageUrl": "/catalog/1526.jpg",
+    "category": "backpack",
+    "catalog": "outdoor",
+    "color": [
+      "black"
+    ],
+    "sizesAvailable": [
+      "One Size"
+    ],
+    "occasionTags": [
+      "sport",
+      "outdoor activity",
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 1,
+    "season": [
+      "autumn"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "sporty"
+    ],
+    "embeddingText": "puma big cat backpack black puma backpack sport outdoor activity day hiking outdoors travel black autumn sporty solid"
+  },
+  {
+    "id": "k1556",
+    "name": "Quechua Forclaz Large  Backpack - 50 ltr Orange",
+    "brand": "Quechua",
+    "price": 5000,
+    "currency": "EUR",
+    "imageUrl": "/catalog/1556.jpg",
+    "category": "backpack",
+    "catalog": "outdoor",
+    "color": [
+      "black"
+    ],
+    "sizesAvailable": [
+      "One Size"
+    ],
+    "occasionTags": [
+      "sport",
+      "outdoor activity",
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 1,
+    "season": [
+      "summer"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "sporty"
+    ],
+    "embeddingText": "quechua forclaz large  backpack - 50 ltr orange quechua backpack sport outdoor activity day hiking outdoors travel black summer sporty solid"
+  },
+  {
+    "id": "k1557",
+    "name": "Quechua Spacious Blue-Black Backpack",
+    "brand": "Quechua",
+    "price": 5000,
+    "currency": "EUR",
+    "imageUrl": "/catalog/1557.jpg",
+    "category": "backpack",
+    "catalog": "outdoor",
+    "color": [
+      "black"
+    ],
+    "sizesAvailable": [
+      "One Size"
+    ],
+    "occasionTags": [
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 2,
+    "season": [
+      "summer"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "relaxed"
+    ],
+    "embeddingText": "quechua spacious blue-black backpack quechua backpack day hiking outdoors travel black summer relaxed solid"
+  },
+  {
+    "id": "k1559",
+    "name": "Quechua Blue Light Backpack",
+    "brand": "Quechua",
+    "price": 5000,
+    "currency": "EUR",
+    "imageUrl": "/catalog/1559.jpg",
+    "category": "backpack",
+    "catalog": "outdoor",
+    "color": [
+      "blue"
+    ],
+    "sizesAvailable": [
+      "One Size"
+    ],
+    "occasionTags": [
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 2,
+    "season": [
+      "summer"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "relaxed"
+    ],
+    "embeddingText": "quechua blue light backpack quechua backpack day hiking outdoors travel blue summer relaxed solid"
+  },
+  {
+    "id": "k1565",
+    "name": "Quechua Green Light Backpack",
+    "brand": "Quechua",
+    "price": 5000,
+    "currency": "EUR",
+    "imageUrl": "/catalog/1565.jpg",
+    "category": "backpack",
+    "catalog": "outdoor",
+    "color": [
+      "green"
+    ],
+    "sizesAvailable": [
+      "One Size"
+    ],
+    "occasionTags": [
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 2,
+    "season": [
+      "summer"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "relaxed"
+    ],
+    "embeddingText": "quechua green light backpack quechua backpack day hiking outdoors travel green summer relaxed solid"
+  },
+  {
+    "id": "k1623",
+    "name": "Reebok Unisex Red Backpack",
+    "brand": "Reebok",
+    "price": 5500,
+    "currency": "EUR",
+    "imageUrl": "/catalog/1623.jpg",
+    "category": "backpack",
+    "catalog": "outdoor",
+    "color": [
+      "red"
+    ],
+    "sizesAvailable": [
+      "One Size"
+    ],
+    "occasionTags": [
+      "everyday",
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 2,
+    "season": [
+      "summer"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "relaxed"
+    ],
+    "embeddingText": "reebok unisex red backpack reebok backpack everyday day hiking outdoors travel red summer relaxed solid"
+  },
+  {
+    "id": "k1624",
+    "name": "Reebok Silver-Black Laptop Backpack",
+    "brand": "Reebok",
+    "price": 5500,
+    "currency": "EUR",
+    "imageUrl": "/catalog/1624.jpg",
+    "category": "backpack",
+    "catalog": "outdoor",
+    "color": [
+      "black"
+    ],
+    "sizesAvailable": [
+      "One Size"
+    ],
+    "occasionTags": [
+      "sport",
+      "outdoor activity",
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 1,
+    "season": [
+      "summer"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "sporty"
+    ],
+    "embeddingText": "reebok silver-black laptop backpack reebok backpack sport outdoor activity day hiking outdoors travel black summer sporty solid"
+  },
+  {
+    "id": "k1646",
+    "name": "Quechua Ultralight Backpack 16 Ltr Grey Bag",
+    "brand": "Quechua",
+    "price": 5500,
+    "currency": "EUR",
+    "imageUrl": "/catalog/1646.jpg",
+    "category": "backpack",
+    "catalog": "outdoor",
+    "color": [
+      "grey"
+    ],
+    "sizesAvailable": [
+      "One Size"
+    ],
+    "occasionTags": [
+      "sport",
+      "outdoor activity",
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 1,
+    "season": [
+      "summer"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "sporty"
+    ],
+    "embeddingText": "quechua ultralight backpack 16 ltr grey bag quechua backpack sport outdoor activity day hiking outdoors travel grey summer sporty solid"
+  },
+  {
+    "id": "k1647",
+    "name": "Quechua Unisex Ultralight 16 Ltr Green Backpack",
+    "brand": "Quechua",
+    "price": 5500,
+    "currency": "EUR",
+    "imageUrl": "/catalog/1647.jpg",
+    "category": "backpack",
+    "catalog": "outdoor",
+    "color": [
+      "green"
+    ],
+    "sizesAvailable": [
+      "One Size"
+    ],
+    "occasionTags": [
+      "sport",
+      "outdoor activity",
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 1,
+    "season": [
+      "summer"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "sporty"
+    ],
+    "embeddingText": "quechua unisex ultralight 16 ltr green backpack quechua backpack sport outdoor activity day hiking outdoors travel green summer sporty solid"
+  },
+  {
+    "id": "k8614",
+    "name": "Fastrack Unisex Brown Gradient Sunglasses",
+    "brand": "Fastrack",
+    "price": 11500,
+    "currency": "EUR",
+    "imageUrl": "/catalog/8614.jpg",
+    "category": "sunglasses",
+    "catalog": "outdoor",
+    "color": [
+      "brown"
+    ],
+    "sizesAvailable": [
+      "One Size"
+    ],
+    "occasionTags": [
+      "everyday",
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 2,
+    "season": [
+      "winter"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "relaxed"
+    ],
+    "embeddingText": "fastrack unisex brown gradient sunglasses fastrack sunglasses everyday day hiking outdoors travel brown winter relaxed solid"
+  },
+  {
+    "id": "k8616",
+    "name": "Fastrack Unisex Sunglasses M035BR6",
+    "brand": "Fastrack",
+    "price": 11500,
+    "currency": "EUR",
+    "imageUrl": "/catalog/8616.jpg",
+    "category": "sunglasses",
+    "catalog": "outdoor",
+    "color": [
+      "brown"
+    ],
+    "sizesAvailable": [
+      "One Size"
+    ],
+    "occasionTags": [
+      "everyday",
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 2,
+    "season": [
+      "winter"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "relaxed"
+    ],
+    "embeddingText": "fastrack unisex sunglasses m035br6 fastrack sunglasses everyday day hiking outdoors travel brown winter relaxed solid"
+  },
+  {
+    "id": "k8617",
+    "name": "Fastrack Unisex Aviator Black Sunglasses",
+    "brand": "Fastrack",
+    "price": 11500,
+    "currency": "EUR",
+    "imageUrl": "/catalog/8617.jpg",
+    "category": "sunglasses",
+    "catalog": "outdoor",
+    "color": [
+      "black"
+    ],
+    "sizesAvailable": [
+      "One Size"
+    ],
+    "occasionTags": [
+      "everyday",
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 2,
+    "season": [
+      "winter"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "relaxed"
+    ],
+    "embeddingText": "fastrack unisex aviator black sunglasses fastrack sunglasses everyday day hiking outdoors travel black winter relaxed solid"
+  },
+  {
+    "id": "k8619",
+    "name": "Fastrack Men Beach Purple Sunglasses",
+    "brand": "Fastrack",
+    "price": 11500,
+    "currency": "EUR",
+    "imageUrl": "/catalog/8619.jpg",
+    "category": "sunglasses",
+    "catalog": "outdoor",
+    "color": [
+      "purple"
+    ],
+    "sizesAvailable": [
+      "One Size"
+    ],
+    "occasionTags": [
+      "everyday",
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 2,
+    "season": [
+      "winter"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "relaxed"
+    ],
+    "embeddingText": "fastrack men beach purple sunglasses fastrack sunglasses everyday day hiking outdoors travel purple winter relaxed solid"
+  },
+  {
+    "id": "k8620",
+    "name": "Fastrack Men Beach Sunglasses",
+    "brand": "Fastrack",
+    "price": 11500,
+    "currency": "EUR",
+    "imageUrl": "/catalog/8620.jpg",
+    "category": "sunglasses",
+    "catalog": "outdoor",
+    "color": [
+      "purple"
+    ],
+    "sizesAvailable": [
+      "One Size"
+    ],
+    "occasionTags": [
+      "everyday",
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 2,
+    "season": [
+      "winter"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "relaxed"
+    ],
+    "embeddingText": "fastrack men beach sunglasses fastrack sunglasses everyday day hiking outdoors travel purple winter relaxed solid"
+  },
+  {
+    "id": "k8622",
+    "name": "Fastrack Unisex Sunglasses",
+    "brand": "Fastrack",
+    "price": 11500,
+    "currency": "EUR",
+    "imageUrl": "/catalog/8622.jpg",
+    "category": "sunglasses",
+    "catalog": "outdoor",
+    "color": [
+      "black"
+    ],
+    "sizesAvailable": [
+      "One Size"
+    ],
+    "occasionTags": [
+      "everyday",
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 2,
+    "season": [
+      "winter"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "relaxed"
+    ],
+    "embeddingText": "fastrack unisex sunglasses fastrack sunglasses everyday day hiking outdoors travel black winter relaxed solid"
+  },
+  {
+    "id": "k8625",
+    "name": "Fastrack Unisex Sunglasses",
+    "brand": "Fastrack",
+    "price": 11500,
+    "currency": "EUR",
+    "imageUrl": "/catalog/8625.jpg",
+    "category": "sunglasses",
+    "catalog": "outdoor",
+    "color": [
+      "black"
+    ],
+    "sizesAvailable": [
+      "One Size"
+    ],
+    "occasionTags": [
+      "everyday",
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 2,
+    "season": [
+      "winter"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "relaxed"
+    ],
+    "embeddingText": "fastrack unisex sunglasses fastrack sunglasses everyday day hiking outdoors travel black winter relaxed solid"
+  },
+  {
+    "id": "k8626",
+    "name": "Fastrack Unisex Ultra slim Blue Sunglasses",
+    "brand": "Fastrack",
+    "price": 11500,
+    "currency": "EUR",
+    "imageUrl": "/catalog/8626.jpg",
+    "category": "sunglasses",
+    "catalog": "outdoor",
+    "color": [
+      "blue"
+    ],
+    "sizesAvailable": [
+      "One Size"
+    ],
+    "occasionTags": [
+      "everyday",
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 2,
+    "season": [
+      "winter"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "relaxed"
+    ],
+    "embeddingText": "fastrack unisex ultra slim blue sunglasses fastrack sunglasses everyday day hiking outdoors travel blue winter relaxed solid"
+  },
+  {
+    "id": "k1163",
+    "name": "Nike Sahara Team India Fanwear Round Neck Jersey",
+    "brand": "Nike",
+    "price": 3000,
+    "currency": "EUR",
+    "imageUrl": "/catalog/1163.jpg",
+    "category": "top",
+    "catalog": "outdoor",
+    "color": [
+      "blue"
+    ],
+    "sizesAvailable": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "occasionTags": [
+      "sport",
+      "outdoor activity",
+      "base layer"
+    ],
+    "formalityLevel": 1,
+    "season": [
+      "summer"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "sporty"
+    ],
+    "embeddingText": "nike sahara team india fanwear round neck jersey nike top sport outdoor activity base layer blue summer sporty solid"
+  },
+  {
+    "id": "k1164",
+    "name": "Nike Men Blue T20 Indian Cricket Jersey",
+    "brand": "Nike",
+    "price": 3000,
+    "currency": "EUR",
+    "imageUrl": "/catalog/1164.jpg",
+    "category": "top",
+    "catalog": "outdoor",
+    "color": [
+      "blue"
+    ],
+    "sizesAvailable": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "occasionTags": [
+      "sport",
+      "outdoor activity",
+      "base layer"
+    ],
+    "formalityLevel": 1,
+    "season": [
+      "winter"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "sporty"
+    ],
+    "embeddingText": "nike men blue t20 indian cricket jersey nike top sport outdoor activity base layer blue winter sporty solid"
+  },
+  {
+    "id": "k1165",
+    "name": "Nike Mean Team India Cricket Jersey",
+    "brand": "Nike",
+    "price": 3000,
+    "currency": "EUR",
+    "imageUrl": "/catalog/1165.jpg",
+    "category": "top",
+    "catalog": "outdoor",
+    "color": [
+      "blue"
+    ],
+    "sizesAvailable": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "occasionTags": [
+      "sport",
+      "outdoor activity",
+      "base layer"
+    ],
+    "formalityLevel": 1,
+    "season": [
+      "summer"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "sporty"
+    ],
+    "embeddingText": "nike mean team india cricket jersey nike top sport outdoor activity base layer blue summer sporty solid"
+  },
+  {
+    "id": "k1536",
+    "name": "Puma Men Black Net Jersey",
+    "brand": "Puma",
+    "price": 3000,
+    "currency": "EUR",
+    "imageUrl": "/catalog/1536.jpg",
+    "category": "top",
+    "catalog": "outdoor",
+    "color": [
+      "black"
+    ],
+    "sizesAvailable": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "occasionTags": [
+      "sport",
+      "outdoor activity",
+      "base layer"
+    ],
+    "formalityLevel": 1,
+    "season": [
+      "autumn"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "sporty"
+    ],
+    "embeddingText": "puma men black net jersey puma top sport outdoor activity base layer black autumn sporty solid"
+  },
+  {
+    "id": "k1537",
+    "name": "Puma Men Red Net Jersey",
+    "brand": "Puma",
+    "price": 3000,
+    "currency": "EUR",
+    "imageUrl": "/catalog/1537.jpg",
+    "category": "top",
+    "catalog": "outdoor",
+    "color": [
+      "red"
+    ],
+    "sizesAvailable": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "occasionTags": [
+      "sport",
+      "outdoor activity",
+      "base layer"
+    ],
+    "formalityLevel": 1,
+    "season": [
+      "autumn"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "sporty"
+    ],
+    "embeddingText": "puma men red net jersey puma top sport outdoor activity base layer red autumn sporty solid"
+  },
+  {
+    "id": "k1561",
+    "name": "Quechua Women Sweat Proof White T-shirt",
+    "brand": "Quechua",
+    "price": 3000,
+    "currency": "EUR",
+    "imageUrl": "/catalog/1561.jpg",
+    "category": "top",
+    "catalog": "outdoor",
+    "color": [
+      "white"
+    ],
+    "sizesAvailable": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "occasionTags": [
+      "sport",
+      "outdoor activity",
+      "base layer"
+    ],
+    "formalityLevel": 1,
+    "season": [
+      "autumn"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "sporty"
+    ],
+    "embeddingText": "quechua women sweat proof white t-shirt quechua top sport outdoor activity base layer white autumn sporty solid"
+  },
+  {
+    "id": "k1562",
+    "name": "Quechua Men Sweat Proof Grey T-shirt",
+    "brand": "Quechua",
+    "price": 3000,
+    "currency": "EUR",
+    "imageUrl": "/catalog/1562.jpg",
+    "category": "top",
+    "catalog": "outdoor",
+    "color": [
+      "grey"
+    ],
+    "sizesAvailable": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "occasionTags": [
+      "sport",
+      "outdoor activity",
+      "base layer"
+    ],
+    "formalityLevel": 1,
+    "season": [
+      "autumn"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "sporty"
+    ],
+    "embeddingText": "quechua men sweat proof grey t-shirt quechua top sport outdoor activity base layer grey autumn sporty solid"
+  },
+  {
+    "id": "k1563",
+    "name": "Quechua Men Sweat Proof Blue T-shirt",
+    "brand": "Quechua",
+    "price": 3000,
+    "currency": "EUR",
+    "imageUrl": "/catalog/1563.jpg",
+    "category": "top",
+    "catalog": "outdoor",
+    "color": [
+      "blue"
+    ],
+    "sizesAvailable": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "occasionTags": [
+      "sport",
+      "outdoor activity",
+      "base layer"
+    ],
+    "formalityLevel": 1,
+    "season": [
+      "autumn"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "sporty"
+    ],
+    "embeddingText": "quechua men sweat proof blue t-shirt quechua top sport outdoor activity base layer blue autumn sporty solid"
+  },
+  {
+    "id": "k1535",
+    "name": "Puma Unisex Logo Cap",
+    "brand": "Puma",
+    "price": 3000,
+    "currency": "EUR",
+    "imageUrl": "/catalog/1535.jpg",
+    "category": "cap",
+    "catalog": "outdoor",
+    "color": [
+      "black"
+    ],
+    "sizesAvailable": [
+      "One Size"
+    ],
+    "occasionTags": [
+      "sport",
+      "outdoor activity",
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 1,
+    "season": [
+      "autumn"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "sporty"
+    ],
+    "embeddingText": "puma unisex logo cap puma cap sport outdoor activity day hiking outdoors travel black autumn sporty solid"
+  },
+  {
+    "id": "k1566",
+    "name": "Artengo Men Black Cap",
+    "brand": "Artengo",
+    "price": 3000,
+    "currency": "EUR",
+    "imageUrl": "/catalog/1566.jpg",
+    "category": "cap",
+    "catalog": "outdoor",
+    "color": [
+      "black"
+    ],
+    "sizesAvailable": [
+      "One Size"
+    ],
+    "occasionTags": [
+      "sport",
+      "outdoor activity",
+      "day hiking",
+      "outdoors",
+      "travel"
+    ],
+    "formalityLevel": 1,
+    "season": [
+      "summer"
+    ],
+    "fabric": [],
+    "silhouette": "",
+    "pattern": "solid",
+    "styleTags": [
+      "sporty"
+    ],
+    "embeddingText": "artengo men black cap artengo cap sport outdoor activity day hiking outdoors travel black summer sporty solid"
+  }
+]

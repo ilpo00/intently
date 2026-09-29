@@ -1,0 +1,101 @@
+{
+  "_note": "Soft situation profiles — the editable, hybrid seam. EMPHASIS, not rules: weights say how much each dimension matters; emphasis says what to lean toward. Nothing is excluded — a de-emphasised garment (shorts for an office) still appears, just lower. World-knowledge authored; a curator tunes the weights in the Studio; later, learned signals can adjust them behind the same scoreSituation() contract. Garment categories not listed default to 0.5 (neutral).",
+  "situations": [
+    {
+      "id": "office-day",
+      "label": "An office day",
+      "query": "something smart to wear for an office day",
+      "keywords": ["office", "work", "workwear", "business"],
+      "catalog": "fashion",
+      "weights": { "formality": 75, "occasion": 65, "garment": 50, "style": 45, "season": 10, "material": 20 },
+      "emphasis": {
+        "formality": 3.5,
+        "garments": { "shirt": 0.9, "trousers": 0.85, "top": 0.7, "dress": 0.7, "jacket": 0.55, "sweatshirt": 0.4, "shorts": 0.2, "sunglasses": 0.3, "cap": 0.2, "backpack": 0.2, "heels": 0.6 },
+        "occasionTags": ["smart casual", "everyday", "formal event"],
+        "styleArchetypes": ["classic", "minimalist", "preppy", "elegant"],
+        "seasons": [],
+        "materials": ["cotton", "wool", "linen"]
+      }
+    },
+    {
+      "id": "hike-cold-evening",
+      "label": "Weekend hike, cold evening",
+      "query": "a few things for a weekend hike, the evenings get cold",
+      "keywords": ["hike", "hiking", "trail", "trek", "outdoor", "mountain"],
+      "catalog": "outdoor",
+      "weights": { "formality": 30, "occasion": 80, "garment": 70, "style": 30, "season": 50, "material": 40 },
+      "emphasis": {
+        "formality": 1.5,
+        "garments": { "jacket": 0.95, "sweatshirt": 0.85, "backpack": 0.8, "cap": 0.7, "sunglasses": 0.7, "shoes": 0.7, "top": 0.6, "dress": 0.2, "heels": 0.1, "shorts": 0.3 },
+        "occasionTags": ["day hiking", "outdoors", "outdoor activity", "sport", "travel", "base layer"],
+        "styleArchetypes": ["sporty", "relaxed"],
+        "seasons": ["autumn", "winter"],
+        "materials": ["fleece", "wool", "technical", "waterproof", "lightweight"]
+      }
+    },
+    {
+      "id": "outdoor-summer-wedding",
+      "label": "Outdoor summer wedding guest",
+      "query": "a dress for an outdoor summer wedding",
+      "keywords": ["wedding", "guest", "bridal"],
+      "catalog": "fashion",
+      "weights": { "formality": 60, "occasion": 80, "garment": 70, "style": 50, "season": 40, "material": 20 },
+      "emphasis": {
+        "formality": 3.8,
+        "garments": { "dress": 0.95, "heels": 0.8, "top": 0.4, "jacket": 0.3, "backpack": 0.1, "sweatshirt": 0.1, "shorts": 0.2, "cap": 0.1 },
+        "occasionTags": ["wedding guest", "summer party", "outdoor event", "formal event", "party", "evening"],
+        "styleArchetypes": ["elegant", "romantic", "classic"],
+        "seasons": ["summer", "spring"],
+        "materials": ["linen", "cotton"]
+      }
+    },
+    {
+      "id": "relaxed-city-weekend",
+      "label": "Relaxed city weekend",
+      "query": "a relaxed outfit for a city weekend",
+      "keywords": ["city", "weekend", "casual", "relaxed"],
+      "catalog": "fashion",
+      "weights": { "formality": 40, "occasion": 60, "garment": 60, "style": 40, "season": 10, "material": 20 },
+      "emphasis": {
+        "formality": 2.5,
+        "garments": { "top": 0.8, "shirt": 0.75, "dress": 0.7, "trousers": 0.7, "shorts": 0.6, "jacket": 0.5, "heels": 0.3 },
+        "occasionTags": ["everyday", "smart casual", "travel", "summer party"],
+        "styleArchetypes": ["relaxed", "minimalist", "classic"],
+        "seasons": [],
+        "materials": ["cotton", "denim", "linen"]
+      }
+    },
+    {
+      "id": "beach-holiday",
+      "label": "Beach holiday",
+      "query": "something for a beach holiday",
+      "keywords": ["beach", "holiday", "vacation", "pool", "seaside"],
+      "catalog": "fashion",
+      "weights": { "formality": 30, "occasion": 60, "garment": 70, "style": 40, "season": 60, "material": 40 },
+      "emphasis": {
+        "formality": 1.5,
+        "garments": { "dress": 0.85, "shorts": 0.85, "top": 0.8, "sunglasses": 0.8, "jacket": 0.1, "sweatshirt": 0.1, "heels": 0.2, "trousers": 0.3 },
+        "occasionTags": ["summer party", "everyday", "travel", "outdoor event"],
+        "styleArchetypes": ["relaxed", "bohemian"],
+        "seasons": ["summer"],
+        "materials": ["linen", "cotton", "lightweight"]
+      }
+    },
+    {
+      "id": "black-tie-gala",
+      "label": "Black-tie gala",
+      "query": "a black-tie gala outfit",
+      "keywords": ["black-tie", "black tie", "gala", "tuxedo", "formal"],
+      "catalog": "fashion",
+      "weights": { "formality": 90, "occasion": 70, "garment": 60, "style": 50, "season": 5, "material": 30 },
+      "emphasis": {
+        "formality": 5,
+        "garments": { "dress": 0.9, "heels": 0.85, "top": 0.2, "jacket": 0.4, "shorts": 0.05, "cap": 0.05, "sweatshirt": 0.05 },
+        "occasionTags": ["formal event", "evening", "party"],
+        "styleArchetypes": ["elegant"],
+        "seasons": [],
+        "materials": ["silk", "satin", "velvet"]
+      }
+    }
+  ]
+}

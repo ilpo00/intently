@@ -1,0 +1,275 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Base resets ───────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  /* Prevent layout shift when scrollbar appears */
+  scrollbar-gutter: stable;
+}
+
+body {
+  min-height: 100vh;
+  /* Subtle grain texture — the "cloud" feel */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
+}
+
+/* ── Typography ────────────────────────────── */
+.font-display { font-family: var(--font-display), Georgia, serif; }
+.font-sans    { font-family: var(--font-sans), system-ui, sans-serif; }
+
+/* ── The River — section reveal animation ─── */
+/*
+  Sections start invisible and slide up when they
+  enter the viewport. We use a CSS class toggled
+  by useRiverReveal (IntersectionObserver).
+
+  The animation-fill-mode fallback ensures a section
+  never stays permanently hidden if the observer
+  fires before the element is measured (e.g. on
+  fast connections or programmatic scrolls).
+*/
+.river-section {
+  opacity: 0;
+  transform: translateY(28px);
+  /* ease-in-out cubic — matches the section-to-section scroll curve so the
+     reveal and the viewport travel feel like one continuous motion. */
+  transition:
+    opacity 0.9s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.9s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.river-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* Safety net: if JS fails or observer never fires, show after 1s */
+@media (prefers-reduced-motion: no-preference) {
+  .river-section {
+    animation: riverFallback 0s 1s forwards;
+  }
+}
+@keyframes riverFallback {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Cart row — highlight when opened from an "In cart" button ── */
+@keyframes cartRowHighlight {
+  0%   { background-color: rgba(29, 158, 117, 0.16); }
+  70%  { background-color: rgba(29, 158, 117, 0.10); }
+  100% { background-color: transparent; }
+}
+.cart-row-highlight {
+  animation: cartRowHighlight 5s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+
+/* ── Cart + button — soft breath nudge while row is highlighted ── */
+@keyframes plusBreathe {
+  0%, 100% { transform: scale(1);    box-shadow: none; }
+  50%       { transform: scale(1.18); box-shadow: 0 0 0 3px rgba(29, 158, 117, 0.20); }
+}
+.plus-breathe {
+  animation: plusBreathe 2s ease-in-out infinite;
+}
+
+/* ── Taste card — exit/enter animations for skip-swap ── */
+@keyframes tasteCardExit {
+  from { opacity: 1; transform: scale(1)    translateY(0); }
+  to   { opacity: 0; transform: scale(0.92) translateY(-8px); }
+}
+@keyframes tasteCardEnter {
+  from { opacity: 0; transform: scale(0.92) translateY(10px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+.taste-card-exit {
+  animation: tasteCardExit 0.32s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  pointer-events: none;
+}
+.taste-card-enter {
+  animation: tasteCardEnter 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+
+/* ── Sticky prompt — slides in from above once the entry collapses ── */
+@keyframes stickySlideDown {
+  from { transform: translateY(-100%); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+.sticky-slide-in {
+  /* fill-mode: both keeps the element off-screen before the animation starts
+     and locked in place after it finishes. */
+  animation: stickySlideDown 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* ── Order confirmation — celebration animations ── */
+@keyframes particleFly {
+  0%   { opacity: 1; transform: translate(0, 0) scale(1); }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.3); }
+}
+@keyframes confirmReveal {
+  0%   { opacity: 0; transform: translateY(16px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes dotPop {
+  0%   { transform: scale(0); opacity: 0; }
+  60%  { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.confirm-reveal {
+  animation: confirmReveal 0.6s ease forwards;
+}
+.confirm-reveal-delay {
+  opacity: 0;
+  animation: confirmReveal 0.6s ease 0.2s forwards;
+}
+.confirm-reveal-delay-2 {
+  opacity: 0;
+  animation: confirmReveal 0.6s ease 0.4s forwards;
+}
+.dot-pop {
+  animation: dotPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Celebration label — small "Order complete." caption that fades in
+   below the particle burst on the CelebrationOverlay. The 0.3s delay
+   lets the eye land on the particle motion first; the label appears
+   as the burst peaks. Opacity-only on the way in so the element's own
+   Tailwind `-translate-x-1/2` (used for horizontal centring) isn't
+   overwritten. */
+@keyframes celebrationLabelFade {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+/* Label fade-out: scales toward the viewer as it disappears, giving
+   the illusion of the celebration UI passing through and away. We
+   only animate transform here — the visual fade comes from the
+   parent overlay's opacity transition (which inherits down to the
+   label), so we don't double-up and end up with quadratic alpha
+   decay. The keyframe owns the transform, so we re-include the
+   translate(-50%, 0) horizontal-centring offset that Tailwind's
+   `-translate-x-1/2` would otherwise provide — the keyframe wins as
+   long as it's running. */
+@keyframes celebrationLabelOut {
+  0%   { transform: translate(-50%, 0) scale(1);    }
+  100% { transform: translate(-50%, 0) scale(1.25); }
+}
+.animate-celebration-label {
+  animation: celebrationLabelFade 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s forwards;
+}
+.animate-celebration-label-out {
+  animation: celebrationLabelOut 800ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-celebration-label,
+  .animate-celebration-label-out {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* Confirmation approach — the 60/40 split underneath the celebration
+   overlay scales up gently from behind (scale 0.94 → 1), timed to
+   start exactly when the overlay begins fading out. Layered with the
+   overlay's opacity-fade and the label's outward scale, this gives
+   the illusion of the celebration UI passing through the viewer
+   while the destination arrives from behind it.
+   No opacity in this animation — the overlay covers the section
+   visually during the hold, so we don't need to hide the section
+   with opacity:0 (which would also hide any descendants like the
+   celebration overlay if it were a child, see CheckoutSection.tsx
+   sibling-render note).
+   The 3000ms delay must match HOLD_MS in CelebrationOverlay.tsx, and
+   the 800ms duration must match FADE_MS. */
+@keyframes confirmationApproach {
+  0%   { transform: scale(0.94); }
+  100% { transform: scale(1);    }
+}
+.confirmation-approach {
+  transform-origin: center center;
+  animation: confirmationApproach 800ms cubic-bezier(0.22, 0.61, 0.36, 1) 3000ms both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .confirmation-approach {
+    animation: none;
+    transform: none;
+  }
+}
+
+/* ── Scrollbar styling ─────────────────────── */
+::-webkit-scrollbar       { width: 6px; }
+::-webkit-scrollbar-track { background: #F2EFE9; }
+::-webkit-scrollbar-thumb { background: #C4BFB5; border-radius: 3px; }
+
+/* ── Focus styles — accessible but not ugly ── */
+:focus-visible {
+  outline: 2px solid #888480;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── Utility: text balance ─────────────────── */
+.text-balance { text-wrap: balance; }
+
+/* ── Product card hover state ──────────────── */
+.product-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.product-card:hover {
+  transform: translateY(-2px);
+}
+
+/* ── Chat bubble animation ─────────────────── */
+@keyframes bubbleIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.bubble-in {
+  animation: bubbleIn 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+
+/* ── Typing indicator dots ─────────────────── */
+@keyframes dotBounce {
+  0%, 80%, 100% { transform: translateY(0); }
+  40%           { transform: translateY(-4px); }
+}
+.typing-dot {
+  animation: dotBounce 1.2s ease-in-out infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.15s; }
+.typing-dot:nth-child(3) { animation-delay: 0.30s; }
+
+/* ── Fly-to-cart animation ─────────────────── */
+/*
+  A cloned node is positioned at the source element's rect, then
+  CSS variables --fly-dx/--fly-dy translate it toward the cart.
+  The transition (set inline when the clone is created) drives the
+  motion. The final scale + fade in keyframe form is reserved for
+  reduced-motion users — see .cart-pulse below. For the fly itself
+  we use element.style.transition so duration is easy to tune.
+*/
+.fly-clone {
+  position: fixed;
+  z-index: 60;
+  pointer-events: none;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+  will-change: transform, opacity;
+}
+
+/* Cart button pulse when an item lands */
+@keyframes cartPulse {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.14); }
+  100% { transform: scale(1); }
+}
+[data-cart-pulse="true"] {
+  animation: cartPulse 0.36s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Reduced motion: skip the fly, keep a subtle pulse */
+@media (prefers-reduced-motion: reduce) {
+  .fly-clone { display: none; }
+}
+

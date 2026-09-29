@@ -1,0 +1,3 @@
+Product images sourced from the H&M dataset (Qdrant/hm_ecommerce_products),
+licensed CC-BY-4.0. Resized to webp thumbnails for the Intently demo.
+https://huggingface.co/datasets/Qdrant/hm_ecommerce_products

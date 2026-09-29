@@ -1,0 +1,67 @@
+# ─────────────────────────────────────────────────────────────────
+# Intently PIM · local Docker stack
+#
+#   postgres  — Medusa's database (port 5432)
+#   redis     — event bus / cache (port 6379; wired into Medusa later)
+#   medusa    — the PIM backend + admin (port 9000)
+#
+#   docker compose up --build      (or: npm run docker:up)
+#   docker compose down            (or: npm run docker:down)
+#
+# Admin:     http://localhost:9000/app
+# Store API: http://localhost:9000/store/products
+# ─────────────────────────────────────────────────────────────────
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: intently_pim
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  medusa:
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "9000:9000"
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/intently_pim
+      REDIS_URL: redis://redis:6379
+      STORE_CORS: http://localhost:3000
+      ADMIN_CORS: http://localhost:9000,http://localhost:3000
+      AUTH_CORS: http://localhost:9000,http://localhost:3000
+      JWT_SECRET: dev-jwt-secret-change-me
+      COOKIE_SECRET: dev-cookie-secret-change-me
+      ADMIN_EMAIL: admin@intently.local
+      ADMIN_PASSWORD: supersecret
+      # Seeded image URLs must resolve in the BROWSER, i.e. the Next app on
+      # the host — not from inside the container. Pictures are absent until a
+      # new bank is chosen; these URLs 404 in the interim, which is expected.
+      PIM_IMAGE_BASE_URL: http://localhost:3000/catalog
+
+volumes:
+  pgdata:

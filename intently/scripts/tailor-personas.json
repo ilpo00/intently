@@ -1,0 +1,100 @@
+[
+  {
+    "name": "vague-vera",
+    "catalog": "fashion",
+    "opening": "I need a dress",
+    "behavior": "taps",
+    "followups": []
+  },
+  {
+    "name": "trip-tom",
+    "catalog": "fashion",
+    "opening": "something nice for a trip",
+    "behavior": "escape",
+    "followups": []
+  },
+  {
+    "name": "casual-cara",
+    "catalog": "fashion",
+    "opening": "I need a dress",
+    "behavior": "types",
+    "followups": [
+      "nothing black",
+      "darker, richer tones"
+    ]
+  },
+  {
+    "name": "outdoor-oliver",
+    "catalog": "outdoor",
+    "opening": "I need a jacket",
+    "behavior": "taps",
+    "followups": []
+  },
+  {
+    "name": "medium-maya",
+    "catalog": "fashion",
+    "opening": "a dress for a summer party",
+    "behavior": "types",
+    "followups": [
+      "keep it under control price-wise"
+    ]
+  },
+  {
+    "name": "escape-elena",
+    "catalog": "fashion",
+    "opening": "a dress for a summer party",
+    "behavior": "escape",
+    "followups": []
+  },
+  {
+    "name": "hiking-harry",
+    "catalog": "outdoor",
+    "opening": "something for hiking in the rain",
+    "behavior": "taps",
+    "followups": []
+  },
+  {
+    "name": "rich-rachel",
+    "catalog": "fashion",
+    "opening": "a dress for a friends outdoor wedding in July, smart casual, nothing floral",
+    "behavior": "types",
+    "followups": [
+      "it gets cold in the evenings",
+      "darker, richer tones"
+    ],
+    "cartsBest": true
+  },
+  {
+    "name": "vague-vince",
+    "catalog": "fashion",
+    "opening": "I just need something cool",
+    "behavior": "escape",
+    "followups": []
+  },
+  {
+    "name": "detailed-dan",
+    "catalog": "outdoor",
+    "opening": "a lightweight waterproof jacket for trail running in autumn",
+    "behavior": "taps",
+    "followups": [
+      "nothing black",
+      "keep it under control price-wise"
+    ]
+  },
+  {
+    "name": "medium-nina",
+    "catalog": "fashion",
+    "opening": "a pair of jeans for work",
+    "behavior": "types",
+    "followups": [
+      "darker, richer tones"
+    ]
+  },
+  {
+    "name": "trip-theo",
+    "catalog": "outdoor",
+    "opening": "a backpack for a weekend camping trip",
+    "behavior": "escape",
+    "followups": []
+  }
+]

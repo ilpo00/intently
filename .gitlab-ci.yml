@@ -1,0 +1,85 @@
+# Mirrors .github/workflows/ci.yml: typecheck, lint, test, build,
+# plus GitLab Security templates (SAST + Secret Detection) inherited
+# from the project's default GitLab CI setup.
+#
+# No deploy stage: production deploys are manual (`vercel deploy --prod`
+# from intently/). Defining this file overrides GitLab Auto DevOps, so no
+# deploy job is injected automatically.
+#
+# Note: if a GitLab→Vercel integration is enabled at the project
+# level (Settings → Integrations → Vercel), disconnect it there too —
+# this YAML can't suppress it.
+
+default:
+  image: node:lts
+  cache:
+    key:
+      files:
+        - intently/package-lock.json
+    paths:
+      - intently/node_modules/
+
+stages:
+  - check
+  - secret-detection
+
+# GitLab Security templates. They bring their own images and jobs;
+# we override their default `test` stage to land in our `check`/
+# `secret-detection` stages below.
+include:
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Secret-Detection.gitlab-ci.yml
+
+variables:
+  SECRET_DETECTION_ENABLED: 'true'
+
+# Anchor for jobs that need the Node app set up. Security jobs from
+# the included templates don't extend this — they run in their own
+# scanner images.
+.node-setup: &node-setup
+  before_script:
+    - cd intently
+    - npm ci
+
+typecheck:
+  <<: *node-setup
+  stage: check
+  script:
+    - npm run typecheck
+
+lint:
+  <<: *node-setup
+  stage: check
+  script:
+    - npm run lint
+
+test:
+  <<: *node-setup
+  stage: check
+  script:
+    - npm run test:ci
+
+# Keyless quality evals: exclusions honoured, grounding verifier,
+# consultation restraint (see intently/docs/eval-scorecard-latest.md).
+eval:
+  <<: *node-setup
+  stage: check
+  script:
+    - npm run eval
+  artifacts:
+    when: always
+    paths:
+      - intently/docs/*-latest.md
+
+build:
+  <<: *node-setup
+  stage: check
+  script:
+    - npm run build
+
+# Re-stage the security jobs onto our stage names.
+sast:
+  stage: check
+
+secret_detection:
+  stage: secret-detection

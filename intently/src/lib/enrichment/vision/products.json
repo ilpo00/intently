@@ -1,0 +1,22 @@
+[
+  { "id": "p-176209033", "image": "/catalog/176209033.webp",
+    "pim": { "title": "Hooded Jacket", "articleType": "Jackets", "gender": "Men", "baseColour": "Brown" } },
+  { "id": "p-282832017", "image": "/catalog/282832017.webp",
+    "pim": { "title": "Hooded Jacket", "articleType": "Jackets", "gender": "Men", "baseColour": "Blue" } },
+  { "id": "p-189691044", "image": "/catalog/189691044.webp",
+    "pim": { "title": "Sweatshirt", "articleType": "Sweatshirts", "gender": "Women", "baseColour": "Grey" } },
+  { "id": "p-118458004", "image": "/catalog/118458004.webp",
+    "pim": { "title": "Joggers", "articleType": "Track Pants", "gender": "Men", "baseColour": "Grey" } },
+  { "id": "p-224314013", "image": "/catalog/224314013.webp",
+    "pim": { "title": "Knitted Hat", "articleType": "Caps", "gender": "Unisex", "baseColour": null } },
+  { "id": "p-203027045", "image": "/catalog/203027045.webp",
+    "pim": { "title": "T-shirt", "articleType": "Tshirts", "gender": "Women", "baseColour": "White" } },
+  { "id": "p-218354045", "image": "/catalog/218354045.webp",
+    "pim": { "title": "Vest Top", "articleType": "Tops", "gender": "Women", "baseColour": "White" } },
+  { "id": "p-220094016", "image": "/catalog/220094016.webp",
+    "pim": { "title": "Maxi Dress", "articleType": "Dresses", "gender": "Women", "baseColour": "White" } },
+  { "id": "p-384654022", "image": "/catalog/384654022.webp",
+    "pim": { "title": "Jersey Dress", "articleType": "Dresses", "gender": "Women", "baseColour": null } },
+  { "id": "p-392938001", "image": "/catalog/392938001.webp",
+    "pim": { "title": "Shirt", "articleType": "Shirts", "gender": "Men", "baseColour": "White" } }
+]

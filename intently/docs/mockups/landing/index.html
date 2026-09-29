@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Intently · Landing redesign — research & 3 directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --nx-surface:#fbfaf8; --nx-surface-raised:#fff; --nx-surface-sunk:#f1eee8;
+    --nx-ink:#1a1b19; --nx-ink-soft:#3a3c38; --nx-muted:#63625b;
+    --nx-line:#e6e2d9; --nx-line-strong:#d3cec3;
+    --nx-accent:#1c6b54; --nx-accent-deep:#134a3a; --nx-accent-tint:#e8f0ec; --nx-on-accent:#fff;
+    --nx-r-sm:8px; --nx-r-md:14px; --nx-r-lg:20px; --nx-r-pill:999px;
+    --nx-shadow-card:0 1px 2px rgba(20,20,18,.04),0 10px 28px rgba(20,20,18,.06);
+    --nx-shadow-pop:0 30px 70px rgba(20,20,18,.22);
+    --nx-ease:cubic-bezier(.22,.61,.36,1);
+    --font-display:'Cormorant Garamond',Georgia,serif; --font-sans:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--nx-surface);font-family:var(--font-sans);color:var(--nx-ink);-webkit-font-smoothing:antialiased;line-height:1.5}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+
+  .hero{background:linear-gradient(168deg,#163f33,#1c6b54);color:#eaf3ee;padding:60px 0 56px}
+  .hero .eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#bfe0d1;font-weight:600;margin:0 0 14px}
+  .hero h1{font-family:var(--font-display);font-weight:500;font-size:clamp(36px,5.5vw,60px);line-height:1.04;margin:0 0 16px;letter-spacing:-.01em;color:#fff}
+  .hero p{font-size:18px;line-height:1.6;color:#d8ebe1;max-width:680px;margin:0}
+  .hero .mark{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:15px;margin-bottom:30px}
+  .hero .mark i{width:9px;height:9px;border-radius:50%;background:#bfe0d1}
+
+  section{padding:48px 0}
+  h2.sec{font-family:var(--font-display);font-weight:500;font-size:32px;margin:0 0 8px;letter-spacing:-.01em}
+  .sub{color:var(--nx-muted);font-size:16px;max-width:720px;margin:0 0 26px;line-height:1.6}
+  .kicker{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--nx-accent);font-weight:600;margin:0 0 10px}
+
+  /* before/after band */
+  .diag{background:var(--nx-surface-sunk);border-top:1px solid var(--nx-line);border-bottom:1px solid var(--nx-line)}
+  .beforegrid{display:grid;grid-template-columns:1.1fr .9fr;gap:30px;align-items:center}
+  @media(max-width:780px){.beforegrid{grid-template-columns:1fr}}
+
+  /* tiny faithful repro of the CURRENT empty screen */
+  .mini{background:var(--nx-surface);border:1px solid var(--nx-line);border-radius:var(--nx-r-md);box-shadow:var(--nx-shadow-card);overflow:hidden}
+  .mini__h{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--nx-line);background:var(--nx-surface-raised);font-size:13px;font-weight:600}
+  .mini__h i{width:7px;height:7px;border-radius:50%;background:var(--nx-accent)}
+  .mini__h .sp{flex:1}
+  .mini__h .pill{font-weight:500;color:var(--nx-muted);border:1px solid var(--nx-line-strong);border-radius:999px;padding:3px 9px;font-size:11px}
+  .mini__body{display:grid;grid-template-columns:150px 1fr;min-height:230px}
+  .mini__rail{border-right:1px solid var(--nx-line);padding:14px;display:flex;flex-direction:column}
+  .mini__eye{font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--nx-accent);font-weight:600;margin-bottom:6px}
+  .mini__title{font-family:var(--font-display);font-size:16px;line-height:1.1;margin:0 0 10px}
+  .mini__seed{border:1px solid var(--nx-line-strong);border-radius:7px;padding:7px 8px;font-size:9.5px;color:var(--nx-ink-soft);margin-bottom:6px}
+  .mini__input{margin-top:auto;border:1px solid var(--nx-line-strong);border-radius:999px;padding:7px 10px;font-size:9.5px;color:var(--nx-muted)}
+  .mini__canvas{background:var(--nx-surface-sunk);display:grid;place-items:center;text-align:center;padding:16px}
+  .mini__hint{color:var(--nx-muted);font-size:11px;max-width:150px}
+  .mini__compass{font-size:26px;color:var(--nx-line-strong);margin-bottom:6px}
+  .redring{box-shadow:0 0 0 2px #c0492f inset;border-radius:6px}
+  .flag{display:inline-block;background:#c0492f;color:#fff;font-size:11px;font-weight:600;border-radius:999px;padding:2px 9px;margin-bottom:10px}
+  .diaglist{margin:0;padding:0;list-style:none}
+  .diaglist li{position:relative;padding:9px 0 9px 26px;border-top:1px solid var(--nx-line);font-size:14.5px;color:var(--nx-ink-soft);line-height:1.55}
+  .diaglist li::before{content:'';position:absolute;left:2px;top:15px;width:9px;height:9px;border-radius:50%;background:#c0492f}
+  .diaglist b{color:var(--nx-ink)}
+
+  /* research / personas */
+  .persona{display:grid;grid-template-columns:1fr;gap:14px}
+  .prow{display:grid;grid-template-columns:200px 1fr 150px;gap:18px;align-items:start;background:var(--nx-surface-raised);
+    border:1px solid var(--nx-line);border-radius:var(--nx-r-md);padding:18px 20px}
+  @media(max-width:780px){.prow{grid-template-columns:1fr}}
+  .prow h3{margin:0 0 4px;font-family:var(--font-display);font-size:21px;font-weight:500}
+  .prow .trig{font-size:12.5px;color:var(--nx-accent);font-weight:600}
+  .prow .jtbd{font-size:14.5px;color:var(--nx-ink-soft);line-height:1.55;margin:6px 0 0}
+  .prow .jtbd em{color:var(--nx-muted);font-style:italic}
+  .prow .serves{font-size:12.5px;color:var(--nx-muted)}
+  .prow .serves b{display:inline-block;background:var(--nx-accent-tint);color:var(--nx-accent-deep);border:1px solid var(--nx-accent);
+    border-radius:999px;padding:2px 9px;font-size:11.5px;font-weight:600;margin-top:3px}
+  .hot{border-left:3px solid var(--nx-accent)}
+
+  /* principles */
+  .principles{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:680px){.principles{grid-template-columns:1fr}}
+  .pri{background:var(--nx-surface-raised);border:1px solid var(--nx-line);border-radius:var(--nx-r-md);padding:18px 20px}
+  .pri h4{margin:0 0 6px;font-size:15px}
+  .pri p{margin:0;color:var(--nx-ink-soft);font-size:14px;line-height:1.55}
+
+  /* concept cards */
+  .concepts{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media(max-width:880px){.concepts{grid-template-columns:1fr}}
+  .concept{display:flex;flex-direction:column;text-decoration:none;color:inherit;background:var(--nx-surface-raised);
+    border:1px solid var(--nx-line);border-radius:var(--nx-r-lg);overflow:hidden;transition:transform .24s var(--nx-ease),box-shadow .24s var(--nx-ease),border-color .24s var(--nx-ease)}
+  .concept:hover{transform:translateY(-4px);box-shadow:var(--nx-shadow-card);border-color:var(--nx-accent)}
+  .concept .thumb{height:118px;position:relative;border-bottom:1px solid var(--nx-line);background:var(--nx-surface-sunk);overflow:hidden}
+  .concept .lab{position:absolute;top:10px;left:10px;font-size:11px;font-weight:600;letter-spacing:.04em;background:var(--nx-ink);color:#fff;border-radius:999px;padding:3px 10px}
+  .concept.rec .lab{background:#caa24a;color:#241c00}
+  .concept .body{padding:16px 18px 20px}
+  .concept h3{font-family:var(--font-display);font-size:23px;font-weight:500;margin:0 0 2px}
+  .concept .one{font-size:13px;color:var(--nx-accent);font-weight:600;margin:0 0 10px}
+  .concept p{font-size:13.5px;color:var(--nx-ink-soft);line-height:1.55;margin:0 0 12px}
+  .concept .meta{font-size:12px;color:var(--nx-muted);border-top:1px solid var(--nx-line);padding-top:10px;margin-top:auto}
+  .concept .meta b{color:var(--nx-ink-soft)}
+  .concept .open{margin-top:12px;font-size:13px;font-weight:600;color:var(--nx-accent)}
+
+  /* thumbnails (pure CSS sketches of each layout) */
+  .th{position:absolute;inset:14px;display:flex;gap:8px}
+  .th .col{background:#fff;border:1px solid var(--nx-line);border-radius:6px}
+  .th .ink{background:var(--nx-accent);border-radius:3px;opacity:.85}
+  .th .soft{background:var(--nx-line-strong);border-radius:3px}
+  .th-a{flex-direction:column;align-items:center;justify-content:center;gap:6px}
+  .th-a .bar{width:62%;height:13px;border:1.5px solid var(--nx-accent);border-radius:999px}
+  .th-a .ch{display:flex;gap:5px}.th-a .ch span{width:24px;height:7px;background:var(--nx-line-strong);border-radius:999px}
+  .th-b .col:first-child{flex:1;padding:10px;display:flex;flex-direction:column;gap:6px}
+  .th-b .col:last-child{flex:1;background:var(--nx-surface-sunk);padding:10px;display:flex;flex-direction:column;gap:5px}
+  .th-b .bar{height:11px;border:1.5px solid var(--nx-accent);border-radius:999px;margin-top:auto}
+  .th-b .cardlet{flex:1;background:#fff;border:1px solid var(--nx-accent);border-radius:5px}
+  .th-c .col:first-child{width:42%;background:linear-gradient(160deg,#163f33,#1c6b54);border:0}
+  .th-c .col:last-child{flex:1;padding:10px;display:flex;flex-direction:column;gap:5px}
+  .th-c .pathlet{height:13px;background:#fff;border:1px solid var(--nx-line-strong);border-radius:5px}
+  .th-c .bar{height:11px;border:1.5px solid var(--nx-accent);border-radius:999px;margin-top:auto}
+
+  .reco{background:var(--nx-accent-tint);border:1px solid var(--nx-accent);border-radius:var(--nx-r-md);padding:22px 24px}
+  .reco h3{margin:0 0 8px;font-family:var(--font-display);font-size:24px;font-weight:500;color:var(--nx-accent-deep)}
+  .reco p{margin:0 0 10px;color:var(--nx-accent-deep);font-size:15px;line-height:1.6}
+  .reco p:last-child{margin:0}
+  .candor{background:#fbf3ec;border:1px solid #e9d4c2;border-radius:var(--nx-r-md);padding:20px 24px;margin-top:16px}
+  .candor h3{margin:0 0 8px;font-family:var(--font-display);font-size:22px;font-weight:500;color:#5e3417}
+  .candor p{margin:0 0 10px;color:#7a4a2a;font-size:14.5px;line-height:1.6}
+  .candor p:last-child{margin:0}
+  .candor b{color:#5e3417}
+
+  .next{border:1px dashed var(--nx-line-strong);border-radius:var(--nx-r-md);padding:18px 22px;color:var(--nx-ink-soft);font-size:14.5px;line-height:1.6}
+  .next b{color:var(--nx-ink)}
+  footer{padding:30px 0 60px;color:var(--nx-muted);font-size:12.5px;border-top:1px solid var(--nx-line)}
+</style>
+</head>
+<body>
+  <div class="hero">
+    <div class="wrap">
+      <div class="mark"><i></i>Intently</div>
+      <p class="eyebrow">Landing redesign · the first impression</p>
+      <h1>Make people want to type.</h1>
+      <p>The discovery screen opens too empty to invite anyone in. Below: who actually arrives at "shop by situation" and why,
+        a diagnosis of what's cold about the current screen, and three landing directions — <b>simple</b>, <b>inviting</b>,
+        <b>assisting</b> — each a clickable, annotated mock.</p>
+    </div>
+  </div>
+
+  <!-- DIAGNOSIS -->
+  <div class="diag">
+    <div class="wrap"><section>
+      <p class="kicker">The problem, precisely</p>
+      <h2 class="sec">Two-thirds of the screen is a void</h2>
+      <p class="sub">Before the first search, the desktop layout is a <code>380px | 1fr</code> split: a cramped invitation in the
+        left rail, and the entire right two-thirds rendered as an empty canvas with a faint compass and one line of text. The
+        only input is the small bar pinned to the bottom of the rail. It reads as an unfinished dashboard, not an invitation.</p>
+      <div class="beforegrid">
+        <!-- faithful mini repro of today -->
+        <div class="mini" aria-label="Reproduction of the current empty discovery screen">
+          <div class="mini__h"><i></i>Intently<span class="sp"></span><span class="pill">Cart</span><span class="pill">✕</span></div>
+          <div class="mini__body">
+            <div class="mini__rail">
+              <div class="mini__eye">Guided discovery</div>
+              <p class="mini__title">What are you shopping for?</p>
+              <div class="mini__seed">“ Something warm for a cold evening</div>
+              <div class="mini__seed">“ A black dress for a party</div>
+              <div class="mini__seed">“ Relaxed minimalist basics</div>
+              <div class="mini__input redring">Describe what you're shopping for…</div>
+            </div>
+            <div class="mini__canvas redring">
+              <div>
+                <div class="mini__compass">◎</div>
+                <p class="mini__hint">Your curated few will appear here — each with a reason it fits.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <span class="flag">What's cold about it</span>
+          <ul class="diaglist">
+            <li><b>The void dominates.</b> ~800px of empty canvas is the largest element on screen — the eye reads "broken / not loaded" before "calm."</li>
+            <li><b>The input hides.</b> The one thing we want tapped is a small bar at the bottom of a side rail — not the focal point.</li>
+            <li><b>No reason to prefer it.</b> Nothing on screen shows why this beats the filters the shopper already knows. It looks like search with extra steps.</li>
+            <li><b>High activation energy.</b> A blank field + a faint hint asks the shopper to do all the work of imagining what's possible.</li>
+          </ul>
+        </div>
+      </div>
+    </section></div>
+  </div>
+
+  <!-- RESEARCH -->
+  <div class="wrap"><section>
+    <p class="kicker">/user-research · who arrives here and why</p>
+    <h2 class="sec">Five situations that bring someone to "shop by situation"</h2>
+    <p class="sub">The landing has to work for very different states of mind. The two marked <b>●</b> are the ones the redesign must
+      win — they're where the old product-listing page already failed the shopper, which is exactly the moment Intently earns or
+      loses them.</p>
+
+    <div class="persona">
+      <div class="prow hot">
+        <div><h3>The filter refugee ●</h3><div class="trig">Trigger: just bounced off the PLP</div></div>
+        <p class="jtbd">Applied filters, got 240 results or 0, ping-ponged between category pages, never felt "yes, that." Arrives
+          frustrated. <em>"I've tried; show me you can do better than the filters I just gave up on."</em></p>
+        <div class="serves">Needs the <b>payoff shown up front</b><br/>→ best served by B</div>
+      </div>
+      <div class="prow hot">
+        <div><h3>The blank-box freezer ●</h3><div class="trig">Trigger: lands, doesn't know what to type</div></div>
+        <p class="jtbd">Open to inspiration or shopping for someone else ("something for my dad who hikes"), but an empty field is
+          the same open-ended task that overwhelms. <em>"Give me a door to walk through."</em></p>
+        <div class="serves">Needs <b>concrete starting points</b><br/>→ best served by C</div>
+      </div>
+      <div class="prow">
+        <div><h3>The constraint-stacker</h3><div class="trig">Trigger: a need filters can't express</div></div>
+        <p class="jtbd">Knows the shape of it — "sturdy track pants that don't look like gym clothes," "a linen shirt for a warm
+          coastal wedding." Function + aesthetic + context in one breath. <em>"Let me say it as a sentence."</em></p>
+        <div class="serves">Needs a <b>clean place to type</b><br/>→ best served by A</div>
+      </div>
+      <div class="prow">
+        <div><h3>The confident first-timer</h3><div class="trig">Trigger: arrives with intent</div></div>
+        <p class="jtbd">Has an occasion in mind, doesn't know this store's taxonomy. Filters require knowing the catalogue's
+          words; a situation doesn't. <em>"I'll tell you the occasion — you map it to products."</em></p>
+        <div class="serves">Needs <b>low friction + a clear promise</b><br/>→ A or B</div>
+      </div>
+      <div class="prow">
+        <div><h3>The curious browser</h3><div class="trig">Trigger: no fixed need, just looking</div></div>
+        <p class="jtbd">Might type, might not. Will leave if there's nothing to react to. <em>"Show me something interesting and
+          I'll engage."</em></p>
+        <div class="serves">Needs <b>something alive on arrival</b><br/>→ B or C</div>
+      </div>
+    </div>
+  </section></div>
+
+  <!-- PRINCIPLES -->
+  <div class="wrap"><section>
+    <p class="kicker">Shared principles</p>
+    <h2 class="sec">What all three directions hold to</h2>
+    <p class="sub">However the layout varies, every direction obeys the same five rules — drawn from the diagnosis and your brief.</p>
+    <div class="principles">
+      <div class="pri"><h4>1 · Don't render a void</h4><p>The empty results canvas never shows before there's a shortlist to fill it. Each direction puts something living, useful, or calm where the compass used to sit.</p></div>
+      <div class="pri"><h4>2 · The input is the hero</h4><p>One unmistakable, pre-focused field ringed in the pine accent — never a small bar hiding in a rail.</p></div>
+      <div class="pri"><h4>3 · Show the difference, don't claim it</h4><p>Every direction signals "explained shortlist, not 300 results" — through a promise line (A), a live preview (B), or a stated 3-step consultation (C).</p></div>
+      <div class="pri"><h4>4 · Lower activation energy</h4><p>The chips/seeds stay — repositioned so the hardest moment (the blank box) always has an easy first move close at hand.</p></div>
+      <div class="pri"><h4>5 · Calm reveal — but CTA-first</h4><p>Suggestions arrive gently, staggered. The <em>primary</em> input and promise are present at t=0. Calm belongs to the secondary layer, never the core action.</p></div>
+      <div class="pri"><h4>0 · Stay unmistakably Intently</h4><p>Warm paper, one pine accent, Cormorant + Inter, the explained card. The variation is layout and approach — not a rebrand.</p></div>
+    </div>
+  </section></div>
+
+  <!-- CONCEPTS -->
+  <div class="diag">
+    <div class="wrap"><section>
+      <p class="kicker">Three directions</p>
+      <h2 class="sec">Simple · Inviting · Assisting</h2>
+      <p class="sub">Deliberately different on the axis that matters most for a first impression — <b>how much the screen does
+        for the shopper before they act</b> — and on layout (centre / left / right). Click any card for the full annotated mock.</p>
+      <div class="concepts">
+
+        <a class="concept" href="a-simple.html">
+          <div class="thumb"><span class="lab">A · Simple</span>
+            <div class="th th-a">
+              <div style="font-family:var(--font-display);font-size:13px;color:var(--nx-ink)">What are you dressing for?</div>
+              <div class="bar"></div>
+              <div class="ch"><span></span><span></span><span></span></div>
+            </div>
+          </div>
+          <div class="body">
+            <h3>The Quiet Open</h3>
+            <p class="one">Centre · minimal</p>
+            <p>No split, no canvas — one calm centred input is the whole page. The void can't feel empty if it isn't drawn.</p>
+            <div class="meta"><b>For:</b> constraint-stackers, confident first-timers · the safe default</div>
+            <div class="open">Open mock →</div>
+          </div>
+        </a>
+
+        <a class="concept rec" href="b-inviting.html">
+          <div class="thumb"><span class="lab">B · Inviting ★</span>
+            <div class="th th-b">
+              <div class="col"><div class="soft" style="height:8px;width:80%"></div><div class="soft" style="height:6px;width:60%"></div><div class="bar"></div></div>
+              <div class="col"><div class="cardlet"></div><div class="ink" style="height:5px;width:70%"></div></div>
+            </div>
+          </div>
+          <div class="body">
+            <h3>The Living Preview</h3>
+            <p class="one">Left · show the payoff</p>
+            <p>The right pane breathes through real explained examples — you see what Intently gives back before typing a word.</p>
+            <div class="meta"><b>For:</b> filter refugees, browsers · highest pull</div>
+            <div class="open">Open mock →</div>
+          </div>
+        </a>
+
+        <a class="concept" href="c-assisting.html">
+          <div class="thumb"><span class="lab">C · Assisting</span>
+            <div class="th th-c">
+              <div class="col"></div>
+              <div class="col"><div class="pathlet"></div><div class="pathlet"></div><div class="pathlet"></div><div class="bar"></div></div>
+            </div>
+          </div>
+          <div class="body">
+            <h3>The Tailor Opens</h3>
+            <p class="one">Right · the guide leads</p>
+            <p>A greeting, then concrete paths arrive in a calm stagger — with free-text always open. Kills the blank-box freeze.</p>
+            <div class="meta"><b>For:</b> blank-box freezers, gift-givers · most assistance</div>
+            <div class="open">Open mock →</div>
+          </div>
+        </a>
+      </div>
+    </section></div>
+  </div>
+
+  <!-- RECOMMENDATION + CANDOR -->
+  <div class="wrap"><section>
+    <p class="kicker">My read</p>
+    <h2 class="sec">Where I'd put the chips</h2>
+
+    <div class="reco">
+      <h3>Lead with B, borrow A's restraint.</h3>
+      <p><b>B is the only direction that meets your two hard requirements head-on.</b> "Is this just a different way to the same
+        results?" — no: the explained shortlist is the first thing on screen. "Will it be a dead end people abandon for the PLP?"
+        — the pull runs toward typing, because the reward is visible before the cost.</p>
+      <p>Keep B's restraint dialled to A's level: one preview card, slow cross-fade, lots of air. If you can only ship one, ship
+        B. If you want a fallback that's nearly impossible to get wrong, A. Reach for C only if behaviour data shows people
+        landing and leaving <em>without typing</em> — that's the specific disease C cures, and it over-assists everyone else.</p>
+    </div>
+
+    <div class="candor">
+      <h3>Two things you didn't ask me to say</h3>
+      <p><b>On "calmly appearing suggestions" — I agree, with one edit.</b> Calm reveals feel premium and cut overwhelm, so
+        they're in all three. But a filter-refugee is ~2 seconds from leaving. If the <em>input or the promise</em> fades in on a
+        delay, you've hidden the lifeline at the exact moment it's needed. So: primary action present instantly, suggestions
+        fade in. That's the one place where "calm" and "broken" look identical, and the difference is which layer you delay.</p>
+      <p><b>A landing can't save a weak first answer.</b> All three write the same cheque — "a curated few, each with a reason."
+        If the first real shortlist comes back looking like a 30-tile product grid, the better the landing, the harder the
+        let-down. The landing is necessary and not sufficient; <b>the first message is where this is actually won or lost.</b></p>
+    </div>
+
+    <div class="next" style="margin-top:22px">
+      <b>Next, per your plan:</b> the first message. Once you pick a landing direction, we design the moment right after submit —
+      the "understood" beat (context chips), the thinking pause, and the first explained shortlist — so the promise made here is
+      paid off in the first three seconds.
+    </div>
+  </section></div>
+
+  <footer><div class="wrap">
+    Mockups are static HTML, faithful to <code>src/app/next/theme.css</code> tokens (warm paper, Nordic-pine accent,
+    Cormorant&nbsp;Garamond + Inter) and the real seeds/products from <code>scripted.ts</code>. Desktop-first frames; the mobile
+    single-column variant is a follow-up. Preview images load from <code>public/catalog/</code> when served locally.
+  </div></footer>
+</body>
+</html>
