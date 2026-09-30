@@ -22,6 +22,8 @@
 import { NextResponse } from 'next/server'
 
 import { assertAdminApi } from '@/lib/auth/admin-guard'
+import { isPublicDemo } from '@/lib/public-demo'
+import { clearSandboxDocs } from '@/lib/store/doc-store'
 import { clearVisionRecords, clearVisionRun } from '@/lib/enrichment/vision/store'
 import { deleteDoc } from '@/lib/store/doc-store'
 import { clearAnalytics } from '@/lib/analytics/events'
@@ -40,6 +42,18 @@ export async function POST(req: Request) {
   if (body.confirm !== 'RESET') {
     return NextResponse.json({ error: 'confirmation required — type RESET to proceed' }, { status: 400 })
   }
+  // Public demo: there is no shared data a visitor may wipe. "Reset" means
+  // "drop MY changes" — whatever targets were ticked.
+  if (isPublicDemo()) {
+    const had = await clearSandboxDocs()
+    return NextResponse.json({
+      ok: true,
+      publicDemo: true,
+      cleared: had ? ['your session’s Studio changes (situations, config, curated attributes, attention queue)'] : [],
+      failed: [],
+    })
+  }
+
   const targets = (body.targets ?? []).filter((t): t is ResetTarget => ALL.includes(t))
   if (!targets.length) {
     return NextResponse.json({ error: 'nothing selected to reset' }, { status: 400 })

@@ -14,7 +14,6 @@
     "typecheck": "tsc --noEmit",
     "test:ci": "jest --ci --coverage",
     "env:init": "node scripts/env-init.mjs",
-    "catalog:images": "node scripts/fetch-catalog-images.mjs",
     "ai:budget": "node scripts/ai-budget.mjs",
     "ai:budget:reset": "node scripts/ai-budget.mjs reset",
     "logs": "node scripts/logs-tail.mjs",
@@ -26,7 +25,10 @@
     "eval": "jest --testMatch '<rootDir>/scripts/**/*.eval.ts'",
     "eval:tailor": "jest --testMatch '<rootDir>/scripts/tailor-eval.eval.ts'",
     "eval:parse": "jest --testMatch '<rootDir>/scripts/parse-eval.eval.ts'",
-    "eval:scorecard": "jest --testMatch '<rootDir>/scripts/scorecard.eval.ts'"
+    "eval:scorecard": "jest --testMatch '<rootDir>/scripts/scorecard.eval.ts'",
+    "video:record": "playwright test -c e2e/video/playwright.config.ts",
+    "video:assemble": "node scripts/video/assemble.mjs",
+    "record:probe-fixtures": "PROBE_RECORD=1 NEXT_PUBLIC_CATALOG=vision jest --testMatch '<rootDir>/scripts/probe-fixtures.record.ts'"
   },
   "dependencies": {
     "@supabase/ssr": "^0.10.3",
@@ -41,6 +43,7 @@
   },
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.104.1",
+    "@playwright/test": "^1.63.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",

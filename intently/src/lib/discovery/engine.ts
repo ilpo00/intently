@@ -24,7 +24,7 @@ import { askMessage, revealMessage, garmentGapPrefix, cartAnchoredMessage } from
 import { buildCompanions, completionSlotFor, occasionCompatible } from './companions'
 import {
   matchesPreferenceToken, detectRequestedGarment, garmentCategories, garmentFallbackCategories,
-  isAccessoryCategory,
+  isAccessoryCategory, namedColours, wearsColour,
   PREF_DARKER, PREF_LIGHTER, PREF_SOLIDS, PREF_PATTERN,
   PREF_TRIM, PREF_SHOULDERS, PREF_MIDDLE, PREF_GENEROUS,
 } from './attributes'
@@ -96,6 +96,11 @@ function explain(product: Product, ctx: SessionContext): string {
   const matchesOccasion = !!occasion && product.occasionTags.some(
     t => t.includes(occasion) || occasion.includes(t),
   )
+  // A colour named outright is honoured first and in so many words (and then
+  // not repeated in the trailing detail). Attribute-backed: only when the piece
+  // actually carries that colour.
+  const askedColour = namedColours(ctx.preferences).find(c => wearsColour(product, c))
+  if (askedColour) bits.push(`is in the ${askedColour} you asked for`)
   if (matchesOccasion) bits.push(`works for ${occasion}`)
   // The consultation payoff: what the shopper chose, visibly honoured.
   for (const [token, ack] of PREF_ACKNOWLEDGMENTS) {
@@ -115,11 +120,11 @@ function explain(product: Product, ctx: SessionContext): string {
   const lead = bits.length
     ? `This ${product.category} ${bits.slice(0, 2).join(' and ')}`
     : `This ${product.category} fits what you described`
-  const patterned = [product.color[0], product.pattern].filter(Boolean).join(' ')
+  const patterned = [askedColour ? null : product.color[0], product.pattern].filter(Boolean).join(' ')
   const detail = product.pattern !== 'solid'
     ? `— ${/^[aeiou]/i.test(patterned) ? 'an' : 'a'} ${patterned} piece`
-    : product.color[0] ? `— in ${product.color[0]}` : ''
-  return `${lead} ${detail}.`.replace(/\s+/g, ' ').trim()
+    : product.color[0] && !askedColour ? `— in ${product.color[0]}` : ''
+  return `${lead}${detail ? ` ${detail}` : ''}.`.replace(/\s+/g, ' ').trim()
 }
 
 // Round-robin across categories so a basket scenario (hiking → jacket +

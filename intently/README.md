@@ -11,16 +11,12 @@ merchandiser Studio (`/admin`), and the API routes that serve both. For the
 
 ```bash
 npm install
-npm run catalog:images -- --from <kaggle-hm>/images   # optional: product photos (not committed)
 NEXT_PUBLIC_CATALOG=vision npm run dev   # http://localhost:3000
 ```
 
-Product photos are H&M images and are not committed. The source is the
-`images/` folder of Kaggle's "H&M Personalized Fashion Recommendations" dataset
-(account and rules acceptance required); the script builds the 292 thumbnails
-from it. The Hugging Face mirror the catalogue was originally built from
-(`Qdrant/hm_ecommerce_products`) no longer serves its images. Without them the
-app runs normally, but cards have no photo.
+Product photos (H&M images, `public/catalog/*.webp`) are served by the live
+demo but are not part of the public repository. Without them the app runs
+normally, but cards have no photo.
 
 No API key needed — the deterministic discovery engine answers every turn by
 default. `NEXT_PUBLIC_CATALOG=vision` selects the 292-product, photo-enriched

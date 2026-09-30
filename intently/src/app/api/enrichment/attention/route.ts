@@ -19,7 +19,7 @@ const STATUSES: AttentionStatus[] = ['open', 'dismissed', 'resolved']
 
 export async function GET() {
   const deny = await assertAdminApi(); if (deny) return deny
-  return NextResponse.json({ state: readAttentionState() })
+  return NextResponse.json({ state: await readAttentionState() })
 }
 
 export async function PUT(req: Request) {
@@ -32,6 +32,6 @@ export async function PUT(req: Request) {
   if (!id || !status) return NextResponse.json({ error: 'id and valid status required' }, { status: 400 })
 
   const note = typeof body.note === 'string' ? body.note : undefined
-  const state = setAttention(id, status, note)
+  const state = await setAttention(id, status, note)
   return NextResponse.json({ ok: true, state })
 }

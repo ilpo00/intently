@@ -25,21 +25,62 @@
 // Pro-plan feature; this deploy stays on Hobby. Deliberately minimal — shared
 // passwords, no session, no per-user identity — enough for a single-operator
 // demo, not a substitute for a real allowlist or multi-admin auth.
+//
+// PUBLIC DEMO (INTENTLY_PUBLIC_DEMO=1): the flag itself opens the gate — the
+// passwords are ignored while it is on, so going public and going private again
+// is one reversible switch and the secrets never have to be deleted. That is
+// safe because public mode makes the admin surface a sandbox and refuses cost
+// and shared-data routes server-side (lib/public-demo.ts). In this mode the
+// proxy instead gives every visitor a sandbox session — an httpOnly cookie
+// plus the same id as a request header, so server code can scope the visitor's
+// Studio changes to them alone (lib/public-demo.ts, lib/store/doc-store.ts).
+// The header is ALWAYS overwritten here, so a client cannot supply its own.
 // ─────────────────────────────────────────────
 
 import { NextResponse, type NextRequest } from 'next/server'
+import {
+  isPublicDemo, isValidSandboxId, newSandboxId,
+  SANDBOX_COOKIE, SANDBOX_HEADER, SANDBOX_TTL_SECONDS,
+} from '@/lib/public-demo'
 
 /** Paths that carry their own authentication and must stay machine-reachable. */
 const UNGATED = [
   // The host storefront's order webhook: authenticated by
   // x-intently-webhook-secret, called by a backend that cannot do Basic Auth.
   '/api/analytics/order',
+  // The daily keep-alive cron: authenticated by Vercel's CRON_SECRET.
+  '/api/health/keepalive',
 ]
 
 const ADMIN_PATHS = ['/admin', '/api/admin', '/api/enrichment']
 
 const isPrefixed = (pathname: string, prefixes: string[]) =>
   prefixes.some(p => pathname === p || pathname.startsWith(`${p}/`))
+
+/** Let the request through. In public-demo mode, attach the visitor's sandbox
+ *  session (creating one on first contact); otherwise a plain pass-through. */
+function pass(request: NextRequest): NextResponse {
+  if (!isPublicDemo()) return NextResponse.next()
+
+  const existing = request.cookies.get(SANDBOX_COOKIE)?.value
+  const id = isValidSandboxId(existing) ? existing : newSandboxId()
+
+  const headers = new Headers(request.headers)
+  headers.set(SANDBOX_HEADER, id)
+  const res = NextResponse.next({ request: { headers } })
+  if (id !== existing) {
+    res.cookies.set(SANDBOX_COOKIE, id, {
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+      path: '/',
+      maxAge: SANDBOX_TTL_SECONDS,
+    })
+  }
+  // An open demo is still not something to index.
+  res.headers.set('X-Robots-Tag', 'noindex, nofollow')
+  return res
+}
 
 /** The password supplied in a `Basic` header, or null if absent/malformed. */
 function suppliedPassword(header: string | null): string | null {
@@ -59,7 +100,8 @@ function suppliedPassword(header: string | null): string | null {
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
-  if (isPrefixed(pathname, UNGATED)) return NextResponse.next()
+  if (isPrefixed(pathname, UNGATED)) return pass(request)
+  if (isPublicDemo()) return pass(request) // open by design — see the header
 
   const site = process.env.SITE_BASIC_AUTH_PASSWORD
   const admin = process.env.ADMIN_BASIC_AUTH_PASSWORD
@@ -75,11 +117,11 @@ export function proxy(request: NextRequest) {
   //                is a master key: it opens shopper routes too, but it never
   //                closes them.
   const gate = isAdmin ? admin ?? site : site
-  if (!gate) return NextResponse.next()
+  if (!gate) return pass(request)
 
   const accepted = (isAdmin ? [gate] : [gate, admin]).filter(Boolean)
   const supplied = suppliedPassword(request.headers.get('authorization'))
-  if (supplied !== null && accepted.includes(supplied)) return NextResponse.next()
+  if (supplied !== null && accepted.includes(supplied)) return pass(request)
 
   return new NextResponse('Authentication required', {
     status: 401,

@@ -11,6 +11,7 @@ import { DEFAULT_PROFILES, scoreSituation } from '@/lib/discovery/situation-matc
 
 import CatalogClient, { type CatData, type Readiness } from './CatalogClient'
 import { loadVisionItems, mergedVisionProducts } from './load'
+import type { Product } from '@/types'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'Catalogue management — Intently admin' }
@@ -18,7 +19,7 @@ export const metadata = { title: 'Catalogue management — Intently admin' }
 const SERVE_THRESHOLD = 0.65 // a situation is "strongly served" if its best match clears this
 const FIT_DARK = 0.40        // a product is dark inventory if no situation fits above this
 
-function buildReadiness(items: { confidence: number; styleArchetypes: string[]; materials: string[]; pattern: string; occasions: string[]; formality: number; seasons: string[] }[]): Readiness {
+function buildReadiness(items: { confidence: number; styleArchetypes: string[]; materials: string[]; pattern: string; occasions: string[]; formality: number; seasons: string[] }[], products: Product[]): Readiness {
   const n = items.length || 1
   // 1 — enrichment completeness
   const complete = items.filter(x => x.confidence >= 0.7 && x.styleArchetypes.length && x.materials.length && x.pattern !== 'other' && x.occasions.length >= 2).length
@@ -30,7 +31,6 @@ function buildReadiness(items: { confidence: number; styleArchetypes: string[]; 
   const coverage = (formCovered + seasonCovered + occDiversity) / 3
   // 3 — situation serviceability (over override-merged products, so curator
   // edits lift the score the same way they lift live discovery)
-  const products = mergedVisionProducts()
   const situations = DEFAULT_PROFILES.map(prof => {
     let top = 0
     for (const p of products) top = Math.max(top, scoreSituation(p, prof).score)
@@ -65,17 +65,17 @@ function buildReadiness(items: { confidence: number; styleArchetypes: string[]; 
   }
 }
 
-function load(): CatData | null {
-  const v = loadVisionItems()
+async function load(): Promise<CatData | null> {
+  const v = await loadVisionItems()
   if (!v) return null
   return {
     items: v.items,
-    readiness: buildReadiness(v.items),
+    readiness: buildReadiness(v.items, await mergedVisionProducts()),
     darkThreshold: FIT_DARK,
     summary: v.summary,
   }
 }
 
-export default function CatalogPage() {
-  return <CatalogClient data={load()} />
+export default async function CatalogPage() {
+  return <CatalogClient data={await load()} />
 }

@@ -72,7 +72,7 @@ export async function vectorRetrieve(
     // Curator overrides apply last so an edited attribute shows in live
     // discovery, keyed by the resolved product's own id (with the raw record id
     // as a fallback).
-    const ovr = readProductOverrides()
+    const ovr = await readProductOverrides()
     const resolve = (id: string, meta: PimProduct): Product => {
       const local = getProductById(id) ?? getProductByArticleNo(id)
       const base: Product = local

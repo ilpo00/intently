@@ -22,6 +22,7 @@
 import { NextResponse } from 'next/server'
 
 import { assertAdminApi } from '@/lib/auth/admin-guard'
+import { blockInPublicDemo } from '@/lib/public-demo-guard'
 import { analyzeOne, visionClient, sleep, THROTTLE_MS } from '@/lib/enrichment/vision/enrich'
 import {
   readVisionRun, writeVisionRun, clearVisionRun,
@@ -71,6 +72,7 @@ export async function GET() {
 
 export async function POST(req: Request) {
   const deny = await assertAdminApi(); if (deny) return deny
+  const blocked = blockInPublicDemo('Vision enrichment'); if (blocked) return blocked
 
   if (!process.env.ANTHROPIC_API_KEY) {
     return NextResponse.json(
@@ -165,6 +167,7 @@ export async function POST(req: Request) {
 
 export async function DELETE(req: Request) {
   const deny = await assertAdminApi(); if (deny) return deny
+  const blocked = blockInPublicDemo('Clearing vision enrichment'); if (blocked) return blocked
   const { searchParams } = new URL(req.url)
   const scope: VisionScope = searchParams.get('scope') === 'catalog' ? 'catalog' : 'sample'
   await clearVisionRecords(scope)

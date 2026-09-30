@@ -10,6 +10,7 @@
 import { NextResponse } from 'next/server'
 
 import { assertAdminApi } from '@/lib/auth/admin-guard'
+import { blockInPublicDemo } from '@/lib/public-demo-guard'
 import { cosine, getVectorStore } from '@/lib/enrichment'
 
 export const runtime = 'nodejs'
@@ -64,6 +65,8 @@ export async function DELETE(
 ) {
   const deny = await assertAdminApi()
   if (deny) return deny
+  const blocked = blockInPublicDemo('Deleting a vector')
+  if (blocked) return blocked
   const { id } = await params
   try {
     await getVectorStore().delete(id)

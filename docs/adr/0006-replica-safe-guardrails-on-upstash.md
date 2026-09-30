@@ -1,6 +1,6 @@
 # ADR-0006 — Replica-safe guardrail counters on Redis (Upstash), not Postgres
 
-- **Status:** Accepted (2026-07-17), in production
+- **Status:** Accepted (2026-07-17). In production from 2026-07-17; on 2026-09-30 the Redis database was found to have been removed (inactive free tier), with the deployment silently on the in-memory fallback — see Consequences and `prodprep.md`
 - **Detail:** `intently/src/lib/discovery/guardrails-shared.ts` · [ADR-012 cloud plan](../../intently/docs/cloud-architecture-plan.md)
 
 ## Context
@@ -24,3 +24,7 @@ request — a shopper's turn must never fail because a counter did.
 - Fail-open trades strictness for availability during a Redis outage; the
   provider-side monthly spend cap remains the hard financial backstop.
 - The client IP still comes from `x-forwarded-for` — tracked in `prodprep.md`.
+- **Fail-open has a cost that this decision under-weighted: it is silent.** When the database
+  disappeared, every limit quietly became per-instance and nothing reported it. The fix is not
+  to stop failing open for rate limits, but to make the state visible: a health check surfaced in
+  the Studio (added 2026-09-30) and, before real traffic, an alert on it.

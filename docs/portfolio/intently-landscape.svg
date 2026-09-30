@@ -1,0 +1,218 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1010" role="img" aria-labelledby="t d" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif">
+  <title id="t">Intently and the portfolio: the technology landscape</title>
+  <desc id="d">Layers from people to delivery. Visitors reach ilmarivuorenmaa.com through Cloudflare DNS. The portfolio site and Intently run on Vercel. Intently calls OpenAI, DeepSeek and Anthropic Claude only for language and photo reading, stores state in Supabase Postgres and Upstash Redis, and ships a bundled catalogue of product data and photos. The code is built with Claude Code, kept in a private GitLab repository with a public GitHub snapshot, and deployed to Vercel. Cross-cutting: secrets only on the server, cost controls, privacy, and every AI call optional.</desc>
+
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#8c9892"/>
+    </marker>
+    <marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#e3a54a"/>
+    </marker>
+    <style>
+      .bg{fill:#0f1311}
+      .lane{fill:#141916}
+      .laneline{stroke:#262d29;stroke-width:1}
+      .ln{fill:#8c9892;font-size:15px;letter-spacing:.08em;text-transform:uppercase;font-weight:700}
+      .lns{fill:#6f7873;font-size:14px}
+      .box{fill:#1c221f;stroke-width:2}
+      .app{stroke:#3fb68b}
+      .ai{stroke:#e3a54a;stroke-dasharray:7 5}
+      .sto{stroke:#6ea8fe}
+      .net{stroke:#c49bff}
+      .dev{stroke:#56605a}
+      .frame{fill:none;stroke:#3fb68b;stroke-width:1.5;stroke-dasharray:3 6}
+      .h{fill:#eef2ef;font-size:19px;font-weight:700}
+      .s{fill:#a9b3ad;font-size:16px}
+      .who{fill:#1c221f;stroke:#3a433e;stroke-width:1.5}
+      .wt{fill:#dfe6e1;font-size:17px}
+      .wire{fill:none;stroke:#8c9892;stroke-width:2}
+      .wirem{fill:none;stroke:#e3a54a;stroke-width:2;stroke-dasharray:6 5}
+      .wl{fill:#8c9892;font-size:14.5px}
+      .note{fill:#f2c46b;font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:17px}
+      .xh{fill:#eef2ef;font-size:17px;font-weight:700}
+      .xs{fill:#a9b3ad;font-size:15px}
+    </style>
+  </defs>
+
+  <rect class="bg" width="1600" height="1010"/>
+
+  <!-- title -->
+  <text x="40" y="44" style="fill:#3fb68b;font-size:15px;letter-spacing:.08em;font-weight:700">INTENTLY · THE LANDSCAPE</text>
+  <text x="40" y="84" fill="#eef2ef" font-family="Georgia,'Times New Roman',serif" font-size="36">Every service, and what it is trusted with</text>
+
+  <!-- legend -->
+  <g transform="translate(900 30)">
+    <rect x="0" y="0" width="24" height="16" rx="4" class="box app"/><text x="32" y="14" class="s">our code</text>
+    <rect x="140" y="0" width="24" height="16" rx="4" class="box ai"/><text x="172" y="14" class="s">AI service — words only</text>
+    <rect x="400" y="0" width="24" height="16" rx="4" class="box sto"/><text x="432" y="14" class="s">data</text>
+    <rect x="0" y="30" width="24" height="16" rx="4" class="box net"/><text x="32" y="44" class="s">network</text>
+    <rect x="140" y="30" width="24" height="16" rx="4" class="box dev"/><text x="172" y="44" class="s">build &amp; delivery</text>
+  </g>
+
+  <!-- lanes -->
+  <g>
+    <rect x="40" y="112" width="1250" height="92" rx="10" class="lane"/>
+    <rect x="40" y="214" width="1250" height="112" rx="10" class="lane"/>
+    <rect x="40" y="336" width="1250" height="186" rx="10" class="lane"/>
+    <rect x="40" y="532" width="1250" height="120" rx="10" class="lane"/>
+    <rect x="40" y="662" width="1250" height="138" rx="10" class="lane"/>
+    <rect x="40" y="810" width="1250" height="160" rx="10" class="lane"/>
+  </g>
+  <text x="58" y="148" class="ln">People</text>
+  <text x="58" y="250" class="ln">Edge</text>
+  <text x="58" y="372" class="ln">Applications</text>
+  <text x="58" y="394" class="lns">hosted on Vercel</text>
+  <text x="58" y="568" class="ln">AI services</text>
+  <text x="58" y="590" class="lns">called, never trusted</text>
+  <text x="58" y="698" class="ln">Data</text>
+  <text x="58" y="846" class="ln">Build &amp; delivery</text>
+
+  <!-- ── People ── -->
+  <rect x="250" y="134" width="240" height="48" rx="24" class="who"/><text x="370" y="164" class="wt" text-anchor="middle">Consultancy visitor</text>
+  <rect x="510" y="134" width="170" height="48" rx="24" class="who"/><text x="595" y="164" class="wt" text-anchor="middle">Shopper</text>
+  <rect x="700" y="134" width="200" height="48" rx="24" class="who"/><text x="800" y="164" class="wt" text-anchor="middle">Merchandiser</text>
+  <rect x="920" y="134" width="330" height="48" rx="24" class="who"/><text x="1085" y="164" class="wt" text-anchor="middle">Ilmari · with Claude as pair</text>
+
+  <!-- ── Edge ── -->
+  <rect x="250" y="232" width="430" height="78" rx="11" class="box net"/>
+  <text x="266" y="262" class="h">Cloudflare DNS</text>
+  <text x="266" y="286" class="s">ilmarivuorenmaa.com · intently. subdomain</text>
+
+  <rect x="700" y="232" width="550" height="78" rx="11" class="box net"/>
+  <text x="716" y="262" class="h">Vercel edge</text>
+  <text x="716" y="286" class="s">TLS certificates · proxy: gate or per-visitor sandbox</text>
+
+  <path d="M680 271 H698" class="wire" marker-end="url(#a)"/>
+  <path d="M370 182 V230" class="wire" marker-end="url(#a)"/>
+  <path d="M595 182 V230" class="wire" marker-end="url(#a)"/>
+  <path d="M800 182 V230" class="wire" marker-end="url(#a)"/>
+
+  <!-- ── Applications ── -->
+  <rect x="250" y="352" width="330" height="154" rx="11" class="box app"/>
+  <text x="266" y="382" class="h">Portfolio site</text>
+  <text x="266" y="408" class="s">Next.js · the story, the video,</text>
+  <text x="266" y="428" class="s">the “see it yourself” button</text>
+
+  <rect x="620" y="352" width="630" height="154" rx="11" class="box app"/>
+  <text x="636" y="382" class="h">Intently · Next.js 16</text>
+  <text x="636" y="408" class="s">shopper view · Studio · API routes · edge proxy</text>
+  <text x="636" y="432" class="s">deterministic engine: decides, ranks, excludes</text>
+  <text x="636" y="456" class="s">guardrails · grounding check · keep-alive cron</text>
+  <text x="636" y="490" class="note">everything that decides lives here</text>
+
+
+  <path d="M580 458 H618" class="wire" marker-end="url(#a)"/>
+  <text x="586" y="448" class="wl">link</text>
+  <path d="M975 310 V350" class="wire" marker-end="url(#a)"/>
+
+  <!-- ── AI services ── -->
+  <rect x="250" y="548" width="320" height="88" rx="11" class="box ai"/>
+  <text x="266" y="578" class="h">OpenAI</text>
+  <text x="266" y="602" class="s">understands and rewords turns;</text>
+  <text x="266" y="622" class="s">turns products into vectors</text>
+
+  <rect x="590" y="548" width="250" height="88" rx="11" class="box ai"/>
+  <text x="606" y="578" class="h">DeepSeek</text>
+  <text x="606" y="602" class="s">interchangeable language</text>
+  <text x="606" y="622" class="s">provider</text>
+
+  <rect x="860" y="548" width="390" height="88" rx="11" class="box ai"/>
+  <text x="876" y="578" class="h">Anthropic · Claude</text>
+  <text x="876" y="602" class="s">reads every product photo, offline;</text>
+  <text x="876" y="622" class="s">also a language provider option</text>
+
+  <path d="M935 506 V546" class="wirem" marker-end="url(#am)"/>
+  <text x="945" y="532" class="wl" style="fill:#e3a54a">words in, words out — only if needed</text>
+
+  <!-- ── Data ── -->
+  <rect x="250" y="678" width="390" height="106" rx="11" class="box sto"/>
+  <text x="266" y="708" class="h">Supabase · Postgres</text>
+  <text x="266" y="732" class="s">pgvector product vectors · Studio settings</text>
+  <text x="266" y="752" class="s">analytics events · row-level security</text>
+  <text x="266" y="772" class="s">no accounts — anonymous sessions</text>
+
+  <rect x="660" y="678" width="270" height="106" rx="11" class="box sto"/>
+  <text x="676" y="708" class="h">Upstash · Redis</text>
+  <text x="676" y="732" class="s">shared rate limits,</text>
+  <text x="676" y="752" class="s">daily LLM cap,</text>
+  <text x="676" y="772" class="s">visitor sandboxes (24 h)</text>
+
+  <rect x="950" y="678" width="300" height="106" rx="11" class="box sto"/>
+  <text x="966" y="708" class="h">Catalogue, in the app</text>
+  <text x="966" y="732" class="s">292 H&amp;M products + photos</text>
+  <text x="966" y="752" class="s">(source: public H&amp;M dataset)</text>
+  <text x="966" y="772" class="s">Medusa PIM adapter: local only</text>
+
+
+  <!-- ── Build & delivery ── -->
+  <rect x="250" y="826" width="250" height="126" rx="11" class="box dev"/>
+  <text x="266" y="856" class="h">Claude Code</text>
+  <text x="266" y="880" class="s">writes code under a</text>
+  <text x="266" y="900" class="s">written operating model:</text>
+  <text x="266" y="920" class="s">CLAUDE.md · wiki · skills</text>
+
+  <rect x="530" y="826" width="250" height="126" rx="11" class="box dev"/>
+  <text x="546" y="856" class="h">GitLab · private</text>
+  <text x="546" y="880" class="s">full history · CI config</text>
+  <text x="546" y="900" class="s">SAST + secret detection</text>
+
+  <rect x="810" y="826" width="210" height="126" rx="11" class="box dev"/>
+  <text x="826" y="856" class="h">GitHub · public</text>
+  <text x="826" y="880" class="s">Intently snapshot</text>
+  <text x="826" y="900" class="s">+ Actions CI ·</text>
+  <text x="826" y="920" class="s">portfolio repo</text>
+
+  <rect x="1050" y="826" width="200" height="126" rx="11" class="box dev"/>
+  <text x="1066" y="856" class="h">Quality gates</text>
+  <text x="1066" y="880" class="s">Jest tests + evals</text>
+  <text x="1066" y="900" class="s">(no API keys)</text>
+  <text x="1066" y="920" class="s">Playwright video</text>
+
+  <path d="M500 889 H528" class="wire" marker-end="url(#a)"/>
+  <path d="M780 889 H808" class="wire" marker-end="url(#a)"/>
+  <text x="784" y="872" class="wl" style="font-size:13px">copy</text>
+
+  <!-- deploy line: build lane → applications -->
+  <path d="M375 826 V806 H1275 V430 H1252" class="wire" marker-end="url(#a)"/>
+  <text x="1110" y="822" class="wl">vercel deploy</text>
+
+  <!-- ── Cross-cutting (right column) ── -->
+  <rect x="1310" y="112" width="250" height="858" rx="12" fill="#161b18" stroke="#2b332e" stroke-width="1.5"/>
+  <text x="1328" y="148" class="ln">Cross-cutting</text>
+
+  <text x="1328" y="190" class="xh">Security</text>
+  <text x="1328" y="214" class="xs">keys only on the server,</text>
+  <text x="1328" y="234" class="xs">in Vercel’s environment</text>
+  <text x="1328" y="254" class="xs">admin API refuses anything</text>
+  <text x="1328" y="274" class="xs">that costs or is shared</text>
+  <text x="1328" y="294" class="xs">demo is not indexed</text>
+
+  <text x="1328" y="340" class="xh">Cost</text>
+  <text x="1328" y="364" class="xs">simple turns never call</text>
+  <text x="1328" y="384" class="xs">a model · daily cap ·</text>
+  <text x="1328" y="404" class="xs">per-visitor rate limits ·</text>
+  <text x="1328" y="424" class="xs">free tiers + a keep-alive</text>
+
+  <text x="1328" y="470" class="xh">Privacy</text>
+  <text x="1328" y="494" class="xs">no accounts, no identity;</text>
+  <text x="1328" y="514" class="xs">AI calls carry the</text>
+  <text x="1328" y="534" class="xs">shopper’s words only,</text>
+  <text x="1328" y="554" class="xs">never who they are</text>
+
+  <text x="1328" y="600" class="xh">Resilience</text>
+  <text x="1328" y="624" class="xs">every AI service optional —</text>
+  <text x="1328" y="644" class="xs">without one, plainer words,</text>
+  <text x="1328" y="664" class="xs">same shortlist</text>
+  <text x="1328" y="684" class="xs">store health shown in the</text>
+  <text x="1328" y="704" class="xs">Studio, not guessed</text>
+
+  <text x="1328" y="750" class="xh">Portability</text>
+  <text x="1328" y="774" class="xs">each box sits behind an</text>
+  <text x="1328" y="794" class="xs">interface: swap a provider,</text>
+  <text x="1328" y="814" class="xs">store or PIM without</text>
+  <text x="1328" y="834" class="xs">touching the engine</text>
+
+  <text x="1328" y="900" class="note" style="font-size:16px">three model vendors,</text>
+  <text x="1328" y="922" class="note" style="font-size:16px">zero of them decide</text>
+</svg>

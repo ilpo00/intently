@@ -114,12 +114,20 @@ than missing ones.
 
 ## 6. What I reversed or killed
 
-- **The product domain.** Intently started as MISE, a Japanese-kitchen
-  commerce concept. I pivoted it to fashion discovery, kept the architecture,
-  and **deleted** the old domain code rather than parking it indefinitely. The
-  full record is in [the migration doc](../intently/docs/mise_to_intently_migration.md).
-  <!-- ILMARI: add 2–3 sentences in your own words on WHY you pivoted — this is
-  the question an interviewer will ask first. -->
+- **The product domain.** Intently started as MISE. In my words:
+
+  > MISE was my first project: an idea to combine food recipes with the
+  > kitchen tools they need. Building that context — understanding what goes
+  > together in the real world — was a good learning experience. Intently came
+  > from a new question: how can we enrich product data using pictures? That
+  > needed a picture-heavy demonstration, so I set MISE aside, took the
+  > conversational side with me, and chose clothes in a web shop. Intently came
+  > out of MISE because I wanted to learn how to enrich data from images and
+  > build rich context.
+
+  I kept the architecture, discarded the food domain, and deleted the old code
+  rather than parking it indefinitely. The full record is in
+  [the migration doc](../intently/docs/mise_to_intently_migration.md).
 - **A scripted demo mode.** It kept the demo safe early on, but it meant two
   code paths drifting apart. I removed it once the live path could fail safe to
   the same deterministic engine.

@@ -7,16 +7,15 @@
 // reflect the edit. Admin-gated. The committed catalogue is never mutated.
 // ─────────────────────────────────────────────────────────────────
 
-import { writeFileSync, mkdirSync } from 'node:fs'
-import { dirname } from 'node:path'
 
 import { NextResponse } from 'next/server'
 
 import { assertAdminApi } from '@/lib/auth/admin-guard'
+import { isPublicDemo } from '@/lib/public-demo'
 import { getProductById } from '@/lib/data'
 import { syncOne } from '@/lib/enrichment'
 import {
-  OVERRIDES_PATH, readProductOverrides, mergeProduct, type ProductOverride,
+  readProductOverrides, writeProductOverrides, mergeProduct, type ProductOverride,
 } from '@/lib/enrichment/product-overrides'
 import type { StyleArchetype } from '@/types'
 
@@ -40,11 +39,6 @@ function sanitize(body: Record<string, unknown>): ProductOverride {
   return o
 }
 
-function writeOverrides(map: Record<string, ProductOverride>) {
-  mkdirSync(dirname(OVERRIDES_PATH), { recursive: true })
-  writeFileSync(OVERRIDES_PATH, JSON.stringify(map, null, 2))
-}
-
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const deny = await assertAdminApi(); if (deny) return deny
   const { id } = await params
@@ -53,9 +47,15 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
   let body: Record<string, unknown>
   try { body = await req.json() } catch { return NextResponse.json({ error: 'invalid json' }, { status: 400 }) }
 
-  const ovr = readProductOverrides()
+  const ovr = await readProductOverrides()
   ovr[id] = sanitize(body)
-  writeOverrides(ovr)
+  await writeProductOverrides(ovr)
+  // Public demo: the edit lives in the visitor's sandbox and already reaches
+  // discovery through the override merge; re-embedding would spend embedding
+  // budget and rewrite a vector every visitor shares, so it is skipped.
+  if (isPublicDemo()) {
+    return NextResponse.json({ ok: true, reembed: 'simulated', product: mergeProduct(base, ovr[id]) })
+  }
   const report = await syncOne(id) // re-embed with the edit
   return NextResponse.json({ ok: report.failed === 0, product: mergeProduct(base, ovr[id]) })
 }
@@ -64,9 +64,9 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   const deny = await assertAdminApi(); if (deny) return deny
   const { id } = await params
   const base = getProductById(id)
-  const ovr = readProductOverrides()
+  const ovr = await readProductOverrides()
   delete ovr[id]
-  writeOverrides(ovr)
-  await syncOne(id)
+  await writeProductOverrides(ovr)
+  if (!isPublicDemo()) await syncOne(id)
   return NextResponse.json({ ok: true, product: base ?? null })
 }

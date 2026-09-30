@@ -1,6 +1,6 @@
 # Quality scorecard — latest
 
-_Generated 2026-09-29 by `scripts/scorecard.eval.ts` · deterministic engine, vision catalogue (292 products), no API keys._
+_Generated 2026-09-30 by `scripts/scorecard.eval.ts` · deterministic engine, vision catalogue (292 products), no API keys._
 
 | Property | Result |
 |---|---|
@@ -14,7 +14,7 @@ _Generated 2026-09-29 by `scripts/scorecard.eval.ts` · deterministic engine, vi
 | **Faithful prose wrongly rejected (false positives)** | **0/208** |
 | Typed turns escalated to the LLM by the complexity gate | 66% (42/64) |
 | Comprehension cost per typed turn (when enabled) | ~$0.00021 vs $0.00032 ungated |
-| Engine latency per turn, p50 / p95 | 0.3 ms / 1.0 ms (106 turns) |
+| Engine latency per turn, p50 / p95 | 0.3 ms / 1.1 ms (106 turns) |
 
 ## Reading the numbers
 

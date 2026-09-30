@@ -98,6 +98,31 @@ export function isSolid(p: Product): boolean {
   return p.pattern === 'solid'
 }
 
+// ── A colour the shopper named outright ("a black dress") ──
+// The most literal thing a shopper can ask for, so it is matched against the
+// product's COLOUR field (not the enriched text, where "black" also appears in
+// styling notes) and it outranks occasion fit when ranking (prefilter.ts).
+// Values checked against the live catalogues' colour vocabulary ('charcoal
+// black', 'dark navy', 'sage green', 'light grey' …): a substring match on the
+// colour name is what works. 'gray' is folded to 'grey' at parse time.
+//
+// "Is this piece black?" is answered by its PRIMARY colour (color[0]). A camo
+// dress that lists black third is not "the black dress you asked for" — it may
+// rank a little higher for carrying the colour, but it is never described as
+// the colour and never outranks a piece that actually is.
+export const COLOUR_WORDS = [
+  'black', 'white', 'grey', 'navy', 'blue', 'red', 'green', 'pink', 'beige', 'cream',
+  'brown', 'burgundy', 'yellow', 'orange', 'purple', 'khaki', 'olive', 'mauve', 'gold', 'silver',
+] as const
+const COLOUR_SET = new Set<string>(COLOUR_WORDS)
+export const isColourWord = (token: string): boolean => COLOUR_SET.has(token)
+export const wearsColour = (p: Product, colour: string): boolean => !!p.color[0]?.includes(colour)
+/** Carries the colour somewhere (an accent, part of a pattern) but is not mainly that colour. */
+export const hasColourAccent = (p: Product, colour: string): boolean =>
+  !wearsColour(p, colour) && p.color.slice(1).some(c => c.includes(colour))
+/** The colours this shopper asked for by name, in the order they said them. */
+export const namedColours = (preferences: readonly string[]): string[] => preferences.filter(isColourWord)
+
 /** Does this product express the given canonical preference token? */
 export function matchesPreferenceToken(p: Product, token: string): boolean {
   switch (token) {
@@ -111,7 +136,7 @@ export function matchesPreferenceToken(p: Product, token: string): boolean {
     case PREF_SHOULDERS: return buildMatch(p, SIL_ROOMY)
     case PREF_MIDDLE: return buildMatch(p, SIL_EASY_MIDDLE)
     case PREF_GENEROUS: return buildMatch(p, SIL_GENEROUS)
-    default: return p.embeddingText.includes(token)
+    default: return isColourWord(token) ? wearsColour(p, token) : p.embeddingText.includes(token)
   }
 }
 

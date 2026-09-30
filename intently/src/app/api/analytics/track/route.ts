@@ -10,13 +10,18 @@
 
 import { NextResponse } from 'next/server'
 import { emitEvent } from '@/lib/analytics/events'
-import { checkRateLimit } from '@/lib/discovery/guardrails'
+import { checkRateLimitShared } from '@/lib/discovery/guardrails-shared'
+import { readRuntimeConfig } from '@/lib/discovery/runtime-config'
 
 export const runtime = 'nodejs'
 
 export async function POST(req: Request) {
   const ip = (req.headers.get('x-forwarded-for') ?? 'local').split(',')[0].trim()
-  if (!checkRateLimit(ip).ok) return NextResponse.json({ ok: false }, { status: 429 })
+  // Replica-safe (Upstash when configured): this endpoint writes to the shared
+  // analytics store and is reachable by anyone on an open deployment.
+  const { limits } = await readRuntimeConfig()
+  const rate = await checkRateLimitShared(`track:${ip}`, { perMin: limits.ratePerMin, perDay: limits.ratePerDay })
+  if (!rate.ok) return NextResponse.json({ ok: false }, { status: 429 })
 
   let body: { type?: string; sessionId?: string; productId?: string; title?: string; surface?: string }
   try {

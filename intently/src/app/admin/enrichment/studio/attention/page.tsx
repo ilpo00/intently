@@ -17,8 +17,8 @@ import AttentionClient, { type QueueRow } from './AttentionClient'
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'Needs attention — Intently admin' }
 
-export default function AttentionPage() {
-  const v = loadVisionItems()
+export default async function AttentionPage() {
+  const v = await loadVisionItems()
   if (!v) return <AttentionClient rows={[]} reasonMeta={[]} state={{}} hasCatalog={false} />
 
   const defs = buildAttention(v.items)
@@ -34,5 +34,5 @@ export default function AttentionPage() {
   const present = new Set(rows.flatMap(r => r.reasons.map(x => x.id)))
   const reasonMeta = defs.filter(d => present.has(d.id)).map(d => ({ id: d.id, label: d.label }))
 
-  return <AttentionClient rows={rows} reasonMeta={reasonMeta} state={readAttentionState()} hasCatalog />
+  return <AttentionClient rows={rows} reasonMeta={reasonMeta} state={await readAttentionState()} hasCatalog />
 }

@@ -17,7 +17,8 @@
 
 import './next/theme.css'
 import { NextExperience } from './next/NextExperience'
+import { isPublicDemo } from '@/lib/public-demo'
 
 export default function Home() {
-  return <NextExperience />
+  return <NextExperience publicDemo={isPublicDemo()} />
 }

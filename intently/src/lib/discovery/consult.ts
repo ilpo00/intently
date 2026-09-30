@@ -27,7 +27,7 @@ import type {
 import {
   matchesPreferenceToken, isWomenswearCategory, isGenderedGarmentWord,
   PREF_DARKER, PREF_LIGHTER, PREF_SOLIDS, PREF_PATTERN, PREF_WARMTH, PREF_CARRY,
-  PREF_TRIM, PREF_SHOULDERS, PREF_MIDDLE, PREF_GENEROUS, BUILD_TOKENS,
+  PREF_TRIM, PREF_SHOULDERS, PREF_MIDDLE, PREF_GENEROUS, BUILD_TOKENS, namedColours,
 } from './attributes'
 
 export interface ConsultAnswer {
@@ -169,7 +169,9 @@ const FASHION_BANK: QuestionSpec[] = [
   {
     id: 'palette',
     prompt: 'When you picture yourself in it — do you lean darker and richer, or lighter and softer?',
-    appliesTo: ctx => !hasPref(ctx, PREF_DARKER, PREF_LIGHTER),
+    // Moot once the shopper has named a colour — never ask "darker or lighter?"
+    // of someone who said "black".
+    appliesTo: ctx => !hasPref(ctx, PREF_DARKER, PREF_LIGHTER) && namedColours(ctx.preferences).length === 0,
     options: [
       {
         id: 'darker', label: 'darker, richer tones',

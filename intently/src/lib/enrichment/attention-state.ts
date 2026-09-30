@@ -1,19 +1,17 @@
 // ─────────────────────────────────────────────────────────────────
-// enrichment/attention-state.ts  (server only — uses node:fs)
+// enrichment/attention-state.ts  ·  SERVER ONLY
 //
 // Persists the merchandiser's triage of the needs-attention queue: which
 // flagged products have been dismissed (not an issue) or resolved (handled).
 // 'open' is the implicit default for any flagged product with no saved state,
-// so we only store the exceptions — the file stays small and self-cleaning.
+// so we only store the exceptions — the document stays small and self-cleaning.
 //
-// A runtime layer like product-overrides.ts / situation-overrides.ts:
-// .enrichment/attention-state.json is gitignored; the catalogue is untouched.
+// A runtime layer like product-overrides.ts / situation-overrides.ts, persisted
+// through the doc-store (local .enrichment/attention-state.json in dev/CI,
+// Supabase runtime_kv on cloud, a per-visitor sandbox in the public demo).
 // ─────────────────────────────────────────────────────────────────
 
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
-import { join, dirname } from 'node:path'
-
-export const ATTENTION_STATE_PATH = join(process.cwd(), '.enrichment/attention-state.json')
+import { readDoc, writeDoc } from '@/lib/store/doc-store'
 
 export type AttentionStatus = 'open' | 'dismissed' | 'resolved'
 export interface AttentionEntry {
@@ -22,28 +20,21 @@ export interface AttentionEntry {
   updatedAt: string
 }
 
-export function readAttentionState(): Record<string, AttentionEntry> {
-  try {
-    return JSON.parse(readFileSync(ATTENTION_STATE_PATH, 'utf8'))
-  } catch {
-    return {}
-  }
-}
+export type AttentionMap = Record<string, AttentionEntry>
 
-function writeAttentionState(map: Record<string, AttentionEntry>) {
-  mkdirSync(dirname(ATTENTION_STATE_PATH), { recursive: true })
-  writeFileSync(ATTENTION_STATE_PATH, JSON.stringify(map, null, 2))
+export async function readAttentionState(): Promise<AttentionMap> {
+  return (await readDoc<AttentionMap>('attention-state')) ?? {}
 }
 
 /** Set a product's triage state. Reopening (→ 'open') clears the entry, since
- *  'open' is the default — keeps the file to just the exceptions. */
-export function setAttention(id: string, status: AttentionStatus, note?: string): Record<string, AttentionEntry> {
-  const map = readAttentionState()
+ *  'open' is the default — keeps the document to just the exceptions. */
+export async function setAttention(id: string, status: AttentionStatus, note?: string): Promise<AttentionMap> {
+  const map = await readAttentionState()
   if (status === 'open') {
     delete map[id]
   } else {
     map[id] = { status, note: note?.trim() || undefined, updatedAt: new Date().toISOString() }
   }
-  writeAttentionState(map)
+  await writeDoc('attention-state', map)
   return map
 }

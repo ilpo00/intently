@@ -42,7 +42,50 @@ const TIERS: { key: Target; label: string; detail: string; cost: string; severe:
   },
 ]
 
-export default function ResetPanel() {
+// Public demo: there is nothing shared a visitor may clear. The panel becomes
+// one action — drop the changes I made in this session.
+function SessionResetPanel() {
+  const router = useRouter()
+  const [busy, setBusy] = useState(false)
+  const [note, setNote] = useState<string | null>(null)
+  const run = async () => {
+    setBusy(true); setNote(null)
+    try {
+      const res = await fetch('/api/admin/reset', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ confirm: 'RESET', targets: ['demoState'] }),
+      })
+      setNote(res.ok ? 'Your changes are gone — the Studio is back to how you found it.' : `Could not reset (${res.status}).`)
+      if (res.ok) router.refresh()
+    } catch {
+      setNote('Network error while resetting.')
+    } finally { setBusy(false) }
+  }
+  return (
+    <section className="border border-intently-cloud rounded-lg p-5">
+      <h2 className="font-sans text-lg text-intently-ink mb-1">Start over</h2>
+      <p className="text-sm text-intently-pebble leading-relaxed mb-4 max-w-2xl">
+        Discard everything you changed in this session — situations, configuration, curated attributes and the
+        attention queue. Only your own changes are affected; nothing here is shared with other visitors.
+      </p>
+      <button
+        onClick={run}
+        disabled={busy}
+        className="text-xs px-3 py-1.5 rounded border border-intently-cloud text-intently-ink hover:border-intently-pebble disabled:opacity-40">
+        {busy ? 'Resetting…' : 'Discard my changes'}
+      </button>
+      {note && <p role="status" className="text-xs text-intently-moss mt-3">{note}</p>}
+    </section>
+  )
+}
+
+export default function ResetPanel({ publicDemo = false }: { publicDemo?: boolean }) {
+  if (publicDemo) return <SessionResetPanel />
+  return <FullResetPanel />
+}
+
+function FullResetPanel() {
   const router = useRouter()
   const [picked, setPicked] = useState<Target[]>([])
   const [confirm, setConfirm] = useState('')

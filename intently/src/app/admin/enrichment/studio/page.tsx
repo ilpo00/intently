@@ -10,8 +10,9 @@
 // + the PIM list). Auth gate runs in the parent /admin layout.
 // ─────────────────────────────────────────────────────────────────
 
-import { getEnrichmentStatuses, getPimAdapter, getVectorStore } from '@/lib/enrichment'
+import { getEnrichmentStatuses, getPimAdapter, vectorCountOrZero } from '@/lib/enrichment'
 import { readProductOverrides } from '@/lib/enrichment/product-overrides'
+import { isPublicDemo } from '@/lib/public-demo'
 
 import StudioClient from './StudioClient'
 import type { StudioRow } from './lib'
@@ -23,11 +24,10 @@ export default async function StudioPage({ searchParams }: { searchParams: Promi
   const sp = await searchParams
   const initialProduct = typeof sp.product === 'string' ? sp.product : null
   const pim = getPimAdapter()
-  const store = getVectorStore()
   const [statuses, products, vectorCount] = await Promise.all([
     getEnrichmentStatuses(),
     pim.list(),
-    store.count(),
+    vectorCountOrZero(),
   ])
   const byId = new Map(products.map(p => [p.id, p]))
   const rows: StudioRow[] = statuses.map(s => ({ ...s, product: byId.get(s.productId) ?? null }))
@@ -42,8 +42,8 @@ export default async function StudioPage({ searchParams }: { searchParams: Promi
     model: rows.find(r => r.model)?.model ?? '—',
   }
 
-  const overriddenIds = Object.keys(readProductOverrides())
+  const overriddenIds = Object.keys(await readProductOverrides())
   const vision = process.env.NEXT_PUBLIC_CATALOG === 'vision'
 
-  return <StudioClient rows={rows} summary={summary} overriddenIds={overriddenIds} initialProduct={initialProduct} vision={vision} />
+  return <StudioClient rows={rows} summary={summary} overriddenIds={overriddenIds} initialProduct={initialProduct} vision={vision} publicDemo={isPublicDemo()} />
 }

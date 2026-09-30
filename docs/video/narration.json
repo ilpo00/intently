@@ -1,0 +1,9 @@
+{
+  "00": "Online shops ask you to think in their categories. Occasion, sleeve length, pattern. People don't think like that.",
+  "01": "They think: a party, it might get cold later. I built Intently to answer that sentence directly.",
+  "02": "It doesn't guess. When the brief is thin, it asks one or two questions, and it picks the question that splits the remaining stock most usefully. Then it shows a short list, not two hundred results, and each piece comes with the reason it is there. Because I said it might get cold, it offers a layer to go over the dress. It does not push.",
+  "03": "This is what makes the answers possible. A product record says \"black dress, thirty-five euros\". That cannot answer \"a cold evening\". So each product photo is read once, offline, and the result is checked by code before it is stored. A merchandiser can correct it here. Watch what a single edit does: I mark this dress as floral, and it is gone from a \"no florals\" request. In this public version that edit lives only in my own session.",
+  "04": "Here is the rule the whole thing is built on. The language model never chooses what to recommend. Plain, testable code chooses, ranks and excludes. The model reads your words and phrases the reply. If it names a product that was not shown, or promises something the shop cannot do, its text is thrown away and the plain version is used.",
+  "05": "I measure it on every change. Exclusions honoured: twelve of twelve. Invented products rejected: all of them. And one number I am not proud of: the guard against the model making promises catches about a third of phrasings it has never seen. I would rather show you that than hide it. The fix is to limit what the model is allowed to write.",
+  "06": "It is open. Try it."
+}

@@ -10,6 +10,7 @@
 import type { Metadata } from 'next'
 import './theme.css'
 import { NextExperience } from './NextExperience'
+import { isPublicDemo } from '@/lib/public-demo'
 
 export const metadata: Metadata = {
   title: 'Intently — new UX preview',
@@ -17,5 +18,5 @@ export const metadata: Metadata = {
 }
 
 export default function NextPreviewPage() {
-  return <NextExperience />
+  return <NextExperience publicDemo={isPublicDemo()} />
 }

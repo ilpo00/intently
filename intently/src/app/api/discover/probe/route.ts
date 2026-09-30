@@ -24,6 +24,9 @@ import { newSignals } from '@/lib/discovery/voice'
 import { inferCatalog } from '@/lib/discovery/infer-catalog'
 import { getAllProducts } from '@/lib/data'
 import type { Provider } from '@/lib/discovery/llm-client'
+import { validateParsedPatch } from '@/lib/discovery/parse-context'
+import { lookupProbeFixture, PROBE_SAMPLE_QUERIES } from '@/lib/discovery/probe-fixtures'
+import { isPublicDemo } from '@/lib/public-demo'
 import { emptySessionContext, type SessionContext } from '@/types'
 
 interface ProbeBody {
@@ -36,6 +39,12 @@ interface ProbeBody {
 }
 
 const PROVIDERS = new Set<string>(['deepseek', 'haiku', 'openai'])
+
+// Public demo: the bench never calls a model. A recorded result (real output,
+// captured once — see probe-fixtures.ts) stands in for the LLM stages; the
+// deterministic engine below still runs live.
+const PUBLIC_NOTE =
+  'Live model calls are switched off in the public demo. Pick one of the sample queries to see recorded results from each provider; any other query shows the deterministic engine only.'
 
 export async function POST(req: Request) {
   const denied = await assertAdminApi()
@@ -61,15 +70,22 @@ export async function POST(req: Request) {
 
   const escalate = shouldEscalate(query)
 
+  const demo = isPublicDemo()
+  const fixture = demo && provider ? lookupProbeFixture(provider, query) : null
+  const live = demo ? null : provider // the only provider that may reach a model
+
   // ── Tier-1 comprehension (explicit provider; bypasses the gate so the
   //    bench can probe simple turns too) ──
   let parse: { ok: boolean; ms: number; patch: unknown; budget: boolean } | null = null
   let patch
-  if (provider && stages.has('parse')) {
+  if (live && stages.has('parse')) {
     const budget = takeLlmBudget()
     const t0 = Date.now()
-    patch = budget ? (await llmParseContext(query, session, provider, model)) ?? undefined : undefined
+    patch = budget ? (await llmParseContext(query, session, live, model)) ?? undefined : undefined
     parse = { ok: !!patch, ms: Date.now() - t0, patch: patch ?? null, budget }
+  } else if (fixture?.parse && stages.has('parse')) {
+    patch = validateParsedPatch(fixture.parse.patch)
+    parse = { ...fixture.parse, budget: true }
   }
 
   // ── Tier-0 deterministic engine (always) ──
@@ -83,7 +99,9 @@ export async function POST(req: Request) {
     message: string | null; prompt: string | null
     grounded: boolean | null
   } | null = null
-  if (provider && stages.has('generate')) {
+  if (fixture?.generate && stages.has('generate')) {
+    generate = { ...fixture.generate, budget: true }
+  } else if (live && stages.has('generate')) {
     const budget = takeLlmBudget()
     const input: RephraseInput = {
       message: outcome.message,
@@ -97,7 +115,7 @@ export async function POST(req: Request) {
       },
     }
     const t2 = Date.now()
-    const re = budget ? await rephraseProse(input, provider, model) : null
+    const re = budget ? await rephraseProse(input, live, model) : null
     const ms = Date.now() - t2
     const isGrounded = re
       ? grounded(
@@ -127,5 +145,15 @@ export async function POST(req: Request) {
       results: outcome.results.map(r => ({ id: r.product.id, name: r.product.name })),
     },
     generate,
+    ...(demo
+      ? {
+          publicDemo: true,
+          recorded: !!fixture,
+          model: fixture?.model ?? null,
+          recordedAt: fixture?.recordedAt ?? null,
+          samples: PROBE_SAMPLE_QUERIES,
+          note: provider && !fixture ? PUBLIC_NOTE : null,
+        }
+      : {}),
   })
 }

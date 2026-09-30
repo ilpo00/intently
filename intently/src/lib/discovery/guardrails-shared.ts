@@ -55,6 +55,20 @@ async function redisPipeline(commands: (string | number)[][]): Promise<{ result:
   }
 }
 
+export type SharedStoreStatus = 'not-configured' | 'ok' | 'unavailable'
+
+/**
+ * Is the shared store actually answering? The counters fail OPEN (a shopper's
+ * turn must never fail because a counter did), which also means a dead Redis
+ * is invisible from behaviour alone — limits quietly become per-instance. This
+ * is the explicit check the Studio shows, so that state cannot go unnoticed.
+ */
+export async function sharedStoreStatus(): Promise<SharedStoreStatus> {
+  if (!sharedCountersEnabled()) return 'not-configured'
+  const res = await redisPipeline([['PING']])
+  return res?.[0]?.result === 'PONG' ? 'ok' : 'unavailable'
+}
+
 const utcDay = () => new Date().toISOString().slice(0, 10)
 
 /**

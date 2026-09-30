@@ -11,6 +11,7 @@
 import { NextResponse } from 'next/server'
 
 import { assertAdminApi } from '@/lib/auth/admin-guard'
+import { blockInPublicDemo } from '@/lib/public-demo-guard'
 import { syncAll } from '@/lib/enrichment'
 
 export const runtime = 'nodejs'
@@ -22,6 +23,8 @@ export const maxDuration = 60
 export async function POST() {
   const deny = await assertAdminApi()
   if (deny) return deny
+  const blocked = blockInPublicDemo('Catalogue sync (re-embedding)')
+  if (blocked) return blocked
   try {
     const report = await syncAll()
     return NextResponse.json(report)

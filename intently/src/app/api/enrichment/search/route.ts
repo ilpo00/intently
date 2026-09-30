@@ -28,6 +28,9 @@
 import { NextResponse } from 'next/server'
 
 import { searchByText } from '@/lib/enrichment'
+import { isPublicDemo } from '@/lib/public-demo'
+import { checkRateLimitShared } from '@/lib/discovery/guardrails-shared'
+import { readRuntimeConfig } from '@/lib/discovery/runtime-config'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -53,6 +56,20 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'query is required' }, { status: 400 })
   }
   const k = Math.max(1, Math.min(50, body.k ?? 5))
+
+  // Each search embeds the query (one small embedding call). On the open demo
+  // that is reachable by anyone, so it shares the discovery per-IP rate limit.
+  if (isPublicDemo()) {
+    const ip = (req.headers.get('x-forwarded-for') ?? 'local').split(',')[0].trim()
+    const { limits } = await readRuntimeConfig()
+    const rate = await checkRateLimitShared(`search:${ip}`, { perMin: limits.ratePerMin, perDay: limits.ratePerDay })
+    if (!rate.ok) {
+      return NextResponse.json(
+        { error: 'rate limited', retryAfterSeconds: rate.retryAfterSeconds },
+        { status: 429, headers: { 'retry-after': String(rate.retryAfterSeconds ?? 60) } },
+      )
+    }
+  }
 
   try {
     const result = await searchByText(query, k, {

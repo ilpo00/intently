@@ -50,12 +50,12 @@ export class IntentlyCatalogPimAdapter implements PimAdapter {
   readonly sourceName = 'intently-catalog'
 
   async list(): Promise<PimProduct[]> {
-    const ovr = readProductOverrides()
+    const ovr = await readProductOverrides()
     return getAllProducts().map(p => toPim(mergeProduct(p, ovr[p.id])))
   }
 
   async get(id: string): Promise<PimProduct | null> {
     const p = getProductById(id)
-    return p ? toPim(mergeProduct(p, readProductOverrides()[id])) : null
+    return p ? toPim(mergeProduct(p, (await readProductOverrides())[id])) : null
   }
 }

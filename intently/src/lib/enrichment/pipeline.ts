@@ -176,13 +176,36 @@ export async function searchByText(
 }
 
 /**
+ * Vector-store reads for the admin surfaces, degraded rather than thrown.
+ * The Studio is an inspector: if the store is unreachable (a paused hosted
+ * database, a network blip) it should render "0 indexed" and log, not take the
+ * whole page down to the error screen. Discovery has its own fallback.
+ */
+export async function vectorRecordsOrEmpty() {
+  try {
+    return await getVectorStore().list()
+  } catch (err) {
+    console.error('[enrichment] vector store unavailable (list):', err instanceof Error ? err.message : err)
+    return []
+  }
+}
+
+export async function vectorCountOrZero(): Promise<number> {
+  try {
+    return await getVectorStore().count()
+  } catch (err) {
+    console.error('[enrichment] vector store unavailable (count):', err instanceof Error ? err.message : err)
+    return 0
+  }
+}
+
+/**
  * Surface every product the PIM knows about, joined with what the
  * vector store has. Powers the admin table.
  */
 export async function getEnrichmentStatuses(): Promise<EnrichmentStatus[]> {
   const pim = getPimAdapter()
-  const store = getVectorStore()
-  const [products, records] = await Promise.all([pim.list(), store.list()])
+  const [products, records] = await Promise.all([pim.list(), vectorRecordsOrEmpty()])
   const byId = new Map<string, (typeof records)[number]>()
   for (const r of records) byId.set(r.id, r)
 

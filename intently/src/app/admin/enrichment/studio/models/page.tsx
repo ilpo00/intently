@@ -10,20 +10,31 @@
 // ─────────────────────────────────────────────────────────────────
 
 import ModelsClient from './ModelsClient'
+import { isPublicDemo } from '@/lib/public-demo'
+import { PROBE_SAMPLE_QUERIES } from '@/lib/discovery/probe-fixtures'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'Model bench — Intently admin' }
 
 export default function ModelsPage() {
   // Which providers have a key on this deployment — the client greys out the rest.
+  // Public demo: the bench serves recordings for every provider (no live
+  // calls), so all three are selectable regardless of which keys exist.
+  const publicDemo = isPublicDemo()
   const available = {
-    deepseek: !!process.env.DEEPSEEK_API_KEY,
-    haiku: !!process.env.ANTHROPIC_API_KEY,
-    openai: !!process.env.OPENAI_API_KEY,
+    deepseek: publicDemo || !!process.env.DEEPSEEK_API_KEY,
+    haiku: publicDemo || !!process.env.ANTHROPIC_API_KEY,
+    openai: publicDemo || !!process.env.OPENAI_API_KEY,
   }
   const activeDefaults = {
     parser: process.env.DISCOVERY_PARSER || 'off — keyword parsing',
     generation: process.env.DISCOVERY_GENERATION || 'off — built-in templates',
   }
-  return <ModelsClient available={available} activeDefaults={activeDefaults} />
+  return (
+    <ModelsClient
+      available={available}
+      activeDefaults={activeDefaults}
+      publicSamples={publicDemo ? [...PROBE_SAMPLE_QUERIES] : null}
+    />
+  )
 }

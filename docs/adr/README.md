@@ -20,6 +20,7 @@ canonical for *what*, these are canonical for *why*.
 |---|---|
 | [0006](0006-replica-safe-guardrails-on-upstash.md) | Replica-safe guardrail counters on Redis, not Postgres |
 | [0007](0007-openai-embeddings-at-384-on-serverless.md) | OpenAI embeddings at 384 dims for the cloud path — zero migration |
+| [0008](0008-public-demo-session-sandbox.md) | The open-web demo is a per-visitor sandbox, enforced at the route |
 | [ADR-012](../../intently/docs/cloud-architecture-plan.md) | Cloud implementation plan — local-first to multi-replica |
 | [private-demo-two-passwords](../../wiki/decisions/private-demo-two-passwords.md) | Private demo behind a two-credential edge gate |
 | [supabase-over-medusa](../../wiki/decisions/supabase-over-medusa.md) | Supabase as the data backbone; Medusa deferred |

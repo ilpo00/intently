@@ -1,0 +1,249 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 960" role="img" aria-labelledby="t d" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif">
+  <title id="t">Intently architecture: how a sentence becomes a shortlist</title>
+  <desc id="d">A shopper's sentence passes an edge proxy into one discovery turn: guardrails, a regex parser and a complexity gate, an optional language-model comprehension step, a regex-first merge, retrieval, ranking with hard exclusions, composition, templates, an optional language-model re-voice, and a grounding check before the reply. Deterministic code makes every decision; language models only read the words and phrase the answer. Product understanding is built offline: product data, a vision model reading each photo, a validator, embed text and an embedder into pgvector. State lives in Upstash Redis and Supabase Postgres.</desc>
+
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#8c9892"/>
+    </marker>
+    <marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#e3a54a"/>
+    </marker>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#e8776b"/>
+    </marker>
+    <style>
+      .bg{fill:#0f1311}
+      .panel{fill:#141916;stroke:#2b332e;stroke-width:1.5}
+      .off{fill:#141916;stroke:#6f7873;stroke-width:1.5;stroke-dasharray:8 6}
+      .box{fill:#1c221f;stroke-width:2}
+      .det{stroke:#3fb68b}
+      .llm{stroke:#e3a54a;stroke-dasharray:7 5}
+      .sto{stroke:#6ea8fe}
+      .neu{stroke:#56605a}
+      .h{fill:#eef2ef;font-size:19px;font-weight:700}
+      .s{fill:#a9b3ad;font-size:16px}
+      .lab{fill:#8c9892;font-size:15px;letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+      .note{fill:#f2c46b;font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:18px}
+      .wire{fill:none;stroke:#8c9892;stroke-width:2}
+      .wirem{fill:none;stroke:#e3a54a;stroke-width:2;stroke-dasharray:6 5}
+      .wirer{fill:none;stroke:#e8776b;stroke-width:2;stroke-dasharray:6 5}
+      .data{fill:none;stroke:#6ea8fe;stroke-width:1.6;stroke-dasharray:3 5}
+      .dlab{fill:#8fb8f5;font-size:14.5px}
+      .pill{fill:#1c221f;stroke:#2f3833;stroke-width:1.5}
+      .pt{fill:#dfe6e1;font-size:18px}
+    </style>
+  </defs>
+
+  <rect class="bg" width="1600" height="960"/>
+
+  <!-- Title -->
+  <text x="40" y="44" class="lab" fill="#3fb68b" style="fill:#3fb68b">Intently · architecture</text>
+  <text x="40" y="84" fill="#eef2ef" font-family="Georgia,'Times New Roman',serif" font-size="36">How a sentence becomes a shortlist</text>
+
+  <!-- Legend -->
+  <g transform="translate(1000 30)">
+    <rect x="0" y="0" width="26" height="18" rx="4" class="box det"/>
+    <text x="36" y="15" class="s">deterministic code — decides</text>
+    <rect x="300" y="0" width="26" height="18" rx="4" class="box llm"/>
+    <text x="336" y="15" class="s">language model — words only</text>
+    <rect x="0" y="32" width="26" height="18" rx="4" class="box sto"/>
+    <text x="36" y="47" class="s">storage</text>
+    <rect x="300" y="32" width="26" height="18" rx="4" class="off"/>
+    <text x="336" y="47" class="s">offline, once per product</text>
+  </g>
+
+  <!-- ── Clients + edge ─────────────────────────────── -->
+  <rect x="40" y="160" width="125" height="92" rx="12" class="box neu"/>
+  <text x="56" y="192" class="h">Shopper</text>
+  <text x="56" y="215" class="s">describes a</text>
+  <text x="56" y="234" class="s">situation</text>
+
+  <rect x="175" y="160" width="125" height="92" rx="12" class="box neu"/>
+  <text x="191" y="192" class="h">Studio</text>
+  <text x="191" y="215" class="s">steers the</text>
+  <text x="191" y="234" class="s">catalogue</text>
+
+  <path d="M102 252 V300" class="wire" marker-end="url(#a)"/>
+  <path d="M237 252 V300" class="wire" marker-end="url(#a)"/>
+
+  <rect x="40" y="302" width="260" height="118" rx="12" class="box det"/>
+  <text x="56" y="336" class="h">Edge · proxy.ts</text>
+  <text x="56" y="360" class="s">a sandbox session per</text>
+  <text x="56" y="380" class="s">visitor · password gate</text>
+  <text x="56" y="400" class="s">(open in the public demo)</text>
+
+  <path d="M300 360 H318 V200 H348" class="wire" marker-end="url(#a)"/>
+
+  <!-- ── One discovery turn ─────────────────────────── -->
+  <rect x="330" y="112" width="880" height="484" rx="18" class="panel"/>
+  <text x="352" y="143" class="lab">POST /api/discover · one turn</text>
+
+  <!-- row 1 → -->
+  <rect x="350" y="160" width="195" height="80" rx="11" class="box det"/>
+  <text x="366" y="193" class="h">Guardrails</text>
+  <text x="366" y="216" class="s">rate limit ·</text>
+  <text x="366" y="234" class="s">daily LLM cap</text>
+
+  <rect x="565" y="160" width="195" height="80" rx="11" class="box det"/>
+  <text x="581" y="193" class="h">Regex parser</text>
+  <text x="581" y="216" class="s">words → situation</text>
+
+  <rect x="780" y="160" width="195" height="80" rx="11" class="box det"/>
+  <text x="796" y="193" class="h">Complexity gate</text>
+  <text x="796" y="216" class="s">is a model worth it?</text>
+
+  <rect x="995" y="160" width="195" height="80" rx="11" class="box llm"/>
+  <text x="1011" y="193" class="h">Comprehension</text>
+  <text x="1011" y="216" class="s">hard phrasing only,</text>
+  <text x="1011" y="234" class="s">vocabulary-clamped</text>
+
+  <path d="M545 200 H563" class="wire" marker-end="url(#a)"/>
+  <path d="M760 200 H778" class="wire" marker-end="url(#a)"/>
+  <path d="M975 200 H993" class="wirem" marker-end="url(#am)"/>
+  <path d="M1092 240 V298" class="wirem" marker-end="url(#am)"/>
+  <!-- simple turns skip the model -->
+  <path d="M877 240 C 877 280, 960 296, 1010 300" class="wire" marker-end="url(#a)"/>
+
+  <!-- row 2 ← -->
+  <rect x="995" y="300" width="195" height="80" rx="11" class="box det"/>
+  <text x="1011" y="333" class="h">Merge</text>
+  <text x="1011" y="356" class="s">regex first; the</text>
+  <text x="1011" y="374" class="s">model fills gaps</text>
+
+  <rect x="780" y="300" width="195" height="80" rx="11" class="box det"/>
+  <text x="796" y="333" class="h">Retrieve</text>
+  <text x="796" y="356" class="s">whole catalogue</text>
+  <text x="796" y="374" class="s">or pgvector</text>
+
+  <rect x="565" y="300" width="195" height="80" rx="11" class="box det"/>
+  <text x="581" y="333" class="h">Rank</text>
+  <text x="581" y="356" class="s">hard exclusions,</text>
+  <text x="581" y="374" class="s">soft situation bias</text>
+
+  <rect x="350" y="300" width="195" height="80" rx="11" class="box det"/>
+  <text x="366" y="333" class="h">Compose</text>
+  <text x="366" y="356" class="s">ask · shortlist ·</text>
+  <text x="366" y="374" class="s">complete the look</text>
+
+  <path d="M995 340 H977" class="wire" marker-end="url(#a)"/>
+  <path d="M780 340 H762" class="wire" marker-end="url(#a)"/>
+  <path d="M565 340 H547" class="wire" marker-end="url(#a)"/>
+  <path d="M447 380 V438" class="wire" marker-end="url(#a)"/>
+
+  <!-- row 3 → -->
+  <rect x="350" y="440" width="195" height="80" rx="11" class="box det"/>
+  <text x="366" y="473" class="h">Templates</text>
+  <text x="366" y="496" class="s">the true answer,</text>
+  <text x="366" y="514" class="s">already in words</text>
+
+  <rect x="565" y="440" width="195" height="80" rx="11" class="box llm"/>
+  <text x="581" y="473" class="h">Re-voice</text>
+  <text x="581" y="496" class="s">warmer wording,</text>
+  <text x="581" y="514" class="s">optional</text>
+
+  <rect x="780" y="440" width="195" height="80" rx="11" class="box det"/>
+  <text x="796" y="473" class="h">Grounding check</text>
+  <text x="796" y="496" class="s">only what was shown,</text>
+  <text x="796" y="514" class="s">no false promises</text>
+
+  <rect x="995" y="440" width="195" height="80" rx="11" class="box det"/>
+  <text x="1011" y="473" class="h">Reply</text>
+  <text x="1011" y="496" class="s">an explained</text>
+  <text x="1011" y="514" class="s">shortlist</text>
+
+  <path d="M545 480 H563" class="wirem" marker-end="url(#am)"/>
+  <path d="M760 480 H778" class="wirem" marker-end="url(#am)"/>
+  <path d="M975 480 H993" class="wire" marker-end="url(#a)"/>
+  <!-- rejected prose falls back to the template -->
+  <path d="M877 520 C 877 575, 447 575, 447 522" class="wirer" marker-end="url(#ar)"/>
+
+  <!-- margin notes -->
+  <text x="596" y="276" class="note">“blue shirt”? no model needed</text>
+  <text x="590" y="420" class="note">“no florals” is a wall, not a hint</text>
+  <text x="560" y="586" class="note">invented a product? back to the template</text>
+
+  <!-- ── State + models (right) ─────────────────────── -->
+  <rect x="1250" y="130" width="310" height="112" rx="12" class="box sto"/>
+  <text x="1266" y="163" class="h">Upstash Redis</text>
+  <text x="1266" y="187" class="s">shared rate limits + LLM cap</text>
+  <text x="1266" y="207" class="s">visitor sandboxes, 24 h —</text>
+  <text x="1266" y="227" class="s">your edits, nobody else’s</text>
+
+  <rect x="1250" y="270" width="310" height="150" rx="12" class="box sto"/>
+  <text x="1266" y="303" class="h">Supabase Postgres</text>
+  <text x="1266" y="327" class="s">pgvector — product vectors</text>
+  <text x="1266" y="349" class="s">runtime_kv — Studio settings</text>
+  <text x="1266" y="371" class="s">analytics — turns, carts,</text>
+  <text x="1266" y="391" class="s">orders · row-level security</text>
+
+  <rect x="1250" y="450" width="310" height="146" rx="12" class="box llm"/>
+  <text x="1266" y="483" class="h">Language models</text>
+  <text x="1266" y="507" class="s">OpenAI · DeepSeek · Claude</text>
+  <text x="1266" y="527" class="s">one setting per stage</text>
+  <text x="1266" y="560" class="note" style="font-size:17px">no key? it still works —</text>
+  <text x="1266" y="582" class="note" style="font-size:17px">just plainer sentences</text>
+
+  <path d="M1210 186 H1248" class="data" marker-end="url(#a)"/>
+  <path d="M1210 340 H1248" class="data" marker-end="url(#a)"/>
+  <path d="M1210 520 H1248" class="wirem" marker-end="url(#am)"/>
+
+  <!-- Studio writes settings -->
+  <path d="M237 160 V104 H1405 V128" class="data" marker-end="url(#a)"/>
+  <text x="620" y="98" class="dlab">Studio changes → a visitor’s sandbox (public demo) or runtime_kv</text>
+
+  <!-- ── Offline enrichment (bottom) ────────────────── -->
+  <rect x="330" y="626" width="880" height="170" rx="18" class="off"/>
+  <text x="352" y="657" class="lab">Offline · understanding the catalogue</text>
+
+  <rect x="350" y="676" width="152" height="96" rx="11" class="box neu"/>
+  <text x="364" y="708" class="h">Product data</text>
+  <text x="364" y="731" class="s">PIM · Medusa ·</text>
+  <text x="364" y="750" class="s">CSV · JSON</text>
+
+  <rect x="520" y="676" width="152" height="96" rx="11" class="box llm"/>
+  <text x="534" y="708" class="h">Vision read</text>
+  <text x="534" y="731" class="s">a model reads</text>
+  <text x="534" y="750" class="s">each photo</text>
+
+  <rect x="690" y="676" width="152" height="96" rx="11" class="box det"/>
+  <text x="704" y="708" class="h">Validator</text>
+  <text x="704" y="731" class="s">clamps to the</text>
+  <text x="704" y="750" class="s">vocabulary</text>
+
+  <rect x="860" y="676" width="152" height="96" rx="11" class="box det"/>
+  <text x="874" y="708" class="h">Embed text</text>
+  <text x="874" y="731" class="s">the biggest</text>
+  <text x="874" y="750" class="s">quality lever</text>
+
+  <rect x="1030" y="676" width="160" height="96" rx="11" class="box det"/>
+  <text x="1044" y="708" class="h">Embedder</text>
+  <text x="1044" y="731" class="s">OpenAI 384-d ·</text>
+  <text x="1044" y="750" class="s">MiniLM locally</text>
+
+  <path d="M502 724 H518" class="wirem" marker-end="url(#am)"/>
+  <path d="M672 724 H688" class="wirem" marker-end="url(#am)"/>
+  <path d="M842 724 H858" class="wire" marker-end="url(#a)"/>
+  <path d="M1012 724 H1028" class="wire" marker-end="url(#a)"/>
+  <path d="M1190 724 H1585 V345 H1562" class="data" marker-end="url(#a)"/>
+  <text x="1250" y="716" class="dlab">vectors → pgvector</text>
+  <text x="1250" y="786" class="note" style="font-size:17px">reads each photo once —</text>
+  <text x="1250" y="808" class="note" style="font-size:17px">never on a shopper’s turn</text>
+
+  <!-- ── Quality (left bottom) ──────────────────────── -->
+  <rect x="40" y="626" width="260" height="170" rx="12" class="box neu"/>
+  <text x="56" y="660" class="h">Every change</text>
+  <text x="56" y="686" class="s">typecheck · lint · tests</text>
+  <text x="56" y="708" class="s">evals, run with no API keys</text>
+  <text x="56" y="730" class="s">GitHub + GitLab CI</text>
+  <text x="56" y="762" class="h" style="font-size:17px">Next.js 16 on Vercel</text>
+  <text x="56" y="782" class="s">serverless</text>
+
+  <!-- ── House rules ────────────────────────────────── -->
+  <rect x="40" y="840" width="480" height="64" rx="32" class="pill"/>
+  <text x="280" y="879" class="pt" text-anchor="middle">The code decides. The model phrases.</text>
+  <rect x="540" y="840" width="520" height="64" rx="32" class="pill"/>
+  <text x="800" y="879" class="pt" text-anchor="middle">Any AI step can fail — the product still works.</text>
+  <rect x="1080" y="840" width="480" height="64" rx="32" class="pill"/>
+  <text x="1320" y="879" class="pt" text-anchor="middle">Measured on every change, weak spots included.</text>
+</svg>

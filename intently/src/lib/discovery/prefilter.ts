@@ -13,7 +13,16 @@
 import type { Product, SessionContext, Formality } from '@/types'
 import {
   matchesPreferenceToken, opposesPreferenceToken, isWomenswearCategory, garmentCategories,
+  isColourWord, namedColours, wearsColour, hasColourAccent,
 } from './attributes'
+
+// A colour named outright is the most literal request there is — a shopper who
+// asks for "a black dress" must see black dresses first, whatever the occasion
+// tags say. So it outweighs the occasion signal (+5). Applied once per product
+// however many colours were named ("black or navy" = either). A piece that
+// only carries the colour as an accent gets a small nudge, nothing more.
+const NAMED_COLOUR_BOOST = 7
+const NAMED_COLOUR_ACCENT_BOOST = 1.5
 
 export interface ScoredProduct {
   product: Product
@@ -93,7 +102,11 @@ function scoreProduct(p: Product, ctx: SessionContext): number {
   // (linen, lightweight, earthy, …) falls through to the enriched text.
   // Opposing a palette/pattern lean is a gentle penalty, never a drop — an
   // A/B answer reorders the shortlist, it doesn't punish the other half.
+  const colours = namedColours(ctx.preferences)
+  if (colours.some(c => wearsColour(p, c))) score += NAMED_COLOUR_BOOST
+  else if (colours.some(c => hasColourAccent(p, c))) score += NAMED_COLOUR_ACCENT_BOOST
   for (const pref of ctx.preferences) {
+    if (isColourWord(pref)) continue // handled above, as one signal
     if (matchesPreferenceToken(p, pref)) score += 2.5
     else if (opposesPreferenceToken(p, pref)) score -= 1.5
   }

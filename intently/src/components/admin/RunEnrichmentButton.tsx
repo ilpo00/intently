@@ -71,9 +71,10 @@ export default function RunEnrichmentButton({ scope = 'sample' }: { scope?: Visi
           body: JSON.stringify({ scope, restart: first && restart }),
         })
         first = false
-        const next: VisionRun & { error?: string } = await res.json().catch(() => ({ ...EMPTY_RUN }))
+        const next: VisionRun & { error?: string; message?: string } = await res.json().catch(() => ({ ...EMPTY_RUN }))
         if (!res.ok) {
-          setError(next.error ?? `enrichment failed (${res.status})`)
+          // `message` is the public demo's plain-language refusal (403).
+          setError(next.message ?? next.error ?? `enrichment failed (${res.status})`)
           if (next.state) setRun(next)
           break
         }

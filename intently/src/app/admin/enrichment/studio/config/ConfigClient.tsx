@@ -52,9 +52,12 @@ function sameConfig(a: RuntimeConfig, b: RuntimeConfig): boolean {
 }
 
 export default function ConfigClient({
-  initialConfig, defaults, overridden, available,
+  initialConfig, defaults, overridden, available, publicDemo = false,
 }: {
   initialConfig: RuntimeConfig; defaults: RuntimeConfig; overridden: boolean; available: Available
+  // Public demo: cost caps and model ids are server-owned (the API ignores a
+  // visitor's values), so those fields are shown locked rather than editable.
+  publicDemo?: boolean
 }) {
   const [cfg, setCfg] = useState<RuntimeConfig>(initialConfig)
   const [saved, setSaved] = useState<RuntimeConfig>(initialConfig)
@@ -139,6 +142,7 @@ export default function ConfigClient({
               subtitle={stage === 'parse'
                 ? 'Understands the shopper’s free text. Off = keyword parsing only.'
                 : 'Rephrases the tailor’s answers naturally. Off = built-in templates.'}
+              lockModel={publicDemo}
               stage={cfg[stage]}
               envDefault={defaults[stage]}
               available={available}
@@ -204,13 +208,14 @@ export default function ConfigClient({
                   </select>
                   {cfg.experiment!.b[stage].provider !== 'off' && (
                     <input
+                      disabled={publicDemo}
                       value={cfg.experiment!.b[stage].model ?? ''}
                       onChange={e => setCfg(c => {
                         const exp = c.experiment ?? EMPTY_EXPERIMENT
                         return { ...c, experiment: { ...exp, b: { ...exp.b, [stage]: { ...exp.b[stage], model: e.target.value.trim() || null } } } }
                       })}
                       placeholder={`${MODEL_HINT[cfg.experiment!.b[stage].provider]} (provider default)`}
-                      className="w-full border border-intently-cloud rounded px-2 py-1.5 text-sm font-mono"
+                      className="w-full border border-intently-cloud rounded px-2 py-1.5 text-sm font-mono disabled:bg-intently-cloud/30 disabled:text-intently-pebble"
                     />
                   )}
                 </div>
@@ -223,6 +228,12 @@ export default function ConfigClient({
       {/* LLM-use limits */}
       <section className="space-y-4">
         <h2 className="text-sm uppercase tracking-wide text-intently-pebble">LLM-use limits</h2>
+        {publicDemo && (
+          <p className="text-sm text-intently-slate border-l-2 border-intently-moss pl-3 max-w-2xl">
+            In the public demo the spend limits are fixed — a visitor cannot raise them, and the server ignores any
+            attempt to. The complexity threshold is yours to change: it decides which turns are worth a model call.
+          </p>
+        )}
         <div className="grid md:grid-cols-2 gap-x-6 gap-y-4">
           {LIMIT_META.map(m => (
             <div key={m.key} className="border border-intently-cloud rounded-lg p-4">
@@ -231,9 +242,13 @@ export default function ConfigClient({
               <div className="flex items-center gap-2">
                 <input
                   type="number" min={m.min} max={m.max} value={cfg.limits[m.key]}
+                  disabled={publicDemo && m.key !== 'escalateMinWords'}
                   onChange={e => setLimit(m.key, Number(e.target.value))}
-                  className="w-40 border border-intently-cloud rounded px-2 py-1 text-sm font-mono"
+                  className="w-40 border border-intently-cloud rounded px-2 py-1 text-sm font-mono disabled:bg-intently-cloud/30 disabled:text-intently-pebble"
                 />
+                {publicDemo && m.key !== 'escalateMinWords' && (
+                  <span className="text-xs text-intently-pebble">fixed in the public demo</span>
+                )}
                 {cfg.limits[m.key] !== defaults.limits[m.key] && (
                   <span className="text-xs text-intently-pebble">env default: {defaults.limits[m.key]}</span>
                 )}
@@ -247,10 +262,11 @@ export default function ConfigClient({
 }
 
 function StagePanel({
-  title, subtitle, stage, envDefault, available, onChange,
+  title, subtitle, stage, envDefault, available, onChange, lockModel = false,
 }: {
   title: string; subtitle: string; stage: StageConfig; envDefault: StageConfig
   available: Available; onChange: (patch: Partial<StageConfig>) => void
+  lockModel?: boolean
 }) {
   return (
     <div className="border border-intently-cloud rounded-lg p-4 space-y-3">
@@ -272,12 +288,15 @@ function StagePanel({
       {stage.provider !== 'off' && (
         <div>
           <input
+            disabled={lockModel}
             value={stage.model ?? ''}
             onChange={e => onChange({ model: e.target.value.trim() || null })}
             placeholder={`${MODEL_HINT[stage.provider]} (provider default)`}
-            className="w-full border border-intently-cloud rounded px-2 py-1.5 text-sm font-mono"
+            className="w-full border border-intently-cloud rounded px-2 py-1.5 text-sm font-mono disabled:bg-intently-cloud/30 disabled:text-intently-pebble"
           />
-          <p className="text-xs text-intently-pebble mt-1">Blank = the provider&apos;s default model.</p>
+          <p className="text-xs text-intently-pebble mt-1">
+            {lockModel ? 'The public demo always uses the provider’s default model.' : 'Blank = the provider’s default model.'}
+          </p>
         </div>
       )}
       {stage.provider !== envDefault.provider && (

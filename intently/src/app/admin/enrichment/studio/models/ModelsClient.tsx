@@ -16,6 +16,12 @@ interface ProbeResponse {
   parse: { ok: boolean; ms: number; patch: unknown; budget: boolean } | null
   engine: { ms: number; message: string; question: string | null; results: { id: string; name: string }[] }
   generate: { ok: boolean; ms: number; budget: boolean; message: string | null; prompt: string | null; grounded: boolean | null } | null
+  // Public demo only: LLM stages are recordings, never live calls.
+  publicDemo?: boolean
+  recorded?: boolean
+  model?: string | null
+  recordedAt?: string | null
+  note?: string | null
 }
 
 interface ColumnConfig {
@@ -48,11 +54,15 @@ const SAMPLE_QUERIES = [
 export default function ModelsClient({
   available,
   activeDefaults,
+  publicSamples,
 }: {
   available: { deepseek: boolean; haiku: boolean; openai: boolean }
   activeDefaults: { parser: string; generation: string }
+  // Non-null in the public demo: the queries that have recorded results.
+  publicSamples: string[] | null
 }) {
-  const [query, setQuery] = useState(SAMPLE_QUERIES[0])
+  const samples = publicSamples ?? SAMPLE_QUERIES
+  const [query, setQuery] = useState(samples[0])
   const [cols, setCols] = useState<ColumnConfig[]>([
     { provider: available.openai ? 'openai' : 'deterministic', model: '' },
     { provider: available.deepseek ? 'deepseek' : 'deterministic', model: '' },
@@ -97,6 +107,13 @@ export default function ModelsClient({
           (parser: <code className="text-xs">{activeDefaults.parser}</code>, generation:{' '}
           <code className="text-xs">{activeDefaults.generation}</code>) — the bench probes explicit overrides.
         </p>
+        {publicSamples && (
+          <p className="text-sm text-intently-slate mt-2 max-w-2xl border-l-2 border-intently-moss pl-3">
+            Public demo: the model columns show <strong>recorded</strong> results — real outputs captured once per
+            sample query and provider — so nothing here spends AI budget. The engine answer is computed live.
+            Pick a sample query below; any other query shows the engine only.
+          </p>
+        )}
       </header>
 
       {/* Query + catalog */}
@@ -118,7 +135,7 @@ export default function ModelsClient({
           </button>
         </div>
         <div className="flex flex-wrap gap-2">
-          {SAMPLE_QUERIES.map(q => (
+          {samples.map(q => (
             <button key={q} onClick={() => setQuery(q)}
               className="text-xs px-2 py-1 rounded border border-intently-cloud text-intently-slate hover:text-intently-ink">
               {q}
@@ -144,7 +161,7 @@ export default function ModelsClient({
                   </option>
                 ))}
               </select>
-              {c.provider !== 'deterministic' && (
+              {c.provider !== 'deterministic' && !publicSamples && (
                 <input
                   value={c.model}
                   onChange={e => setCol(i, { model: e.target.value })}
@@ -174,6 +191,12 @@ function ProbeResult({ r }: { r: ProbeResponse | { error: string } | null }) {
 
   return (
     <div className="space-y-3 text-sm">
+      {r.note && <p className="text-xs text-intently-slate border-l-2 border-intently-cloud pl-3">{r.note}</p>}
+      {r.recorded && (
+        <p className="text-xs text-intently-moss">
+          Recorded result{r.model ? ` · ${r.model}` : ''}{r.recordedAt ? ` · ${r.recordedAt}` : ''} — latencies are from the recording.
+        </p>
+      )}
       <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-intently-slate">
         <span>complexity: {r.escalate ? 'needs AI' : 'simple — engine only'}</span>
         <span>engine {r.engine.ms}ms</span>

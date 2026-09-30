@@ -16,6 +16,8 @@ export {
   syncOne,
   searchByText,
   getEnrichmentStatuses,
+  vectorCountOrZero,
+  vectorRecordsOrEmpty,
 } from './pipeline'
 
 export type {

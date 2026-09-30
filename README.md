@@ -83,7 +83,7 @@ A PIM knows *"black dress, €35"*. Answering *"cold seaside evening"* needs to 
 ## Decisions and how I work
 
 - **Decisions (ADRs):** [`docs/adr/`](docs/adr/README.md). Start with [0001 engine decides, LLM phrases](docs/adr/0001-engine-decides-llm-phrases.md) and [0003 the inversion trap](docs/adr/0003-hard-filters-need-deterministic-guards.md), a production bug that became a design rule.
-- **Kill things deliberately.** Intently began as a Japanese-kitchen commerce concept ("MISE") and was pivoted to fashion discovery, keeping the architecture and discarding the domain. The old code was removed rather than left to rot, and the full record is in [`intently/docs/mise_to_intently_migration.md`](intently/docs/mise_to_intently_migration.md).
+- **Kill things deliberately.** Intently began as MISE, a project combining recipes with the kitchen tools they need. The question that followed — *how do you enrich product data from pictures?* — needed a picture-heavy catalogue, so the conversational layer moved to fashion and the food domain was discarded. The old code was removed rather than left to rot, and the full record is in [`intently/docs/mise_to_intently_migration.md`](intently/docs/mise_to_intently_migration.md).
 - **Built with AI agents, deliberately governed.** Most code was written with Claude Code under explicit guardrails. [`CLAUDE.md`](CLAUDE.md) holds the standing conventions, [`wiki/`](wiki/index.md) is the agent's long-term memory for *why*, and project skills enforce hard rules (tiered-AI-first, ask-before-browser-verification). Treating the agent as a team member with a written operating model is part of the architecture.
 
 ## Run it locally (no keys)
@@ -91,7 +91,6 @@ A PIM knows *"black dress, €35"*. Answering *"cold seaside evening"* needs to 
 ```bash
 cd intently
 npm install
-npm run catalog:images -- --from <kaggle-hm>/images   # optional: product photos, see below
 NEXT_PUBLIC_CATALOG=vision npm run dev   # → http://localhost:3000
 ```
 
@@ -121,4 +120,4 @@ prodprep.md    Pre-production risk ledger
 
 ---
 
-Catalogue data and product photos derive from H&M product data via the Hugging Face dataset [`Qdrant/hm_ecommerce_products`](https://huggingface.co/datasets/Qdrant/hm_ecommerce_products). The photos are not redistributed in this repository. To see them, download the `images/` folder of Kaggle's [H&M Personalized Fashion Recommendations](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/data) dataset (account and rules acceptance required) and run `npm run catalog:images -- --from <path>/images` in `intently/`. Used for non-commercial demonstration only.
+Catalogue data and product photos derive from H&M product data via the Hugging Face dataset [`Qdrant/hm_ecommerce_products`](https://huggingface.co/datasets/Qdrant/hm_ecommerce_products). The photos are served by the live demo but are not redistributed in the public repository, so a fresh clone runs normally with product cards that have no photo. Used for non-commercial demonstration only.

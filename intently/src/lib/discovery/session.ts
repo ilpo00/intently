@@ -13,7 +13,7 @@
 import type { SessionContext, Formality, Audience } from '@/types'
 import { emptySessionContext } from '@/types'
 import {
-  detectRequestedGarment,
+  detectRequestedGarment, COLOUR_WORDS,
   PREF_DARKER, PREF_LIGHTER, PREF_SOLIDS, PREF_PATTERN, PREF_WARMTH, PREF_CARRY,
   PREF_TRIM, PREF_SHOULDERS, PREF_MIDDLE, PREF_GENEROUS,
 } from './attributes'
@@ -131,6 +131,21 @@ const PREFERENCE_PATTERNS: Array<[RegExp, string]> = [
   [/\bgenerous,? easy fit\b|\bfuller figure\b|\bplus[- ]sized?\b|\bcurvy\b|\blarger frame\b/, PREF_GENEROUS],
 ]
 
+// A colour named as a wish ("a black dress", "something in navy"). Not a wish
+// when it is being rejected ("nothing black", "I hate pink", "anything but
+// red" — the hard ones are the LLM parser's job, but the plain ones must not
+// invert here), when the shopper already owns it, or when "black tie" is the
+// dress code rather than the colour.
+const COLOUR_REJECTION_CUE =
+  `\\b(?:no|not|nothing|none|never|avoid|without|hate|dislike|don'?t (?:want|like)|can'?t stand|anything but|already (?:have|got|own))\\b`
+function detectWantedColours(text: string): string[] {
+  const t = text.replace(/\bgray\b/g, 'grey').replace(/\bblack[- ]tie\b/g, ' ')
+  return COLOUR_WORDS.filter(c =>
+    new RegExp(`\\b${c}\\b`).test(t) &&
+    !new RegExp(`${COLOUR_REJECTION_CUE}[\\w\\s,]{0,20}?\\b${c}\\b`).test(t),
+  )
+}
+
 function detectPreferences(text: string): string[] {
   const out: string[] = []
   for (const p of PREFERENCE_WORDS) {
@@ -153,15 +168,18 @@ function uniq(arr: string[]): string[] {
  */
 export function updateSessionContext(prev: SessionContext, query: string): SessionContext {
   const text = query.toLowerCase()
+  const exclusions = uniq([...prev.exclusions, ...detectExclusions(text)])
   return {
     occasion: detectOccasion(text) ?? prev.occasion,
     formality: detectFormality(text) ?? prev.formality,
     season: detectSeason(text) ?? prev.season,
     activity: detectActivity(text) ?? prev.activity,
     audience: detectAudience(text) ?? prev.audience,
-    exclusions: uniq([...prev.exclusions, ...detectExclusions(text)]),
+    exclusions,
     constraints: uniq([...prev.constraints, ...detectConstraints(text)]),
-    preferences: uniq([...prev.preferences, ...detectPreferences(text)]),
+    // A colour excluded now (or earlier) is never also a wish: the hard filter wins.
+    preferences: uniq([...prev.preferences, ...detectPreferences(text), ...detectWantedColours(text)])
+      .filter(p => !exclusions.includes(p)),
     askedQuestions: prev.askedQuestions,
     requestedGarment: detectRequestedGarment(text)?.word ?? prev.requestedGarment,
     revealCount: prev.revealCount,

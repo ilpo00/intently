@@ -8,6 +8,7 @@
 import { NextResponse } from 'next/server'
 
 import { assertAdminApi } from '@/lib/auth/admin-guard'
+import { blockInPublicDemo } from '@/lib/public-demo-guard'
 import { syncOne } from '@/lib/enrichment'
 
 export const runtime = 'nodejs'
@@ -19,6 +20,8 @@ export async function POST(
 ) {
   const deny = await assertAdminApi()
   if (deny) return deny
+  const blocked = blockInPublicDemo('Re-embedding a product')
+  if (blocked) return blocked
   const { id } = await params
   try {
     const report = await syncOne(id)

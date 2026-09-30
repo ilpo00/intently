@@ -18,11 +18,15 @@ import {
   clearRuntimeConfig, hasRuntimeOverride, type RuntimeConfig,
 } from '@/lib/discovery/runtime-config'
 
-function payload() {
+// The config functions are async (the store may be Supabase or a visitor's
+// sandbox) — everything here must be awaited, both so the response carries
+// values rather than pending promises and so a write has landed before a
+// serverless function returns.
+async function payload() {
   return {
-    config: readRuntimeConfig(),
+    config: await readRuntimeConfig(),
     defaults: runtimeConfigDefaults(),
-    overridden: hasRuntimeOverride(),
+    overridden: await hasRuntimeOverride(),
     available: {
       deepseek: !!process.env.DEEPSEEK_API_KEY,
       haiku: !!process.env.ANTHROPIC_API_KEY,
@@ -34,7 +38,7 @@ function payload() {
 export async function GET() {
   const denied = await assertAdminApi()
   if (denied) return denied
-  return NextResponse.json(payload())
+  return NextResponse.json(await payload())
 }
 
 export async function PUT(req: Request) {
@@ -48,13 +52,13 @@ export async function PUT(req: Request) {
   }
   // writeRuntimeConfig re-validates/clamps every field onto the env baseline,
   // so a malformed edit can never corrupt the live path.
-  writeRuntimeConfig(body)
-  return NextResponse.json(payload())
+  await writeRuntimeConfig(body)
+  return NextResponse.json(await payload())
 }
 
 export async function DELETE() {
   const denied = await assertAdminApi()
   if (denied) return denied
-  clearRuntimeConfig()
-  return NextResponse.json(payload())
+  await clearRuntimeConfig()
+  return NextResponse.json(await payload())
 }

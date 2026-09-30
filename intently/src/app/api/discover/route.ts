@@ -17,7 +17,7 @@
 // ─────────────────────────────────────────────
 
 import { NextResponse } from 'next/server'
-import { discover, composeFromCandidates, type ComposeOpts } from '@/lib/discovery/engine'
+import { composeFromCandidates, type ComposeOpts } from '@/lib/discovery/engine'
 import { isVectorRetrievalEnabled, vectorRetrieve } from '@/lib/discovery/retrieve'
 import { loadActiveProfiles } from '@/lib/discovery/situation-overrides'
 import { llmParseContext } from '@/lib/discovery/parse-llm'
@@ -28,7 +28,8 @@ import { shouldEscalate } from '@/lib/discovery/escalate'
 import { grounded } from '@/lib/discovery/verify'
 import { readRuntimeConfig, stageProvider, armFor } from '@/lib/discovery/runtime-config'
 import { emitEvent, newMeter, costUsd } from '@/lib/analytics/events'
-import { getAllProducts } from '@/lib/data'
+import { getAllProducts, getProductsByCatalog } from '@/lib/data'
+import { mergeProducts, readProductOverrides } from '@/lib/enrichment/product-overrides'
 import { newSignals } from '@/lib/discovery/voice'
 import type { ConsultAnswer } from '@/lib/discovery/consult'
 import {
@@ -91,7 +92,12 @@ export async function POST(req: Request) {
   if (!query) {
     return NextResponse.json({ error: 'query is required' }, { status: 400 })
   }
-  const catalog: Catalog = body.catalog === 'outdoor' ? 'outdoor' : 'fashion'
+  // The client infers fashion vs outdoor per turn. When the active catalogue has
+  // no products on the inferred side (the vision catalogue is fashion-only), a
+  // hiking-flavoured brief must not dead-end on an empty set — answer from the
+  // catalogue that exists.
+  const inferred: Catalog = body.catalog === 'outdoor' ? 'outdoor' : 'fashion'
+  const catalog: Catalog = getProductsByCatalog(inferred).length > 0 ? inferred : 'fashion'
   const session = body.session ?? emptySessionContext()
   const answer = body.answer
   const cart = body.cart ?? []
@@ -116,6 +122,16 @@ export async function POST(req: Request) {
 
   const baseOpts: ComposeOpts = { answer, cart, contextPatch }
 
+  // The deterministic path reasons over the catalogue WITH curator overrides
+  // applied — the same seam the vector path uses (retrieve.ts), so an attribute
+  // curated in the Studio changes what discovery shows in either mode.
+  const deterministic = async () =>
+    composeFromCandidates(
+      query, session,
+      mergeProducts(getProductsByCatalog(catalog), await readProductOverrides()),
+      profiles, baseOpts,
+    )
+
   let outcome
   if (isVectorRetrievalEnabled()) {
     // Outfit completion needs a wider universe than the query-narrowed top-k
@@ -133,10 +149,10 @@ export async function POST(req: Request) {
       ]
       outcome = composeFromCandidates(query, session, candidates, profiles, { ...baseOpts, companionPool })
     } else {
-      outcome = discover(query, session, catalog, profiles, baseOpts) // fallback on vector error
+      outcome = await deterministic() // fallback on vector error
     }
   } else {
-    outcome = discover(query, session, catalog, profiles, baseOpts)
+    outcome = await deterministic()
   }
 
   // Re-voice the spoken prose (opt-in). The engine's deterministic text is the

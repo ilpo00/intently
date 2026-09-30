@@ -18,8 +18,8 @@ export const VISION_PRODUCTS = visionProducts as unknown as Product[]
 /** The committed vision catalogue with curator overrides applied — the single
  *  source of truth for both catalogue views, so an edit moves the readiness
  *  score and clears attention reasons everywhere (empty overrides = identity). */
-export function mergedVisionProducts(): Product[] {
-  const ovr = readProductOverrides()
+export async function mergedVisionProducts(): Promise<Product[]> {
+  const ovr = await readProductOverrides()
   return VISION_PRODUCTS.map(p => mergeProduct(p, ovr[p.id]))
 }
 
@@ -54,7 +54,7 @@ function fitById(products: Product[]): Map<string, number> {
   return m
 }
 
-export function loadVisionItems(): VisionLoad | null {
+export async function loadVisionItems(): Promise<VisionLoad | null> {
   try {
     const r = JSON.parse(readFileSync(join(process.cwd(), '.enrichment/vision-catalog.json'), 'utf8')) as {
       count: number; ok: number; model: string; estCostUSD: number; tokens: { input: number; output: number }; records: VisionRec[]
@@ -62,8 +62,8 @@ export function loadVisionItems(): VisionLoad | null {
     // Overlay curator overrides so an edit moves these views (occasions/style/
     // pattern/material/fit) the same way it moves live discovery. confidence and
     // validator flags stay from the model — those aren't curator-editable.
-    const ovr = readProductOverrides()
-    const fits = fitById(mergedVisionProducts())
+    const ovr = await readProductOverrides()
+    const fits = fitById(VISION_PRODUCTS.map(p => mergeProduct(p, ovr[p.id])))
     const items: VisionItem[] = r.records.filter(x => x.vision).map(x => {
       const o = ovr[x.id]
       return {

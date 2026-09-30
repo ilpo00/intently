@@ -11,11 +11,12 @@
 // to the page where its work happens.
 // ─────────────────────────────────────────────────────────────────
 
+import { readVisionRecords } from '@/lib/enrichment/vision/store'
 import Link from 'next/link'
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
-import { getEnrichmentStatuses, getPimAdapter, getVectorStore } from '@/lib/enrichment'
+import { getEnrichmentStatuses, getPimAdapter, vectorCountOrZero } from '@/lib/enrichment'
 import { loadMergedProfiles, loadActiveProfiles } from '@/lib/discovery/situation-overrides'
 
 type StageState = 'done' | 'partial' | 'todo'
@@ -29,7 +30,14 @@ interface Stage {
   action?: string // what to do when not done
 }
 
-function visionEnrichedCount(): { enriched: number; hasCache: boolean } {
+// Read vision results through the store (Supabase on the cloud, local files in
+// dev) — the same source the Vision page uses. Reading only the legacy local
+// file made the deployed ribbon say "not run" beside products marked
+// "vision-analysed".
+async function visionEnrichedCount(total: number): Promise<{ enriched: number; hasCache: boolean }> {
+  const stored = await readVisionRecords('catalog').catch(() => [])
+  const fromStore = stored.filter(r => r.vision).length
+  if (fromStore > 0) return { enriched: fromStore, hasCache: true }
   for (const ver of ['v2', 'v1']) {
     try {
       const raw = JSON.parse(readFileSync(join(process.cwd(), `.enrichment/vision-${ver}.json`), 'utf8'))
@@ -37,15 +45,20 @@ function visionEnrichedCount(): { enriched: number; hasCache: boolean } {
       return { enriched: records.filter(r => r.vision).length, hasCache: true }
     } catch { /* try next */ }
   }
+  // The vision catalogue is itself the output of a completed vision run (built
+  // by scripts/build-vision-catalog.mjs), so when it is the active catalogue
+  // every product in it has been photo-read — the same rule the Studio uses
+  // for its "vision-analysed" badge.
+  if (process.env.NEXT_PUBLIC_CATALOG === 'vision') return { enriched: total, hasCache: true }
   return { enriched: 0, hasCache: false }
 }
 
 export default async function PipelineStatus() {
   const pim = getPimAdapter()
-  const [statuses, vectorCount] = await Promise.all([getEnrichmentStatuses(), getVectorStore().count()])
+  const [statuses, vectorCount] = await Promise.all([getEnrichmentStatuses(), vectorCountOrZero()])
   const total = statuses.length
   const embedded = statuses.filter(s => s.hasVector).length
-  const vision = visionEnrichedCount()
+  const vision = await visionEnrichedCount(total)
   const [allProfiles, activeProfiles] = await Promise.all([loadMergedProfiles(), loadActiveProfiles()])
   const allSituations = allProfiles.length
   const activeSituations = activeProfiles.length

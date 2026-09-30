@@ -1,0 +1,328 @@
+{
+  "deepseek|a black dress for a party, it might get cold later": {
+    "model": "deepseek-v4-flash",
+    "recordedAt": "2026-09-30",
+    "parse": {
+      "ok": true,
+      "ms": 1001,
+      "patch": {
+        "occasion": "party",
+        "requestedGarment": "dress",
+        "addConstraints": [
+          "cold evenings"
+        ],
+        "addPreferences": [
+          "black"
+        ]
+      }
+    },
+    "generate": {
+      "ok": true,
+      "ms": 1105,
+      "message": "A party and cold evenings ahead — a clear brief. 8 pieces chosen for it, each with its reason.",
+      "prompt": "How should the cut sit? Point at the sketch that’s closest.",
+      "grounded": true
+    }
+  },
+  "deepseek|something for the office, nothing too loud": {
+    "model": "deepseek-v4-flash",
+    "recordedAt": "2026-09-30",
+    "parse": {
+      "ok": true,
+      "ms": 885,
+      "patch": {
+        "occasion": "work",
+        "addExclusions": [
+          "bright"
+        ]
+      }
+    },
+    "generate": {
+      "ok": true,
+      "ms": 923,
+      "message": "Got it — work, nothing bright. One quick thing first: who's it for, so I pull from the right rail?",
+      "prompt": "Who's it for, so I pull from the right rail?",
+      "grounded": true
+    }
+  },
+  "deepseek|my budget kind of died in december, i need a warm layer": {
+    "model": "deepseek-v4-flash",
+    "recordedAt": "2026-09-30",
+    "parse": {
+      "ok": true,
+      "ms": 917,
+      "patch": {
+        "requestedGarment": "layer",
+        "addConstraints": [
+          "budget conscious"
+        ],
+        "addPreferences": [
+          "warmth first"
+        ]
+      }
+    },
+    "generate": {
+      "ok": true,
+      "ms": 985,
+      "message": "Winter, budget in mind, warmth first — got it. Here are 8 pieces picked for exactly that, each with its reason.",
+      "prompt": "Who's it for? That way I pull from the right rail.",
+      "grounded": true
+    }
+  },
+  "deepseek|a jacket for my husband": {
+    "model": "deepseek-v4-flash",
+    "recordedAt": "2026-09-30",
+    "parse": {
+      "ok": true,
+      "ms": 649,
+      "patch": {
+        "audience": "men",
+        "requestedGarment": "jacket"
+      }
+    },
+    "generate": {
+      "ok": true,
+      "ms": 1085,
+      "message": "For him — got it. One quick thing first — how should the cut sit? Point to the sketch that's closest.",
+      "prompt": "How should the cut sit? Point to the sketch that's closest.",
+      "grounded": true
+    }
+  },
+  "deepseek|jeans for the office": {
+    "model": "deepseek-v4-flash",
+    "recordedAt": "2026-09-30",
+    "parse": {
+      "ok": true,
+      "ms": 744,
+      "patch": {
+        "occasion": "work",
+        "requestedGarment": "jeans"
+      }
+    },
+    "generate": {
+      "ok": true,
+      "ms": 1025,
+      "message": "Work — got it. One quick thing first: who's it for? That way I pull from the right rail.",
+      "prompt": "Who's it for? That way I pull from the right rail.",
+      "grounded": true
+    }
+  },
+  "openai|a black dress for a party, it might get cold later": {
+    "model": "gpt-5.4-nano",
+    "recordedAt": "2026-09-30",
+    "parse": {
+      "ok": true,
+      "ms": 3028,
+      "patch": {
+        "occasion": "party",
+        "requestedGarment": "dress",
+        "addConstraints": [
+          "cold evenings"
+        ],
+        "addPreferences": [
+          "black"
+        ]
+      }
+    },
+    "generate": {
+      "ok": true,
+      "ms": 2208,
+      "message": "A party and cold evenings ahead — nice and clear. 8 pieces picked for it, each chosen for a reason.",
+      "prompt": "How should it sit? Point to the sketch that feels closest.",
+      "grounded": true
+    }
+  },
+  "openai|something for the office, nothing too loud": {
+    "model": "gpt-5.4-nano",
+    "recordedAt": "2026-09-30",
+    "parse": {
+      "ok": true,
+      "ms": 1463,
+      "patch": {
+        "occasion": "work",
+        "addPreferences": [
+          "clean solids"
+        ]
+      }
+    },
+    "generate": {
+      "ok": true,
+      "ms": 1546,
+      "message": "Work and clean solids — got it. Quick question first: who’s wearing it, so I grab the right rail?",
+      "prompt": "Who’s wearing it, so I grab the right rail?",
+      "grounded": true
+    }
+  },
+  "openai|my budget kind of died in december, i need a warm layer": {
+    "model": "gpt-5.4-nano",
+    "recordedAt": "2026-09-30",
+    "parse": {
+      "ok": true,
+      "ms": 3087,
+      "patch": {
+        "requestedGarment": "layer",
+        "addConstraints": [
+          "budget conscious",
+          "cold evenings"
+        ],
+        "addPreferences": [
+          "warmth first"
+        ]
+      }
+    },
+    "generate": {
+      "ok": true,
+      "ms": 1448,
+      "message": "For winter and cold evenings ahead — a clear brief. 8 pieces chosen for it, each with its reason.",
+      "prompt": "Who will be wearing it — so I pull from the right rail?",
+      "grounded": true
+    }
+  },
+  "openai|a jacket for my husband": {
+    "model": "gpt-5.4-nano",
+    "recordedAt": "2026-09-30",
+    "parse": {
+      "ok": true,
+      "ms": 875,
+      "patch": {
+        "audience": "men",
+        "requestedGarment": "jacket"
+      }
+    },
+    "generate": {
+      "ok": true,
+      "ms": 1385,
+      "message": "For him — got it. First, one quick question: how should the cut sit? Point to the sketch that feels closest.",
+      "prompt": "How should the cut sit? Point to the sketch that’s closest.",
+      "grounded": true
+    }
+  },
+  "openai|jeans for the office": {
+    "model": "gpt-5.4-nano",
+    "recordedAt": "2026-09-30",
+    "parse": {
+      "ok": true,
+      "ms": 1933,
+      "patch": {
+        "occasion": "work",
+        "requestedGarment": "jeans"
+      }
+    },
+    "generate": {
+      "ok": true,
+      "ms": 1424,
+      "message": "Work — got it. Quick question first: who’s going to wear it, so I grab from the right rail?",
+      "prompt": "Who’s going to wear it, so I grab from the right rail?",
+      "grounded": true
+    }
+  },
+  "haiku|a black dress for a party, it might get cold later": {
+    "model": "claude-haiku-4-5",
+    "recordedAt": "2026-09-30",
+    "parse": {
+      "ok": true,
+      "ms": 1127,
+      "patch": {
+        "occasion": "party",
+        "requestedGarment": "dress",
+        "addConstraints": [
+          "cold evenings"
+        ],
+        "addPreferences": [
+          "black"
+        ]
+      }
+    },
+    "generate": {
+      "ok": true,
+      "ms": 2124,
+      "message": "Party nights and chilly air — that's your story. We've picked 8 pieces that each earn their place in it.",
+      "prompt": "What cut feels right? Show me on the sketch.",
+      "grounded": true
+    }
+  },
+  "haiku|something for the office, nothing too loud": {
+    "model": "claude-haiku-4-5",
+    "recordedAt": "2026-09-30",
+    "parse": {
+      "ok": true,
+      "ms": 968,
+      "patch": {
+        "occasion": "work",
+        "addExclusions": [
+          "bright",
+          "print"
+        ]
+      }
+    },
+    "generate": {
+      "ok": true,
+      "ms": 1239,
+      "message": "Work it is — no bright, no print. I've picked 7 pieces that'll do the job.",
+      "prompt": "Who's wearing these?",
+      "grounded": true
+    }
+  },
+  "haiku|my budget kind of died in december, i need a warm layer": {
+    "model": "claude-haiku-4-5",
+    "recordedAt": "2026-09-30",
+    "parse": {
+      "ok": true,
+      "ms": 756,
+      "patch": {
+        "requestedGarment": "layer",
+        "addConstraints": [
+          "budget conscious"
+        ],
+        "addPreferences": [
+          "warmth first"
+        ]
+      }
+    },
+    "generate": {
+      "ok": true,
+      "ms": 1259,
+      "message": "Winter, warmth, value — got it. These 8 pieces each earn their place.",
+      "prompt": "Who's this for?",
+      "grounded": true
+    }
+  },
+  "haiku|a jacket for my husband": {
+    "model": "claude-haiku-4-5",
+    "recordedAt": "2026-09-30",
+    "parse": {
+      "ok": true,
+      "ms": 674,
+      "patch": {
+        "audience": "men",
+        "requestedGarment": "jacket"
+      }
+    },
+    "generate": {
+      "ok": true,
+      "ms": 1693,
+      "message": "Got it — for him. Quick question: how do you want it to fit? Pick the sketch that feels right.",
+      "prompt": "How do you want it to fit? Pick the sketch that feels right.",
+      "grounded": true
+    }
+  },
+  "haiku|jeans for the office": {
+    "model": "claude-haiku-4-5",
+    "recordedAt": "2026-09-30",
+    "parse": {
+      "ok": true,
+      "ms": 737,
+      "patch": {
+        "occasion": "work",
+        "requestedGarment": "jeans"
+      }
+    },
+    "generate": {
+      "ok": true,
+      "ms": 1282,
+      "message": "Work — got it. Quick question first — who's this for? That'll help me narrow things down.",
+      "prompt": "Who's this for?",
+      "grounded": true
+    }
+  }
+}

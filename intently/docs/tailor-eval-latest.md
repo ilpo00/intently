@@ -1,6 +1,6 @@
 # Tailor eval — latest transcripts
 
-_Generated 2026-09-29 by scripts/tailor-eval.eval.ts (deterministic playback of DeepSeek-generated personas through the real engine)._
+_Generated 2026-09-30 by scripts/tailor-eval.eval.ts (deterministic playback of DeepSeek-generated personas through the real engine)._
 
 ## Demo catalogue (Kaggle set)
 

@@ -38,13 +38,19 @@ Both become real the moment this fronts anything but a single-operator demo. The
 
 Per-IP rate limits and the global daily LLM budget live in process memory: correct on the single-replica demo, silently ineffective under multiple replicas (each replica gets its own counters → real limits are N× the configured ones), and reset on every deploy. `x-forwarded-for` is also trivially spoofable without a trusted proxy in front. Before prod: move counters to a shared store (Redis/Upstash or an edge rate-limiter), take the client IP from the trusted proxy header only, and consider per-session (cookie) limits alongside per-IP.
 
-**Partly resolved (2026-07-17):** the counter half is fixed — `guardrails-shared.ts` moves the per-IP rate limit and the global daily LLM budget onto Upstash Redis (`INCR` + `EXPIRE`, replica-safe, fail-open to in-memory), live on the cloud demo. What remains: the IP is still read from the first `x-forwarded-for` value, which a client can set. Before prod: take it from the platform's trusted header (on Vercel, `x-real-ip` / `request.ip`) and add a per-session (cookie) limit alongside per-IP.
+**Partly resolved (2026-07-17):** the counter half is fixed in code — `guardrails-shared.ts` moves the per-IP rate limit and the global daily LLM budget onto Upstash Redis (`INCR` + `EXPIRE`, replica-safe, fail-open to in-memory). (As of 2026-09-30 the Redis database itself is gone — see the entry above — so on the deployment this is currently the in-memory fallback.) What remains: the IP is still read from the first `x-forwarded-for` value, which a client can set. Before prod: take it from the platform's trusted header (on Vercel, `x-real-ip` / `request.ip`) and add a per-session (cookie) limit alongside per-IP.
 
 ### The action-claim verifier is a denylist that generalises poorly — `intently/src/lib/discovery/verify.ts`
 
 `claimsUnsupportedCapability` is the always-on guard against the LLM re-voicer promising what Intently can't do ("I've ordered it", "ships tomorrow"). Measured by `scripts/scorecard.eval.ts` (2026-09-29): **100% on the phrasings it was tuned on, ~30% on a held-out set** written before tuning — e.g. "I've gone ahead and ordered it", "Delivery is on us", "Your parcel will be dispatched today" pass. Product grounding (naming an unshown product) is exact and at 100%; this entry is only about action/fulfilment claims. Low blast radius today (generation is off by default, prose is short, the faithfulness gate constrains structure), but it is the weakest link in "the LLM phrases, it never promises."
 
 Before prod, pick one: (a) an LLM verifier pass on re-voiced prose (a cheap classifier call, only when generation ran — budget it under the existing daily cap); or (b) — the more architectural fix — narrow what generation may write: per-product "why" lines and the question wording only, via structured output, so free-form sentences about the cart/delivery can't be produced at all. Do **not** keep growing the regex list against the held-out set; that just destroys the measurement.
+
+### The shared store (Upstash Redis) was gone and nothing said so — `intently/src/lib/discovery/guardrails-shared.ts`, `intently/src/lib/store/sandbox.ts`
+
+Found 2026-09-30 on the first public-mode deploy: the Upstash database the deployment points at **no longer exists** (its hostname returns NXDOMAIN — free-tier databases are removed after inactivity). Because the guardrails fail open by design, nothing broke visibly: the per-IP rate limit and the daily LLM cap had silently become per-instance, in-memory counters that reset on every cold start, for an unknown length of time. The public-demo sandbox, which needs the store, saved nothing. The site was put back behind the password gate the same hour.
+
+Done: sandbox writes now throw instead of reporting success; `sharedStoreStatus()` pings the store and the Studio config page (and the public-demo banner) shows when it is down. A new database was provisioned the same day and the live checks re-run and passed. Later the same day the public Studio showed its error page: the Supabase project `intently` had been auto-paused for inactivity (free tier). It was restored; the Studio now degrades instead of crashing when the vector store is unreachable, and a daily keep-alive cron (`/api/health/keepalive`, `CRON_SECRET`) touches both Supabase and Redis so neither is reclaimed as idle. It answers 503 when either store is down — wire that to an alert before real traffic. Before real traffic: alert on the health check (a page nobody opens is not monitoring), and decide whether the daily LLM cap should fail *closed* — degrade to the deterministic engine — when the shared counter is unreachable, since that is the safer direction for spend.
 
 ---
 
@@ -64,7 +70,9 @@ Fix path when this matters: add a `presentation` field per item via a vision-enr
 
 ### Vision-catalogue mode has no outdoor catalogue — `intently/src/lib/data.ts`
 
-With `NEXT_PUBLIC_CATALOG=vision` (the demo flag), every product is `catalog: 'fashion'`. A hiking-flavoured query still routes through `inferCatalog` → `'outdoor'` → `getProductsByCatalog('outdoor')` returns `[]` → zero results, and the consultation goes quiet (info-gain guard needs ≥6 candidates). Pre-existing before the consultation layer, but the tailor experience makes the dead-end more visible. Before any demo that might field outdoor questions: either route everything to `'fashion'` under vision mode, or accept and script around it.
+With `NEXT_PUBLIC_CATALOG=vision` (the demo flag), every product is `catalog: 'fashion'`, while `inferCatalog` still routes a hiking-flavoured query to `'outdoor'`.
+
+**Mostly resolved (2026-09-30):** `/api/discover` now answers from the catalogue that has products when the inferred side is empty, so such a brief no longer dead-ends on the live path. Residual: the client-side fallback engine in `useDiscover` (used only when the API call itself fails) still looks up the inferred catalogue directly and would return nothing for an outdoor-routed brief. The clean fix is to retire the fashion/outdoor split from the engine entirely (the product has one catalogue).
 
 ### Companion-pool retrieval couples the route to slot vocabulary — `intently/src/app/api/discover/route.ts`
 
@@ -108,7 +116,7 @@ Anchor to a known marker — walk up from `__dirname` looking for `package.json`
 
 ### Admin curation writes had no durable store on Vercel
 
-**Resolved (2026-07-17).** Product overrides, situation overrides/custom situations, runtime config, vision-run status and the needs-attention queue all go through `intently/src/lib/store/doc-store.ts`: local JSON in dev/CI, Supabase `runtime_kv` on cloud (`INTENTLY_STORE=supabase`). Same keys, same shapes — the swap is a backend change, not a data-model change. Residual: whole-document read-modify-write means two curators editing simultaneously can lose one edit (last-write-wins); fine for a single-operator Studio.
+**Resolved in two steps.** Runtime config, situation overrides/custom situations and vision-run status moved to `intently/src/lib/store/doc-store.ts` on 2026-07-17 (local JSON in dev/CI, Supabase `runtime_kv` on cloud via `INTENTLY_STORE=supabase`). **Product overrides and the needs-attention queue were only moved on 2026-09-30** — until then they wrote the local filesystem directly and never persisted on Vercel (an earlier revision of this file wrongly said they already had). The same change makes curated attributes reach the default deterministic discovery path; previously only vector retrieval applied them. Residual: whole-document read-modify-write means two curators editing simultaneously can lose one edit (last-write-wins); fine for a single-operator Studio.
 
 ---
 

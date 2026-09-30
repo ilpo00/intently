@@ -24,7 +24,8 @@ import { join } from 'node:path'
 import { parserProvider } from './parse-llm'
 import { generationProvider } from './generate-llm'
 import type { Provider } from './llm-client'
-import { readDoc, writeDoc, deleteDoc, docExists } from '@/lib/store/doc-store'
+import { readDoc, readBaseDoc, writeDoc, deleteDoc, docExists } from '@/lib/store/doc-store'
+import { isPublicDemo } from '@/lib/public-demo'
 
 // Local file path (used only by tests to clean up); the store honors the same
 // INTENTLY_RUNTIME_CONFIG_PATH override.
@@ -144,9 +145,35 @@ function coerceExperiment(raw: unknown): ExperimentConfig | null {
   }
 }
 
+// PUBLIC DEMO: a visitor's config lives in their sandbox and must never be
+// able to raise spend. So the cost caps (daily LLM cap, per-IP rates) always
+// come from the SHARED config, never the visitor's copy, and a stage may only
+// use its provider's deploy-time default model — no arbitrary model ids.
+// Provider choice, the experiment split and the escalation threshold stay
+// theirs to play with; the global daily cap bounds all of it.
+function clampForPublicDemo(cfg: RuntimeConfig, shared: RuntimeConfig): RuntimeConfig {
+  const defaultModel = (s: StageConfig): StageConfig => ({ provider: s.provider, model: null })
+  return {
+    parse: defaultModel(cfg.parse),
+    generation: defaultModel(cfg.generation),
+    limits: {
+      llmDailyCap: shared.limits.llmDailyCap,
+      ratePerMin: shared.limits.ratePerMin,
+      ratePerDay: shared.limits.ratePerDay,
+      escalateMinWords: cfg.limits.escalateMinWords,
+    },
+    experiment: cfg.experiment && {
+      ...cfg.experiment,
+      b: { parse: defaultModel(cfg.experiment.b.parse), generation: defaultModel(cfg.experiment.b.generation) },
+    },
+  }
+}
+
 /** The effective config: env defaults ⊕ the saved override. Always complete. */
 export async function readRuntimeConfig(): Promise<RuntimeConfig> {
-  return coerce(envDefaults(), await readDoc('runtime-config'))
+  const cfg = coerce(envDefaults(), await readDoc('runtime-config'))
+  if (!isPublicDemo()) return cfg
+  return clampForPublicDemo(cfg, coerce(envDefaults(), await readBaseDoc('runtime-config')))
 }
 
 /** The env baseline alone — for the "reset to defaults" affordance + diffing. */
@@ -162,7 +189,10 @@ export async function hasRuntimeOverride(): Promise<boolean> {
 /** Persist a full config. Writing the env-equal config still creates the
  *  override (an explicit "pinned" choice); use clearRuntimeConfig to revert. */
 export async function writeRuntimeConfig(cfg: RuntimeConfig): Promise<RuntimeConfig> {
-  const merged = coerce(envDefaults(), cfg)
+  let merged = coerce(envDefaults(), cfg)
+  if (isPublicDemo()) {
+    merged = clampForPublicDemo(merged, coerce(envDefaults(), await readBaseDoc('runtime-config')))
+  }
   await writeDoc('runtime-config', merged)
   return merged
 }

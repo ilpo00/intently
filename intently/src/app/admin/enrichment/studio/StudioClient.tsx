@@ -65,7 +65,7 @@ interface EditForm {
 const splitCsv = (s: string) => s.split(',').map(x => x.trim().toLowerCase()).filter(Boolean)
 const rankOf = (rs: SearchResult[], id: string) => rs.findIndex(r => r.id === id)
 
-export default function StudioClient({ rows, summary, overriddenIds, initialProduct, vision }: { rows: StudioRow[]; summary: Summary; overriddenIds: string[]; initialProduct: string | null; vision: boolean }) {
+export default function StudioClient({ rows, summary, overriddenIds, initialProduct, vision, publicDemo = false }: { rows: StudioRow[]; summary: Summary; overriddenIds: string[]; initialProduct: string | null; vision: boolean; publicDemo?: boolean }) {
   const overridden = useMemo(() => new Set(overriddenIds), [overriddenIds])
   const assessed = useMemo(
     () => rows.map(r => ({ row: r, q: assessQuality(r) })),
@@ -120,7 +120,7 @@ export default function StudioClient({ rows, summary, overriddenIds, initialProd
           setListQuery={setListQuery}
         />
         {selected ? (
-          <Detail key={selected.row.productId} entry={selected} initiallyOverridden={overridden.has(selected.row.productId)} vision={vision} />
+          <Detail key={selected.row.productId} entry={selected} initiallyOverridden={overridden.has(selected.row.productId)} vision={vision} publicDemo={publicDemo} />
         ) : (
           <div className="border border-intently-cloud rounded-lg p-10 text-center text-intently-pebble text-sm">
             Select a product to open its enrichment.
@@ -266,7 +266,7 @@ function ProductList({
 }
 
 // ── Detail ──
-function Detail({ entry, initiallyOverridden, vision }: { entry: { row: StudioRow; q: ReturnType<typeof assessQuality> }; initiallyOverridden: boolean; vision: boolean }) {
+function Detail({ entry, initiallyOverridden, vision, publicDemo }: { entry: { row: StudioRow; q: ReturnType<typeof assessQuality> }; initiallyOverridden: boolean; vision: boolean; publicDemo: boolean }) {
   const { row, q } = entry
   const p = row.product
   const raw = readRaw(p)
@@ -304,6 +304,9 @@ function Detail({ entry, initiallyOverridden, vision }: { entry: { row: StudioRo
   const [tuning, setTuning] = useState(false)
   const [reembedding, setReembedding] = useState(false)
   const [toast, setToast] = useState<string | null>(null)
+  // Shown beside the Save button and kept until the next save or revert — unlike the
+  // transient toast at the top of the panel, which is off-screen from here.
+  const [saveNote, setSaveNote] = useState<string | null>(null)
 
   useEffect(() => {
     let alive = true
@@ -356,8 +359,11 @@ function Detail({ entry, initiallyOverridden, vision }: { entry: { row: StudioRo
     setReembedding(true); setToast(null)
     try {
       const res = await fetch(`/api/enrichment/sync/${encodeURIComponent(row.productId)}`, { method: 'POST' })
-      setToast(res.ok ? 'Re-indexed from source ✓' : 'Re-index failed')
-    } finally { setReembedding(false); setTimeout(() => setToast(null), 3000) }
+      if (res.ok) { setToast('Re-indexed from source ✓'); return }
+      // Public demo: re-embedding is refused server-side; show why, not "failed".
+      const d = await res.json().catch(() => null) as { publicDemo?: boolean; message?: string } | null
+      setToast(d?.publicDemo && d.message ? d.message : 'Re-index failed')
+    } finally { setReembedding(false); setTimeout(() => setToast(null), 8000) }
   }, [row.productId])
 
   // ── curate: edit the structured attributes → PUT → re-embed → measure shift ──
@@ -396,10 +402,19 @@ function Detail({ entry, initiallyOverridden, vision }: { entry: { row: StudioRo
       })
       if (!res.ok) { setToast('Save failed'); return }
       setOverridden(true)
+      const saved = await res.clone().json().catch(() => null) as { reembed?: string } | null
+      if (saved?.reembed === 'simulated') {
+        // Public demo: the edit is in the visitor's session and already changes
+        // live discovery, but the shared semantic index is not re-embedded — so
+        // the rank readout below would not move. Say that instead of showing it.
+        setImpact(null)
+        setSaveNote('Saved to your session. The shopper view now recommends with this change — open it and try a brief. (In the public demo the semantic index is not re-embedded, so the search rank on this page stays put.)')
+        return
+      }
       const after = rankOf(await runProbe(probeForImpact), row.productId) // re-embedded; re-rank
       setImpact({ probe: probeForImpact, before, after })
       setToast('Saved · re-indexed ✓')
-    } finally { setSaving(false); setTimeout(() => setToast(null), 3500) }
+    } finally { setSaving(false); setTimeout(() => setToast(null), 9000) }
   }, [form, probeRan, results, runProbe, row.productId])
 
   const revert = useCallback(async () => {
@@ -407,7 +422,7 @@ function Detail({ entry, initiallyOverridden, vision }: { entry: { row: StudioRo
     try {
       const res = await fetch(`/api/enrichment/products/${encodeURIComponent(row.productId)}`, { method: 'DELETE' })
       if (!res.ok) { setToast('Revert failed'); return }
-      setOverridden(false); setForm(initialForm); setImpact(null)
+      setOverridden(false); setForm(initialForm); setImpact(null); setSaveNote(null)
       await runProbe((probeRan || PROBES[3]).trim())
       setToast('Reverted to catalogue ✓')
     } finally { setSaving(false); setTimeout(() => setToast(null), 3500) }
@@ -647,7 +662,9 @@ function Detail({ entry, initiallyOverridden, vision }: { entry: { row: StudioRo
       {/* curate attributes → re-embed → see the rank shift (the scalpel) */}
       <div id="curate" ref={curateRef} className="scroll-mt-4">
       <Section title="Curate attributes"
-        hint="Edit the structured attributes the discovery layer reads. Save re-embeds the product immediately — the change reaches live discovery and the probe above. Non-destructive: it's a runtime override, the committed catalogue is untouched.">
+        hint={publicDemo
+          ? "Edit the structured attributes the discovery layer reads. Your edit is saved to your own session and changes what the shopper view recommends straight away. Non-destructive: it's an override, the catalogue is untouched."
+          : "Edit the structured attributes the discovery layer reads. Save re-embeds the product immediately — the change reaches live discovery and the probe above. Non-destructive: it's a runtime override, the committed catalogue is untouched."}>
         <div className="grid sm:grid-cols-2 gap-4">
           <Field label="Colours" hint="comma-separated">
             <input value={form.color} onChange={e => setForm(f => ({ ...f, color: e.target.value }))}
@@ -698,16 +715,25 @@ function Detail({ entry, initiallyOverridden, vision }: { entry: { row: StudioRo
         <div className="flex items-center flex-wrap gap-3 mt-5">
           <button onClick={save} disabled={saving || (!dirty && !overridden)}
             className="text-sm bg-intently-ink text-white px-4 py-2 rounded hover:bg-intently-slate disabled:opacity-40">
-            {saving ? 'saving…' : 'Save & re-embed'}
+            {saving ? 'saving…' : publicDemo ? 'Save to my session' : 'Save & re-embed'}
           </button>
           <button onClick={revert} disabled={saving || !overridden}
             className="text-sm border border-intently-cloud px-3 py-2 rounded text-intently-slate hover:border-intently-pebble disabled:opacity-40">
             Revert to catalogue
           </button>
           <span className="text-xs text-intently-pebble">
-            Persists to a runtime override · re-embeds on save · reaches <code className="font-mono">/api/discover</code>.
+            {publicDemo
+              ? <>Kept for your session only · reaches <code className="font-mono">/api/discover</code>.</>
+              : <>Persists to a runtime override · re-embeds on save · reaches <code className="font-mono">/api/discover</code>.</>}
           </span>
         </div>
+
+        {saveNote && (
+          <p role="status" className="mt-3 text-sm text-intently-ink border-l-2 border-intently-moss pl-3">
+            {saveNote}{' '}
+            <Link href="/" className="underline underline-offset-2">Open the shopper view →</Link>
+          </p>
+        )}
 
         {impact && (
           <div className="mt-4 rounded-lg border border-intently-cloud bg-intently-paper/50 p-3">

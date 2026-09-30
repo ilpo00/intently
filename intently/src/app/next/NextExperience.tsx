@@ -18,7 +18,8 @@
 // One Intently skin (CSS custom properties under [data-intently-next]).
 // ─────────────────────────────────────────────
 
-import { memo, useCallback, useEffect, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react'
+import Link from 'next/link'
 import { prefersReducedMotion } from '@/lib/motion'
 import { emptySessionContext, type SessionContext } from '@/types'
 import type { ConsultAnswer } from '@/lib/discovery/consult'
@@ -85,7 +86,7 @@ function flyTo(source: HTMLElement, target: HTMLElement) {
   setTimeout(done, 800)
 }
 
-export function NextExperience() {
+export function NextExperience({ publicDemo = false }: { publicDemo?: boolean } = {}) {
   const [thread, setThread] = useState<ThreadItem[]>([])
   const [thinking, setThinking] = useState(false)
   const [busy, setBusy] = useState(false)
@@ -370,6 +371,8 @@ export function NextExperience() {
               <button className="nx-iconbtn" onClick={close} aria-label="Close"><X /></button>
             </header>
 
+            {publicDemo && <VisitorWelcome onTry={onSubmit} disabled={busy} started={started} />}
+
             {!started ? (
               <Landing onSeed={onSeed} onSubmit={onSubmit} disabled={busy} />
             ) : (
@@ -400,7 +403,7 @@ export function NextExperience() {
                     <div className="nx-turn">
                       <div className="nx-thinking">
                         <span className="nx-thinking__label">
-                          {started ? 'Re-reading your situation' : 'Reading your situation'}
+                          {started ? 'Assessing your situation' : 'Reading your situation'}
                         </span>
                         <span className="nx-dots"><i className="nx-dot" /><i className="nx-dot" /><i className="nx-dot" /></span>
                       </div>
@@ -639,6 +642,51 @@ function VisualAsk({ ask, busy, onAnswer }: {
 // the payoff on the right — so the shopper sees what comes back (explained, not
 // endless) before typing a word. Replaces the empty results canvas that read as
 // a void. The post-search rail+canvas layout is untouched.
+// Public demo only (INTENTLY_PUBLIC_DEMO): a slim strip under the header that
+// tells a first-time visitor what they are looking at and what to try. Dismissal is kept
+// for the browser session. This is orientation for a visitor, not the tailor's
+// voice — it never appears in a private or embedded deployment.
+const WELCOME_DISMISSED_KEY = 'intently:welcome-dismissed'
+const WELCOME_TRY = 'A black dress for a party, it might get cold later'
+
+const noopSubscribe = () => () => {}
+function readWelcomeDismissed(): boolean {
+  try { return sessionStorage.getItem(WELCOME_DISMISSED_KEY) === '1' } catch { return false }
+}
+
+function VisitorWelcome({ onTry, disabled, started }: {
+  onTry: (s: string) => void
+  disabled: boolean
+  started: boolean
+}) {
+  // sessionStorage is an external store: the server snapshot says "dismissed"
+  // (render nothing), and the client corrects it after hydration — no mismatch.
+  const dismissedEarlier = useSyncExternalStore(noopSubscribe, readWelcomeDismissed, () => true)
+  const [closed, setClosed] = useState(false)
+  if (dismissedEarlier || closed) return null
+  const dismiss = () => {
+    try { sessionStorage.setItem(WELCOME_DISMISSED_KEY, '1') } catch { /* private mode */ }
+    setClosed(true)
+  }
+  return (
+    <aside className="nx-welcome" aria-label="About this demo">
+      <span className="nx-welcome__tag">Public demo</span>
+      <p className="nx-welcome__body">
+        A working demo by Ilmari Vuorenmaa: the engine decides, a capped language model only words it.
+      </p>
+      {!started && (
+        <button className="nx-welcome__try" onClick={() => onTry(WELCOME_TRY)} disabled={disabled} title={WELCOME_TRY}>
+          Try a brief
+        </button>
+      )}
+      <Link className="nx-welcome__link" href="/admin/enrichment/studio">
+        Open the Studio →
+      </Link>
+      <button className="nx-welcome__close" onClick={dismiss} aria-label="Dismiss">×</button>
+    </aside>
+  )
+}
+
 function Landing({ onSeed, onSubmit, disabled }: {
   onSeed: (s: string) => void
   onSubmit: (v: string) => void
