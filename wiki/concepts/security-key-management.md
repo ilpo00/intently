@@ -62,7 +62,7 @@ the contract: where each key lives, why it's safe there, and what to do when one
 The live project is **`<supabase-project-ref>`** ("intently", eu-central-1) — it carries the full
 migration history 0001–0015. It was paused and got restored when the cloud stores landed. The
 service-role key in `~/.zshenv` authenticates **against this project**; `intently-demo`
-(`<supabase-project-ref>`) also received the analytics/runtime_kv schema during exploration but is
+(`<supabase-demo-project-ref>`) also received the analytics/runtime_kv schema during exploration but is
 **not** the project the key targets. If you ever swap projects, the key must swap with it.
 
 ## Rotation & incident response
