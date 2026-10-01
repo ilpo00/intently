@@ -19,6 +19,8 @@
 //      engine failed outright.
 // ─────────────────────────────────────────────
 
+import { isSeededSession } from './events'
+import { isPublicDemo } from '@/lib/public-demo'
 import { loadEvents, type TurnEvent } from './events'
 import { matchSituation, type SituationProfile } from '@/lib/discovery/situation-match'
 
@@ -62,6 +64,9 @@ export async function mineSituationSuggestions(
   const seen = new Map<string, { zero: boolean }>()
   for (const t of turns) {
     if (t.answered) continue
+    // Public demo: suggestions are built from synthetic traffic only, so no
+    // visitor's words can surface on a public page.
+    if (isPublicDemo() && !isSeededSession(t.sessionId)) continue
     const q = t.query.toLowerCase().trim()
     if (!q || matchSituation(q, profiles)) continue
     const cur = seen.get(q)

@@ -1,8 +1,6 @@
-# Intently — portfolio intro (DRAFT)
+# Intently — portfolio intro
 
-> **Status: draft, written by Claude for Ilmari to approve or rewrite.**
-> Nothing here is published as Ilmari's own words until he says so. The
-> portfolio site keeps it `draft: true` until then.
+> **Status: approved by Ilmari, 2026-10-01.** Publish as written.
 >
 > Rules followed: first person, plain, short sentences, no buzzwords. Every
 > figure carries a status — **Measured**, **Estimated** or **Hypothesis** — with
@@ -52,7 +50,7 @@ It runs in the open. You can use the shopper view and the admin Studio behind it
 ## Buttons
 
 - Primary: **Want to see it yourself?** → the public demo (URL when live; see `handoff.md`)
-- Secondary: **Watch the 3-minute tour** → the video
+- Secondary: **Watch the 74-second tour** → the video
 - Text links: **Read how I built it** → `docs/case-study.md` on GitHub · **Source** → https://github.com/ilpo00/intently
 
 ## One sentence to put next to the demo button

@@ -13,7 +13,8 @@
 //     flagged so the UI can label them.
 // ─────────────────────────────────────────────
 
-import { loadEvents, PRICES, type TurnEvent, type CartEvent, type OrderEvent } from './events'
+import { loadEvents, PRICES, isSeededSession, type TurnEvent, type CartEvent, type OrderEvent } from './events'
+import { isPublicDemo } from '@/lib/public-demo'
 
 export interface FunnelStep { key: string; label: string; sessions: number; note?: string }
 
@@ -45,6 +46,8 @@ export interface Aggregates {
   itemsPerCartSession: number | null
   topQueries: { query: string; count: number; zeroResult: boolean }[]
   zeroResultQueries: { query: string; count: number }[]
+  // Public demo: typed queries from real visitors, counted but not shown.
+  hiddenVisitorQueries: number
   topProducts: { title: string; count: number }[]
   // Conversation
   turns: number
@@ -117,8 +120,11 @@ export async function aggregate(sinceIso: string): Promise<Aggregates> {
   for (const c of carts) bySurface.set(c.surface, (bySurface.get(c.surface) ?? 0) + 1)
 
   const queryCounts = new Map<string, { count: number; zero: number }>()
+  const showText = (t: TurnEvent) => !isPublicDemo() || isSeededSession(t.sessionId)
+  let hiddenVisitorQueries = 0
   for (const t of turns) {
     if (t.answered) continue // tapped options aren't typed demand
+    if (!showText(t)) { hiddenVisitorQueries += 1; continue }
     const q = t.query.toLowerCase()
     const cur = queryCounts.get(q) ?? { count: 0, zero: 0 }
     cur.count += 1
@@ -221,6 +227,7 @@ export async function aggregate(sinceIso: string): Promise<Aggregates> {
     cartAddsBySurface: [...bySurface.entries()].map(([surface, count]) => ({ surface, count })),
     itemsPerCartSession: pct(carts.length, sessionsWithCart.size),
     topQueries,
+    hiddenVisitorQueries,
     zeroResultQueries,
     topProducts,
     turns: turns.length,

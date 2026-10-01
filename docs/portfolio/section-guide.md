@@ -2,7 +2,7 @@
 
 > **Status: draft, not yet sent to the portfolio-site session.** Everything in
 > it that would appear on the page as Ilmari's words stays `draft: true` until
-> he approves it. Owner: the Intently side. Last updated 2026-09-30.
+> he approves it. Owner: the Intently side. Last updated 2026-09-30 (evening).
 
 This is the one document the portfolio-site builder needs to put Intently on
 the page: what the section is for, its order, every asset with its status, the
@@ -38,12 +38,13 @@ not can go.
 | 3 | Primary button **Want to see it yourself?** | → `https://intently.ilmarivuorenmaa.com` | live; open in a new tab |
 | 4 | One sentence under the button | `intently-intro.md` → *One sentence…* | sets the sandbox expectation |
 | 5 | Architecture chart | `intently-architecture.svg` | full width (up to 1024 px); click opens full size |
+| 5b | Landscape chart (optional, for the enterprise-minded reader) | `intently-landscape.svg` | same treatment; can sit behind a "the whole stack" link |
 | 6 | Three points: problem / idea / evidence | `intently-intro.md` → *Three points* | short |
-| 7 | Video tour | `docs/video/out/intently-tour.mp4` + poster + `.vtt` | **not final yet**; leave a slot |
+| 7 | Video tour | `docs/video/out/intently-tour.mp4` + `poster.png` + `intently-tour.vtt` | **final** — 1:14, subtitled, silent |
 | 8 | Two or three figures, each with its status label | `intently-intro.md` → *Figures* table | see §4 |
 | 9 | Links: **Read how I built it** · **Source** · **Decision records** | case study, GitHub, ADR index | text links, not buttons |
 
-If the page has room for only four things: 1, 3, 5, 9.
+If the page has room for only four things: 1, 3, 7 (the video), 9.
 
 ---
 
@@ -51,13 +52,14 @@ If the page has room for only four things: 1, 3, 5, 9.
 
 | Asset | Path (Intently repo) | Format / size | Status |
 |---|---|---|---|
-| Intro copy, points, button labels, figures | `docs/portfolio/intently-intro.md` | Markdown | **draft** — needs Ilmari's approval |
+| Intro copy, points, button labels, figures | `docs/portfolio/intently-intro.md` | Markdown | **approved** 2026-10-01 |
 | Architecture chart | `docs/portfolio/intently-architecture.svg` (+ `.png`, 3200×1920) | SVG, scales; dark background | **approved** |
+| Landscape chart | `docs/portfolio/intently-landscape.svg` (+ `.png`, 3200×2020) | SVG, scales; dark background | **approved** |
 | Live demo | `https://intently.ilmarivuorenmaa.com` | public, no sign-in, not indexed | **live** |
-| Video tour | `docs/video/out/intently-tour.mp4`, `poster.png`, `intently-tour.vtt` | 1920×1080 H.264, about 2½ min, about 10 MB | **draft cut only**; final cut + voice-over pending |
+| Video tour | `docs/video/out/intently-tour.mp4`, `poster.png`, `intently-tour.vtt` | 1920×1080 H.264, 1:14, about 4.5 MB, subtitles burned in, no audio | **final** |
 | Case study | `docs/case-study.md` (on GitHub) | Markdown | complete (pivot paragraph in Ilmari's words) |
 | Decision records | `docs/adr/README.md` (on GitHub) | Markdown | live |
-| Source | `https://github.com/ilpo00/intently` | public repo, no product photos | live; to be refreshed with the latest work |
+| Source | `https://github.com/ilpo00/intently` | public repo, no product photos | live; refreshed 2026-09-30 |
 
 Rule unchanged: the portfolio side copies assets into its own repo; nobody edits
 the other repo.
@@ -120,8 +122,14 @@ The page can set expectations in one line; this is the detail behind it.
   Green: code that decides. Amber: language model, words only."*
   Smallest text is about 10 px at 1024 px wide — let a click open the full-size
   file.
-- **Video:** self-hosted mp4 or YouTube/Vimeo — Ilmari's call. Poster and
-  captions are separate files either way. Autoplay off; captions available.
+- **Video:** the story in 74 seconds — a brief, one adjustment, a correction
+  in the Studio, and a second adjustment in the same conversation where the
+  corrected dress is gone. Subtitles are burned into the picture and there is
+  no audio, so it works muted. Self-host the mp4 (about 4.5 MB) with a
+  standard `<video controls playsinline preload="metadata" poster=…>`; the
+  `.vtt` is optional (it duplicates the burned-in subtitles). Suggested
+  caption under it: *"74 seconds, no sound needed: a shopper, a merchandiser,
+  and one correction."*
 - **Demo link:** new tab. The demo is `noindex`; linking to it is fine.
 - **No link back** from the demo to the portfolio until Ilmari confirms the
   site is launched.
@@ -143,9 +151,10 @@ The page can set expectations in one line; this is the detail behind it.
 
 ## 8. Open before the section goes live
 
-- [ ] Ilmari approves or rewrites the intro copy and the button text.
+- [x] Ilmari approves the intro copy and the button text (2026-10-01).
 - [x] Ilmari writes the pivot paragraph (case study §6) — done 2026-09-30.
 - [x] Ilmari approves the architecture chart.
-- [ ] Final video cut recorded against the live demo; voice-over recorded.
-- [ ] Video hosting decided.
-- [ ] Public GitHub repo refreshed with the latest work.
+- [x] Final video cut recorded against the live demo (subtitled; no voice-over, by decision).
+- [x] Video hosting: embed the mp4 on the page (self-hosted).
+- [x] Public GitHub repo refreshed with the latest work.
+- [x] Ilmari approves the landscape chart.

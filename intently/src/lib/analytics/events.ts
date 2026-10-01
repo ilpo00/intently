@@ -252,3 +252,13 @@ async function loadEventsSupabase(sinceIso: string): Promise<AnalyticsEvent[] | 
   }))
   return [...turns, ...carts, ...orders]
 }
+
+// ── Public demo: whose words may be shown ─────────────────────────
+// On the open demo the analytics and situation-mining pages are public, so a
+// visitor must never read what another visitor typed. Metrics still count
+// every turn; only the TEXT of real visitors' queries is withheld — the
+// synthetic seed traffic (session ids "demo-…", scripts/seed-analytics.mjs)
+// stays visible so the dashboards still show what they are for.
+export const SEEDED_SESSION_PREFIX = 'demo-'
+export const isSeededSession = (sessionId: string | undefined): boolean =>
+  !!sessionId && sessionId.startsWith(SEEDED_SESSION_PREFIX)

@@ -148,6 +148,12 @@ function Commerce({ agg }: { agg: Aggregates }) {
       <div className="grid md:grid-cols-2 gap-6">
         <Section title="Top queries"
           tip={{ what: 'What shoppers actually type (tapped options excluded).', how: 'Typed queries grouped case-insensitively, top 10. ⚠ marks queries that returned zero results without a follow-up question.', why: 'Demand in the shopper’s own words — the raw material for new situations and match keywords.' }}>
+          {agg.hiddenVisitorQueries > 0 && (
+            <p className="text-xs text-intently-slate mb-2">
+              Public demo: {agg.hiddenVisitorQueries} queries typed by visitors are counted in every metric, but their
+              text is not shown here — only the synthetic demo traffic is.
+            </p>
+          )}
           {agg.topQueries.length === 0 && <Empty />}
           <ol className="space-y-1 text-sm">
             {agg.topQueries.map(q => (
