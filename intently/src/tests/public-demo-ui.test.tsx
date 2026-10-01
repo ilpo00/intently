@@ -18,6 +18,8 @@ describe('visitor welcome', () => {
     const { unmount } = render(<NextExperience publicDemo />)
     const card = screen.getByLabelText('About this demo')
     expect(card).toHaveTextContent('Public demo')
+    expect(card).toHaveTextContent(/prototype, so results may vary/)
+    expect(card).toHaveTextContent(/logged anonymously/)
     expect(screen.getByRole('link', { name: /Open the Studio/ })).toHaveAttribute('href', '/admin/enrichment/studio')
 
     fireEvent.click(screen.getByRole('button', { name: 'Dismiss' }))

@@ -367,6 +367,7 @@ body:has([data-intently-next]) [data-session-reset] { display: none !important; 
   color: var(--nx-accent-deep); font-weight: 700; white-space: nowrap;
 }
 .nx-welcome__body { margin: 0; flex: 1 1 260px; min-width: 0; }
+.nx-welcome__fine { margin: 0; flex: 1 1 100%; font-size: 0.85em; opacity: 0.75; }
 .nx-welcome__try {
   border: 1px solid var(--nx-accent); background: var(--nx-surface-raised); color: var(--nx-accent-deep);
   border-radius: var(--nx-r-pill); padding: 5px 12px; font: inherit; cursor: pointer; text-align: left;

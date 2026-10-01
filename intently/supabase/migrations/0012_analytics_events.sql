@@ -2,7 +2,7 @@
 -- 0012 · Analytics events — the durable home for the Phase-1 local
 -- JSONL event stream (src/lib/analytics/events.ts).
 --
--- APPLIED to intently-demo (<supabase-demo-project-ref>) 2026-07-16. Phase-1
+-- APPLIED to intently-demo (<supabase-project-ref>) 2026-07-16. Phase-1
 -- analytics still runs on the local file sink by default; the Supabase
 -- EventSink swaps in via env (emit sites unchanged). Mirrors the
 -- TurnEvent / CartEvent shapes 1:1 — if you change those types, change

@@ -58,6 +58,7 @@ export default async function AdminLayout({
             <span className="opacity-90">
               This is the real Studio. Your changes are saved to your browser session only — nobody else sees them, and they expire after 24 hours.
               Actions that would spend AI budget (vision enrichment, re-embedding, live model calls) are switched off; the model bench shows recorded results.
+              Intently is a prototype, so results may vary.
             </span>
             <Link href="/" className="underline underline-offset-2 opacity-90 hover:opacity-100 whitespace-nowrap">← Back to the shopper view</Link>
           </div>

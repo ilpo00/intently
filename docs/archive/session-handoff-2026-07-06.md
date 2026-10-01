@@ -89,7 +89,7 @@ yet — see Phase 7 below).
   unrelated and untouched.
 - **Supabase:** the live vector store is Ilmari's own **`intently`**
   project (`<supabase-project-ref>`, eu-central-1) — not `intently-demo`
-  (`<supabase-demo-project-ref>`), which was provisioned earlier in the session
+  (`<supabase-project-ref>`), which was provisioned earlier in the session
   before real keys were available and is now redundant ($0/mo; ask before
   deleting).
 - **Keys:** DeepSeek, OpenAI, and Supabase are live in Vercel. Anthropic is

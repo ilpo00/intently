@@ -683,6 +683,10 @@ function VisitorWelcome({ onTry, disabled, started }: {
         Open the Studio →
       </Link>
       <button className="nx-welcome__close" onClick={dismiss} aria-label="Dismiss">×</button>
+      <p className="nx-welcome__fine">
+        Intently is a prototype, so results may vary — thank you for trying it.
+        What you type is logged anonymously to improve the demo; there are no accounts, and other visitors never see it.
+      </p>
     </aside>
   )
 }
